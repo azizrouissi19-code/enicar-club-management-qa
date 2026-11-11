@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
-import { mockClubs, mockEvents, mockRooms } from "../mock/data";
-import { useAuth } from "../context/AuthContext";
+import api from "../api/axios";
+import { useAuth } from "../context/useAuth";
 
 const statusConfig = {
   APPROVED: { label: "Approuvé", class: "bg-[#0a1a0f] text-[#60a870] border border-[#1a4a28]" },
@@ -10,19 +11,33 @@ const statusConfig = {
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  // ANO-08 : statistiques calculées à partir des données réelles de l'API (plus de données fictives)
+  const [data, setData] = useState({ clubs: [], events: [], rooms: [] });
+
+  useEffect(() => {
+    Promise.all([api.get("/clubs"), api.get("/events"), api.get("/rooms")])
+      .then(([clubs, events, rooms]) => setData({ clubs: clubs.data, events: events.data, rooms: rooms.data }))
+      .catch((error) => console.error("Failed to load dashboard", error));
+  }, []);
+
+  const { clubs, events, rooms } = data;
+  const pending = events.filter((e) => e.status === "PENDING").length;
+  const members = new Set(clubs.flatMap((c) => c.members ?? [])).size;
+  const capacity = rooms.reduce((sum, r) => sum + (r.capacity ?? 0), 0);
+  const recentEvents = [...events].sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 5);
 
   const stats = [
-    { value: mockClubs.length, label: "Clubs actifs", change: "↑ 1 ce mois" },
-    { value: mockEvents.length, label: "Événements", change: "2 en attente" },
-    { value: mockRooms.length, label: "Salles", change: "2 disponibles" },
-    { value: 12, label: "Membres", change: "↑ 3 nouveaux" },
+    { value: clubs.length, label: "Clubs actifs", change: `${members} membres au total` },
+    { value: events.length, label: "Événements", change: `${pending} en attente` },
+    { value: rooms.length, label: "Salles", change: `${capacity} places au total` },
+    { value: members, label: "Membres", change: "inscrits dans un club" },
   ];
 
   return (
     <Layout title="Dashboard" subtitle={`Bienvenue, ${user?.fullName}`}>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         {stats.map((s, i) => (
           <div key={i} className="bg-[#161924] border border-[#1e2540] rounded-xl p-4">
             <div className="text-white text-2xl font-black" style={{ fontFamily: "Syne, sans-serif" }}>{s.value}</div>
@@ -33,7 +48,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         {/* Événements récents */}
         <div className="bg-[#161924] border border-[#1e2540] rounded-xl p-4">
@@ -41,7 +56,8 @@ export default function DashboardPage() {
             Événements récents
           </h2>
           <div className="flex flex-col gap-0">
-            {mockEvents.map((event) => {
+            {recentEvents.length === 0 && <div className="text-[#5a6080] text-xs py-2">Aucun événement</div>}
+            {recentEvents.map((event) => {
               const s = statusConfig[event.status] || statusConfig.DRAFT;
               return (
                 <div key={event.id} className="flex items-center gap-3 py-2.5 border-b border-[#1e2130] last:border-0">
@@ -68,14 +84,14 @@ export default function DashboardPage() {
             Clubs actifs
           </h2>
           <div className="flex flex-col gap-0">
-            {mockClubs.map((club) => (
+            {clubs.map((club) => (
               <div key={club.id} className="flex items-center gap-3 py-2.5 border-b border-[#1e2130] last:border-0">
                 <div className="w-8 h-8 rounded-lg bg-[#1a2040] border border-[#2a3060] flex items-center justify-center text-[#4f7fff] text-xs font-bold flex-shrink-0" style={{ fontFamily: "Syne, sans-serif" }}>
                   {club.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-white text-xs font-medium truncate">{club.name}</div>
-                  <div className="text-[#5a6080] text-[11px]">{club.members.length} membres</div>
+                  <div className="text-[#5a6080] text-[11px]">{club.members?.length ?? 0} membres</div>
                 </div>
               </div>
             ))}

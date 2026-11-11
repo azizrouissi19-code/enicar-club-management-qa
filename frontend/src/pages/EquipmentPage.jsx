@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import api from "../api/axios";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 function NewEquipmentModal({ onClose, onSave }) {
   const [name, setName] = useState("");
@@ -47,17 +47,8 @@ export default function EquipmentPage() {
   const isAdmin = user?.role === "ADMINISTRATOR";
 
   useEffect(() => {
-    fetchEquipment();
+    api.get("/equipment").then((r) => setEquipment(r.data)).catch((e) => console.error("Failed to fetch equipment", e));
   }, []);
-
-  const fetchEquipment = async () => {
-    try {
-      const response = await api.get("/equipment");
-      setEquipment(response.data);
-    } catch (error) {
-      console.error("Failed to fetch equipment", error);
-    }
-  };
 
   const handleAdd = async (equipmentData) => {
     try {

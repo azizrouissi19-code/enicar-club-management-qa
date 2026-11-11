@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import api from "../api/axios";
-import { useAuth } from "../context/AuthContext";
+import { apiMessage } from "../api/errors";
+import ErrorAlert from "../components/ErrorAlert";
+import { useAuth } from "../context/useAuth";
 
-function NewReservationModal({ onClose, onSave }) {
+function NewReservationModal({ clubId, onClose, onSave }) {
   const [resourceType, setResourceType] = useState("ROOM");
   const [resourceId, setResourceId] = useState("");
   const [date, setDate] = useState("");
 
   const handleSave = () => {
     if (!resourceId.trim() || !date.trim()) return;
-    onSave({ 
-      resourceType, 
+    onSave({
+      resourceType,
       resourceId: parseInt(resourceId) || 0,
-      clubId: 1, // Default for demo
+      clubId, // ANO-10 : club de l'utilisateur connecté (plus de valeur codée en dur)
       date,
       status: "PENDING"
     });
@@ -53,28 +55,25 @@ function NewReservationModal({ onClose, onSave }) {
 export default function ReservationsPage() {
   const [reservations, setReservations] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [clubs, setClubs] = useState([]);
+  const [error, setError] = useState("");
   const { user } = useAuth();
   const isAdmin = user?.role === "ADMINISTRATOR";
+  const myClub = clubs.find((c) => c.presidentId === user?.id || c.members?.includes(user?.id));
+  const clubName = (id) => clubs.find((c) => c.id === id)?.name ?? (id ? `Club ${id}` : "—");
 
   useEffect(() => {
-    fetchReservations();
+    api.get("/reservations").then((r) => setReservations(r.data)).catch(() => setError("Impossible de charger les réservations"));
+    api.get("/clubs").then((r) => setClubs(r.data)).catch(() => {});
   }, []);
 
-  const fetchReservations = async () => {
-    try {
-      const response = await api.get("/reservations");
-      setReservations(response.data);
-    } catch (error) {
-      console.error("Failed to fetch reservations", error);
-    }
-  };
-
   const handleAdd = async (reservationData) => {
+    setError("");
     try {
       const response = await api.post("/reservations", reservationData);
       setReservations([...reservations, response.data]);
-    } catch (error) {
-      console.error("Failed to create reservation", error);
+    } catch (e) {
+      setError(apiMessage(e, "Réservation impossible"));
     }
   };
 
@@ -82,8 +81,8 @@ export default function ReservationsPage() {
     try {
       const response = await api.put(`/reservations/${id}/status`, { status });
       setReservations(reservations.map(res => res.id === id ? response.data : res));
-    } catch (error) {
-      console.error("Failed to update status", error);
+    } catch (e) {
+      setError(apiMessage(e, "Mise à jour du statut impossible"));
     }
   };
 
@@ -108,7 +107,9 @@ export default function ReservationsPage() {
           )}
         </div>
 
-        <div className="bg-[#161924] border border-[#1e2540] rounded-xl overflow-hidden">
+        <ErrorAlert message={error} onClose={() => setError("")} />
+
+        <div className="bg-[#161924] border border-[#1e2540] rounded-xl overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-[#1a2040] border-b border-[#1e2540]">
@@ -128,7 +129,7 @@ export default function ReservationsPage() {
                     <div className="text-white text-sm font-semibold">{res.resourceType}</div>
                     <div className="text-[#5a6080] text-xs">ID: {res.resourceId}</div>
                   </td>
-                  <td className="p-4 text-[#4f7fff] text-sm font-semibold">Club {res.clubId}</td>
+                  <td className="p-4 text-[#4f7fff] text-sm font-semibold">{clubName(res.clubId)}</td>
                   <td className="p-4 text-[#5a6080] text-sm">{res.date}</td>
                   <td className="p-4">
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${statusColors[res.status] || statusColors.PENDING}`} style={{ fontFamily: "Syne, sans-serif" }}>
@@ -160,6 +161,7 @@ export default function ReservationsPage() {
 
         {showModal && (
           <NewReservationModal
+            clubId={myClub?.id ?? null}
             onClose={() => setShowModal(false)}
             onSave={handleAdd}
           />

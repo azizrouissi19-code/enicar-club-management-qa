@@ -1,5 +1,5 @@
 import Layout from "../components/Layout";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 export default function ProfilePage() {
   const { user } = useAuth();

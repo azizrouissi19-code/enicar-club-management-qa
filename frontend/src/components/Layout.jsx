@@ -1,20 +1,32 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 export default function Layout({ children, title, subtitle }) {
   const [showProperties, setShowProperties] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
 
   return (
     <div className="flex h-screen bg-[#0f1117] overflow-hidden">
-      <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      {/* ANO-11 : sur smartphone, la barre latérale devient un tiroir ouvert par le bouton « menu » */}
+      <div className={`${menuOpen ? "fixed inset-0 z-40 flex" : "hidden"} md:static md:flex`}>
+        <Sidebar />
+        {menuOpen && <div className="flex-1 bg-black/60 md:hidden" onClick={() => setMenuOpen(false)} />}
+      </div>
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Topbar */}
-        <div className="px-6 py-4 border-b border-[#1e2130] flex items-center justify-between flex-shrink-0 relative z-10">
-          <div>
+        <div className="px-4 md:px-6 py-4 border-b border-[#1e2130] flex items-center justify-between gap-3 flex-shrink-0 relative z-10">
+          <button
+            onClick={() => setMenuOpen(true)}
+            aria-label="Ouvrir le menu"
+            className="md:hidden w-8 h-8 flex-shrink-0 border border-[#1e2540] rounded-lg text-[#5a6080] hover:text-white"
+          >
+            ☰
+          </button>
+          <div className="flex-1 min-w-0">
             <h1 className="text-white font-black text-lg" style={{ fontFamily: "Syne, sans-serif" }}>
               {title}
             </h1>
@@ -50,7 +62,7 @@ export default function Layout({ children, title, subtitle }) {
           </div>
         </div>
         {/* Content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">
           {children}
         </main>
       </div>

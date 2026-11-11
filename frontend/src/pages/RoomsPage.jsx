@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import api from "../api/axios";
-import { useAuth } from "../context/AuthContext";
+import { apiMessage } from "../api/errors";
+import ErrorAlert from "../components/ErrorAlert";
+import { useAuth } from "../context/useAuth";
 
 function NewRoomModal({ onClose, onSave }) {
   const [name, setName] = useState("");
@@ -55,25 +57,19 @@ export default function RoomsPage() {
   const { user } = useAuth();
   const isAdmin = user?.role === "ADMINISTRATOR";
 
+  const [error, setError] = useState("");
+
   useEffect(() => {
-    fetchRooms();
+    api.get("/rooms").then((r) => setRooms(r.data)).catch(() => setError("Impossible de charger les salles"));
   }, []);
 
-  const fetchRooms = async () => {
-    try {
-      const response = await api.get("/rooms");
-      setRooms(response.data);
-    } catch (error) {
-      console.error("Failed to fetch rooms", error);
-    }
-  };
-
   const handleAdd = async (roomData) => {
+    setError("");
     try {
       const response = await api.post("/rooms", roomData);
       setRooms([...rooms, response.data]);
-    } catch (error) {
-      console.error("Failed to create room", error);
+    } catch (e) {
+      setError(apiMessage(e, "Ajout de la salle impossible"));
     }
   };
 
@@ -100,6 +96,8 @@ export default function RoomsPage() {
             </button>
           )}
         </div>
+
+        <ErrorAlert message={error} onClose={() => setError("")} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {rooms.map((room) => (
