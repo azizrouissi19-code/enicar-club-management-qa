@@ -21,6 +21,10 @@ public class RoomController {
 
     @PostMapping
     public Room createRoom(@RequestBody Room room) {
+        // ANO-07 : nom obligatoire et capacité strictement positive
+        if (com.example.backend.web.ApiError.isBlank(room.getName()) || room.getCapacity() == null || room.getCapacity() <= 0) {
+            throw com.example.backend.web.ApiError.badRequest("Nom obligatoire et capacité strictement positive");
+        }
         return roomRepository.save(room);
     }
 
