@@ -145,7 +145,7 @@ ${pair("../results/screenshots/TS01-1-login.png", "Page de connexion", "../resul
 <tr><td>Le projet Vite utilise des modules ES ; Jest ne les comprend pas nativement</td><td><code>babel.config.cjs</code> (preset-env + preset-react) ; <code>TextEncoder</code> ajouté pour React Router dans jsdom</td></tr>
 <tr><td>PMD ne s'exécute pas avec des règles personnalisées en ligne de commande</td><td>Profil Maven <code>qa</code> dans <code>pom.xml</code> (règles bestpractices, errorprone, security, design)</td></tr>
 <tr><td>Couverture JaCoCo d'une application lancée hors Maven</td><td>Agent JaCoCo en mode <code>tcpserver</code> ; vidage avec <code>jacococli dump</code> après chaque campagne</td></tr>
-<tr><td>Le jeton GitHub n'a pas le droit <code>project</code></td><td>Suivi par issues, libellés et jalons ; le tableau GitHub Projects peut être ajouté après <code>gh auth refresh -s project</code></td></tr></table>
+<tr><td>Le jeton GitHub n'avait pas le droit <code>project</code> (tableau impossible à créer)</td><td>Droit ajouté avec <code>gh auth refresh -h github.com -s project</code> ; tableau créé par l'API GraphQL (<code>qa/github/project.mjs</code>)</td></tr></table>
 
 <h1>4. Besoins fonctionnels et non fonctionnels (objectif 2)</h1>
 <p>Chaque exigence possède un identifiant unique, repris dans une issue GitHub (libellé <code>exigence</code>) pour la traçabilité. La criticité oriente l'effort de test (approche basée sur les risques).</p>
@@ -167,11 +167,14 @@ ${EXIGENCES.filter((e) => e.id.startsWith("ENF")).map((e) => `<tr><td>${e.id}</t
 <tr><td>Résultats d'exécution</td><td>Commentaire de résultat par itération sur chaque cas (x/y vérifications), fermeture une fois exécuté</td></tr>
 <tr><td>Gestion des anomalies</td><td>${ANOMALIES.length} issues <code>[ANO-xx]</code> : gravité, exigence, test détecteur, reproduction</td></tr>
 <tr><td>Traçabilité anomalie → correctif → re-test</td><td>Pull Request #71 « Fixes #n » : la fusion ferme les anomalies corrigées</td></tr>
+<tr><td>Suivi visuel (tableau de bord de la campagne)</td><td>GitHub Projects : colonnes du cycle de vie (À faire → En cours → Corrigée → Re-testée → Fermée), champ « Catégorie » (Exigence / Cas de test / Anomalie) — <a href="https://github.com/users/azizrouissi19-code/projects/1">projet public</a></td></tr>
 <tr><td>Rapports</td><td>Filtres par libellé et jalon ; matrice générée depuis le référentiel (<code>qa/referentiel.mjs</code>)</td></tr></table>
 <p>Pour éviter une saisie manuelle de ${Object.keys(ISSUES).length} issues, le référentiel est écrit une seule fois (<code>qa/referentiel.mjs</code>) puis publié par l'API GitHub (<code>qa/github/publish.mjs</code>). Le même fichier génère les tableaux de ce rapport, ce qui garantit leur cohérence.</p>
 ${img("img/gh-exigences.png", "Issues « exigence » du dépôt", 92)}
 ${img("img/gh-ti03.png", "Cas de test TI-03 : lien vers les exigences, résultats des deux itérations", 92)}
 ${img("img/gh-milestones.png", "Jalons = campagnes de test", 92)}
+<p>Le tableau GitHub Projects regroupe les ${Object.keys(ISSUES).length} issues selon le cycle de vie défini au § 6.9. À la fin de l'itération 2, les 4 éléments « À faire » sont l'exigence EF-10 et les anomalies ouvertes (ANO-12, 16, 17). Les 3 éléments « En cours » sont les exigences satisfaites avec réserve. Les colonnes « Corrigée » et « Re-testée » sont vides parce que toutes les anomalies corrigées ont été re-testées puis fermées.</p>
+${img("img/gh-board.png", "Tableau GitHub Projects de la campagne (cycle de vie des anomalies)", 100)}
 <h2>5.2 Matrice de traçabilité exigences → cas de test</h2>
 <table><tr><th>Exigence</th><th>Criticité</th><th>Cas de test qui la vérifient</th><th>Verdict (v1.0.1)</th></tr>
 ${EXIGENCES.map((e) => { const v = verdict(e.id); return `<tr><td>${e.id} ${esc(e.titre)}</td><td>${e.crit}</td><td>${casOf(e.id).join(", ")}</td><td>${badge(v, v === "Satisfaite" ? "ok" : v.startsWith("Non") ? "ko" : "wa")}</td></tr>`; }).join("")}</table>
