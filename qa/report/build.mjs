@@ -67,7 +67,7 @@ a{color:var(--c2);text-decoration:none}
 <div class="kpi"><b>${EXIGENCES.length}</b><span>exigences</span></div><div class="kpi"><b>${CAS.length}</b><span>cas de test</span></div>
 <div class="kpi"><b>${t2.unit.total + t2.api.total}</b><span>tests Jest</span></div><div class="kpi"><b>${t2.e2e.total}</b><span>tests E2E (2 navigateurs)</span></div>
 <div class="kpi"><b>${ANOMALIES.length}</b><span>anomalies détectées</span></div></div></div>
-<div class="band"><div><b>Réalisé par :</b> [Noms des membres de l'équipe]</div><div><b>Encadrement :</b> [Nom de l'encadrant]</div>
+<div class="band"><div><b>Réalisé par :</b> Mohamed Aziz Rouissi · Mohamed Bouchahda · Mohamed Hosni Missaoui</div><div><b>Encadrement :</b> [Nom de l'encadrant]</div>
 <div><b>Outil de test :</b> Jest 30 (+ React Testing Library) · Playwright · k6 · JaCoCo · ESLint · PMD</div>
 <div><b>Gestion des tests et des exigences :</b> GitHub Issues, jalons et Pull Requests — <a style="color:#cfe0ff" href="${REPO}">${REPO.replace("https://", "")}</a></div>
 <div><b>Date :</b> 11 novembre 2026 · Année universitaire 2026 – 2027</div></div>
