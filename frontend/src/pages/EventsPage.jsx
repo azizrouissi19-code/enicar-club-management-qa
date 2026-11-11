@@ -124,6 +124,7 @@ function EventCard({ event, onDelete, canManage, clubName }) {
 export default function EventsPage() {
   const [events, setEvents] = useState([]);
   const [clubs, setClubs] = useState([]);
+  const [clubsLoaded, setClubsLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
   const { user } = useAuth();
@@ -134,7 +135,8 @@ export default function EventsPage() {
 
   useEffect(() => {
     api.get("/events").then((r) => setEvents(r.data)).catch(() => setError("Impossible de charger les événements"));
-    api.get("/clubs").then((r) => setClubs(r.data)).catch(() => {});
+    // ANO-18 : le bouton de création reste désactivé tant que les clubs ne sont pas chargés
+    api.get("/clubs").then((r) => setClubs(r.data)).catch(() => {}).finally(() => setClubsLoaded(true));
   }, []);
 
   const handleDelete = async (id) => {
@@ -167,7 +169,8 @@ export default function EventsPage() {
           {canManage && (
             <button
               onClick={() => (myClubs.length ? setShowModal(true) : setError("Aucun club associé à votre compte"))}
-              className="bg-[#4f7fff] hover:bg-[#3a62e8] text-white px-5 py-2.5 rounded-lg text-sm font-bold tracking-wide transition-all shadow-lg shadow-[#4f7fff]/20"
+              disabled={!clubsLoaded}
+              className="bg-[#4f7fff] hover:bg-[#3a62e8] disabled:opacity-40 text-white px-5 py-2.5 rounded-lg text-sm font-bold tracking-wide transition-all shadow-lg shadow-[#4f7fff]/20"
             >
               + Nouvel Événement
             </button>
