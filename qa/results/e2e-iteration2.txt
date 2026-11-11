@@ -1,0 +1,27 @@
+
+Running 22 tests using 1 worker
+
+  ok  1 [edge] › tests\e2e\TS_system.spec.js:9:3 › TS-01 Authentification › connexion administrateur -> tableau de bord personnalisé (4.7s)
+  ok  2 [edge] › tests\e2e\TS_system.spec.js:18:3 › TS-01 Authentification › mot de passe erroné -> message d'erreur visible sur la page de connexion (3.1s)
+  ok  3 [edge] › tests\e2e\TS_system.spec.js:28:3 › TS-01 Authentification › accès direct à /reservations sans session -> redirection vers /login (1.3s)
+  ok  4 [edge] › tests\e2e\TS_system.spec.js:35:3 › TS-02 Inscription › inscription -> tableau de bord -> déconnexion -> reconnexion (2.1s)
+  ok  5 [edge] › tests\e2e\TS_system.spec.js:52:3 › TS-03 Clubs › l'administrateur crée un club -> le président créé peut se connecter (3.8s)
+  ok  6 [edge] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING (2.5s)
+  ok  7 [edge] › tests\e2e\TS_system.spec.js:94:3 › TS-05 Réservations › un membre réserve une salle -> l'administrateur l'approuve (3.7s)
+  ok  8 [edge] › tests\e2e\TS_system.spec.js:117:3 › TS-06 Tableau de bord › le nombre de clubs affiché est celui de la base de données (1.3s)
+  ok  9 [edge] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /login : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (1.5s)
+  ok 10 [edge] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /dashboard : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (2.4s)
+  ok 11 [edge] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /reservations : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (2.0s)
+  ok 12 [firefox] › tests\e2e\TS_system.spec.js:9:3 › TS-01 Authentification › connexion administrateur -> tableau de bord personnalisé (7.7s)
+  ok 13 [firefox] › tests\e2e\TS_system.spec.js:18:3 › TS-01 Authentification › mot de passe erroné -> message d'erreur visible sur la page de connexion (5.1s)
+  ok 14 [firefox] › tests\e2e\TS_system.spec.js:28:3 › TS-01 Authentification › accès direct à /reservations sans session -> redirection vers /login (3.0s)
+  ok 15 [firefox] › tests\e2e\TS_system.spec.js:35:3 › TS-02 Inscription › inscription -> tableau de bord -> déconnexion -> reconnexion (5.9s)
+  ok 16 [firefox] › tests\e2e\TS_system.spec.js:52:3 › TS-03 Clubs › l'administrateur crée un club -> le président créé peut se connecter (5.5s)
+  ok 17 [firefox] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING (4.6s)
+  ok 18 [firefox] › tests\e2e\TS_system.spec.js:94:3 › TS-05 Réservations › un membre réserve une salle -> l'administrateur l'approuve (6.6s)
+  ok 19 [firefox] › tests\e2e\TS_system.spec.js:117:3 › TS-06 Tableau de bord › le nombre de clubs affiché est celui de la base de données (3.7s)
+  ok 20 [firefox] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /login : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (3.9s)
+  ok 21 [firefox] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /dashboard : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (7.7s)
+  ok 22 [firefox] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /reservations : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (7.6s)
+
+  22 passed (1.7m)

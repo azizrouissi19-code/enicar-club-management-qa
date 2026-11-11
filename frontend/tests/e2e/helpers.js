@@ -19,6 +19,22 @@ export async function loginUI(page, { email, password }) {
   await expect(page).toHaveURL(/\/dashboard/);
 }
 
+/** En-tête d'authentification administrateur (préparation des données ; nécessaire depuis la v1.0.1) */
+export async function adminHeaders(request) {
+  const r = await request.post(`${API}/auth/login`, { data: ADMIN });
+  return { Authorization: `Bearer ${(await r.json()).token}` };
+}
+
+/** Ouvre une vraie session dans le navigateur sans passer par le formulaire */
+export async function sessionAs(page, request, creds) {
+  const r = await (await request.post(`${API}/auth/login`, { data: creds })).json();
+  await page.goto("/login");
+  await page.evaluate(([token, user]) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [r.token, r.user]);
+}
+
 /** Crée un compte membre directement par l'API (préparation des données de test) */
 export async function newMember(request) {
   const email = `membre${uid()}@enicar.tn`;

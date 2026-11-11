@@ -1,0 +1,8 @@
+Running one project: api
+
+Test Suites: 3 passed, 3 total
+Tests:       45 passed, 45 total
+Snapshots:   0 total
+Time:        7.537 s, estimated 8 s
+Ran all test suites.
+Test results written to: ..\qa\results\jest-api-iteration2.json

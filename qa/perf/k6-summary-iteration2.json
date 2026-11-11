@@ -1,0 +1,168 @@
+{
+    "metrics": {
+        "data_received": {
+            "count": 17589782,
+            "rate": 247599.32344371275
+        },
+        "http_req_duration{expected_response:true}": {
+            "max": 686.341917,
+            "p(90)": 320.458567,
+            "p(95)": 410.0094785,
+            "avg": 126.48114688597036,
+            "min": 7.426399,
+            "med": 82.809472
+        },
+        "http_req_receiving": {
+            "avg": 0.18641188919082163,
+            "min": 0.015213,
+            "med": 0.137527,
+            "max": 10.775447,
+            "p(90)": 0.2723865,
+            "p(95)": 0.409217
+        },
+        "http_req_sending": {
+            "min": 0.002913,
+            "med": 0.0205805,
+            "max": 2.381028,
+            "p(90)": 0.0559245,
+            "p(95)": 0.0709095,
+            "avg": 0.030381314110305844
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 9936,
+            "thresholds": {
+                "rate<0.01": false
+            },
+            "value": 0
+        },
+        "checks": {
+            "passes": 9936,
+            "fails": 0,
+            "value": 1
+        },
+        "http_req_tls_handshaking": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0
+        },
+        "http_req_waiting": {
+            "med": 82.60971699999999,
+            "max": 685.19401,
+            "p(90)": 320.3035825,
+            "p(95)": 409.68539275,
+            "avg": 126.26435368266925,
+            "min": 7.342347
+        },
+        "data_sent": {
+            "count": 1642752,
+            "rate": 23123.895667712426
+        },
+        "iterations": {
+            "count": 1656,
+            "rate": 23.31037869729075
+        },
+        "http_req_connecting": {
+            "max": 10.030404,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.03443858655394524,
+            "min": 0,
+            "med": 0
+        },
+        "vus_max": {
+            "value": 50,
+            "min": 50,
+            "max": 50
+        },
+        "http_req_blocked": {
+            "med": 0.0058815,
+            "max": 29.522647,
+            "p(90)": 0.0103095,
+            "p(95)": 0.013465999999999999,
+            "avg": 0.04564493367552324,
+            "min": 0.001189
+        },
+        "iteration_duration": {
+            "med": 1873.9715215,
+            "max": 2185.810844,
+            "p(90)": 2012.3511055,
+            "p(95)": 2048.47148775,
+            "avg": 1761.2274772234325,
+            "min": 1132.795121
+        },
+        "http_req_duration": {
+            "min": 7.426399,
+            "med": 82.809472,
+            "max": 686.341917,
+            "p(90)": 320.458567,
+            "p(95)": 410.0094785,
+            "avg": 126.48114688597036,
+            "thresholds": {
+                "p(95)<500": false
+            }
+        },
+        "http_reqs": {
+            "count": 9936,
+            "rate": 139.86227218374452
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 50
+        }
+    },
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+                "login 200": {
+                    "name": "login 200",
+                    "path": "::login 200",
+                    "id": "48b06dc5cde7f6ebb606ad7da726a2a5",
+                    "passes": 1656,
+                    "fails": 0
+                },
+                "clubs 200": {
+                    "passes": 1656,
+                    "fails": 0,
+                    "name": "clubs 200",
+                    "path": "::clubs 200",
+                    "id": "af3d7b63099a76b3474effa631c04056"
+                },
+                "events 200": {
+                    "name": "events 200",
+                    "path": "::events 200",
+                    "id": "76bdd0589e3db2f73358e667a40fa019",
+                    "passes": 1656,
+                    "fails": 0
+                },
+                "rooms 200": {
+                    "fails": 0,
+                    "name": "rooms 200",
+                    "path": "::rooms 200",
+                    "id": "716043e0006cc192db8bc09ec2436f5e",
+                    "passes": 1656
+                },
+                "equipment 200": {
+                    "passes": 1656,
+                    "fails": 0,
+                    "name": "equipment 200",
+                    "path": "::equipment 200",
+                    "id": "28243cdf34c9a7738598588e8471fe1f"
+                },
+                "reservations 200": {
+                    "id": "252465794d943613e33e6bab1575f45d",
+                    "passes": 1656,
+                    "fails": 0,
+                    "name": "reservations 200",
+                    "path": "::reservations 200"
+                }
+            }
+    }
+}

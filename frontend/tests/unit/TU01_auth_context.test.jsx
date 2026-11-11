@@ -3,7 +3,8 @@
  * Composant isolé : l'API est simulée (jest.mock). Techniques : partitions d'équivalence.
  */
 import { renderHook, act } from "@testing-library/react";
-import { AuthProvider, useAuth } from "../../src/context/AuthContext";
+import { AuthProvider } from "../../src/context/AuthContext";
+import { useAuth } from "../../src/context/useAuth";
 import api from "../../src/api/axios";
 
 jest.mock("../../src/api/axios", () => ({

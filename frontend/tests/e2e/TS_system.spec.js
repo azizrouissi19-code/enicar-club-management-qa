@@ -3,7 +3,7 @@
  * Chaque scénario traverse : interface React -> API Spring Boot -> base MySQL.
  */
 import { test, expect } from "@playwright/test";
-import { ADMIN, PRESIDENT, API, uid, shot, loginUI, newMember } from "./helpers";
+import { ADMIN, PRESIDENT, API, uid, shot, loginUI, newMember, adminHeaders, sessionAs } from "./helpers";
 
 test.describe("TS-01 Authentification", () => {
   test("connexion administrateur -> tableau de bord personnalisé", async ({ page }, ti) => {
@@ -92,7 +92,7 @@ test.describe("TS-04 Événements", () => {
 
 test.describe("TS-05 Réservations", () => {
   test("un membre réserve une salle -> l'administrateur l'approuve", async ({ page, request }, ti) => {
-    const room = await (await request.post(`${API}/rooms`, { data: { name: `Salle TS05 ${uid()}`, capacity: 30, type: "SALLE" } })).json();
+    const room = await (await request.post(`${API}/rooms`, { data: { name: `Salle TS05 ${uid()}`, capacity: 30, type: "SALLE" }, headers: await adminHeaders(request) })).json();
     const member = await newMember(request);
     await loginUI(page, member);
     await page.getByRole("link", { name: /Réservations/ }).click();
@@ -126,11 +126,8 @@ test.describe("TS-06 Tableau de bord", () => {
 test.describe("TS-07 Affichage sur smartphone (360 × 800)", () => {
   test.use({ viewport: { width: 360, height: 800 } });
   for (const path of ["/login", "/dashboard", "/reservations"]) {
-    test(`${path} : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur)`, async ({ page }, ti) => {
-      if (path !== "/login") {
-        await page.goto("/login");
-        await page.evaluate(() => localStorage.setItem("user", JSON.stringify({ id: 1, fullName: "Admin ENICarthage", role: "ADMINISTRATOR" })));
-      }
+    test(`${path} : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur)`, async ({ page, request }, ti) => {
+      if (path !== "/login") await sessionAs(page, request, ADMIN);
       await page.goto(path);
       await page.waitForTimeout(800);
       await shot(page, ti, `TS07-mobile${path.replace("/", "-")}`);

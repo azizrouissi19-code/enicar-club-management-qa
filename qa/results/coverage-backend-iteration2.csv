@@ -1,0 +1,13 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+JaCoCo Coverage Report,com.example.backend.security,TokenAuthenticationFilter,0,54,1,3,0,12,1,4,0,3
+JaCoCo Coverage Report,com.example.backend.security,SecurityConfig,0,177,0,0,0,23,0,9,0,9
+JaCoCo Coverage Report,com.example.backend.security,TokenService,0,40,0,0,0,9,0,3,0,3
+JaCoCo Coverage Report,com.example.backend.controller,EquipmentController,5,13,0,0,2,3,1,3,1,3
+JaCoCo Coverage Report,com.example.backend.controller,AuthController,0,162,2,20,0,28,2,13,0,4
+JaCoCo Coverage Report,com.example.backend.controller,RoomController,5,27,2,4,2,5,3,4,1,3
+JaCoCo Coverage Report,com.example.backend.controller,EventController,14,80,3,11,5,16,4,8,1,4
+JaCoCo Coverage Report,com.example.backend.controller,ClubController,0,102,3,7,0,22,3,6,0,4
+JaCoCo Coverage Report,com.example.backend.controller,ReservationController,20,104,8,11,4,22,7,10,1,6
+JaCoCo Coverage Report,com.example.backend.web,ApiError,0,27,0,4,0,4,0,6,0,4
+JaCoCo Coverage Report,com.example.backend,BackendApplication,0,8,0,0,0,3,0,2,0,2
+JaCoCo Coverage Report,com.example.backend,DataLoader,218,10,1,1,55,3,1,2,0,2
