@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReservationController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">com.example.backend.controller</a> &gt; <span class="el_source">ReservationController.java</span></div><h1>ReservationController.java</h1><pre class="source lang-java linenums">package com.example.backend.controller;
+
+import com.example.backend.model.Reservation;
+import com.example.backend.repository.EquipmentRepository;
+import com.example.backend.repository.ReservationRepository;
+import com.example.backend.repository.RoomRepository;
+import com.example.backend.web.ApiError;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping(&quot;/api/reservations&quot;)
+<span class="fc" id="L16">public class ReservationController {</span>
+
+<span class="fc" id="L18">    private static final Set&lt;String&gt; STATUSES = Set.of(&quot;PENDING&quot;, &quot;APPROVED&quot;, &quot;REJECTED&quot;);</span>
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
+
+    @Autowired
+    private EquipmentRepository equipmentRepository;
+
+    @GetMapping
+    public List&lt;Reservation&gt; getAllReservations() {
+<span class="fc" id="L31">        return reservationRepository.findAll();</span>
+    }
+
+    @PostMapping
+    public Reservation createReservation(@RequestBody Reservation reservation) {
+        // ANO-05 : la ressource doit exister et ne pas Ãªtre dÃ©jÃ  rÃ©servÃ©e Ã  cette date
+<span class="fc" id="L37">        Long id = reservation.getResourceId();</span>
+<span class="pc bpc" id="L38" title="2 of 3 branches missed.">        boolean exists = switch (String.valueOf(reservation.getResourceType())) {</span>
+<span class="pc bpc" id="L39" title="1 of 4 branches missed.">            case &quot;ROOM&quot; -&gt; id != null &amp;&amp; roomRepository.existsById(id);</span>
+<span class="nc bnc" id="L40" title="All 4 branches missed.">            case &quot;EQUIPMENT&quot; -&gt; id != null &amp;&amp; equipmentRepository.existsById(id);</span>
+<span class="pc" id="L41">            default -&gt; false;</span>
+        };
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (!exists) {</span>
+<span class="fc" id="L44">            throw ApiError.badRequest(&quot;Ressource inexistante&quot;);</span>
+        }
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (ApiError.isBlank(reservation.getDate())) {</span>
+<span class="nc" id="L47">            throw ApiError.badRequest(&quot;La date est obligatoire&quot;);</span>
+        }
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (reservationRepository.existsByResourceTypeAndResourceIdAndDateAndStatusNot(</span>
+<span class="fc" id="L50">                reservation.getResourceType(), id, reservation.getDate(), &quot;REJECTED&quot;)) {</span>
+<span class="fc" id="L51">            throw ApiError.conflict(&quot;Ressource dÃ©jÃ  rÃ©servÃ©e Ã  cette date&quot;);</span>
+        }
+<span class="fc" id="L53">        reservation.setStatus(&quot;PENDING&quot;); // seule l'administration peut approuver</span>
+<span class="fc" id="L54">        return reservationRepository.save(reservation);</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public void deleteReservation(@PathVariable Long id) {
+<span class="nc" id="L59">        reservationRepository.deleteById(id);</span>
+<span class="nc" id="L60">    }</span>
+
+    @PutMapping(&quot;/{id}/status&quot;)
+    public Reservation updateReservationStatus(@PathVariable Long id, @RequestBody Map&lt;String, String&gt; statusMap) {
+<span class="fc" id="L64">        String status = statusMap.get(&quot;status&quot;);</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (!STATUSES.contains(status)) {</span>
+<span class="fc" id="L66">            throw ApiError.badRequest(&quot;Statut invalide : &quot; + status);</span>
+        }
+<span class="fc" id="L68">        Reservation reservation = reservationRepository.findById(id)</span>
+<span class="fc" id="L69">            .orElseThrow(() -&gt; ApiError.notFound(&quot;RÃ©servation introuvable : &quot; + id));</span>
+<span class="fc" id="L70">        reservation.setStatus(status);</span>
+<span class="fc" id="L71">        return reservationRepository.save(reservation);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

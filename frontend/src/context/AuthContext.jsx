@@ -1,22 +1,32 @@
-import { createContext, useContext, useState } from "react";
+import { useState } from "react";
 import api from "../api/axios";
+import { AuthContext } from "./useAuth";
 
-const AuthContext = createContext(null);
+// ANO-02 : ne jamais conserver le mot de passe (ni son hash) dans le navigateur
+function withoutPassword(user) {
+  if (!user) return user;
+  const { password: _ignored, ...safeUser } = user;
+  return safeUser;
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem("user");
-    return saved ? JSON.parse(saved) : null;
+    return saved ? withoutPassword(JSON.parse(saved)) : null;
   });
+
+  const openSession = (token, serverUser) => {
+    const safeUser = withoutPassword(serverUser);
+    localStorage.setItem("user", JSON.stringify(safeUser));
+    localStorage.setItem("token", token);
+    setUser(safeUser);
+    return safeUser;
+  };
 
   const login = async (email, password) => {
     try {
       const response = await api.post("/auth/login", { email, password });
-      const { token, user: safeUser } = response.data;
-      localStorage.setItem("user", JSON.stringify(safeUser));
-      localStorage.setItem("token", token);
-      setUser(safeUser);
-      return safeUser;
+      return openSession(response.data.token, response.data.user);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         throw new Error("Email ou mot de passe incorrect");
@@ -28,13 +38,10 @@ export function AuthProvider({ children }) {
   const register = async (fullName, email, password) => {
     try {
       const response = await api.post("/auth/register", { fullName, email, password });
-      const { token, user: newUser } = response.data;
-      localStorage.setItem("user", JSON.stringify(newUser));
-      localStorage.setItem("token", token);
-      setUser(newUser);
-      return newUser;
+      return openSession(response.data.token, response.data.user);
     } catch (error) {
-      throw new Error("Cet email est peut-être déjà utilisé ou une erreur est survenue");
+      const message = error.response?.data?.message;
+      throw new Error(message || "Cet email est peut-être déjà utilisé ou une erreur est survenue");
     }
   };
 
@@ -44,11 +51,5 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
-  return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, login, register, logout }}>{children}</AuthContext.Provider>;
 }
-
-export const useAuth = () => useContext(AuthContext);

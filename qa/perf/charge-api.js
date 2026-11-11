@@ -23,8 +23,10 @@ export default function () {
     tags: { name: "login" },
   });
   check(login, { "login 200": (r) => r.status === 200 });
+  // depuis la v1.0.1, /reservations exige le jeton de session
+  const auth = { Authorization: `Bearer ${login.json("token")}` };
   for (const res of ["clubs", "events", "rooms", "equipment", "reservations"]) {
-    const r = http.get(`${BASE}/${res}`, { tags: { name: res } });
+    const r = http.get(`${BASE}/${res}`, { tags: { name: res }, headers: auth });
     check(r, { [`${res} 200`]: (x) => x.status === 200 });
   }
   sleep(1);

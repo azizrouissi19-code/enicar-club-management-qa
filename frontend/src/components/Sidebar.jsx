@@ -1,10 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 const navItems = [
   { label: "Dashboard", path: "/dashboard", section: "Principal" },
-  { label: "Clubs", path: "/clubs", section: null, badge: 3 },
-  { label: "Événements", path: "/events", section: null, badge: 5 },
+  // ANO-08 : plus de badges codés en dur (3, 5) sans lien avec les données
+  { label: "Clubs", path: "/clubs", section: null },
+  { label: "Événements", path: "/events", section: null },
   { label: "Salles", path: "/rooms", section: "Ressources" },
   { label: "Équipements", path: "/equipment", section: null },
   { label: "Réservations", path: "/reservations", section: "Admin" },
@@ -40,7 +41,7 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-2 py-3 overflow-y-auto">
-        {navItems.map((item, i) => (
+        {navItems.map((item) => (
           <div key={item.path}>
             {item.section && (
               <div className="text-[#2e3455] text-[10px] tracking-widest uppercase px-2 pt-4 pb-1" style={{ fontFamily: "Syne, sans-serif" }}>

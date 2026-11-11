@@ -1,0 +1,128 @@
+[
+  {
+    "ta": "TA-01",
+    "n": 1,
+    "action": "Se connecter avec admin@enicar.tn / admin123",
+    "attendu": "Tableau de bord « Bienvenue, Admin ENICarthage » ; 1 club, 1 événement, 1 salle",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-01",
+    "n": 2,
+    "action": "Salles → + Nouvelle Salle « Labo Robotique », capacité 0",
+    "attendu": "Message d'erreur : capacité strictement positive",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-01",
+    "n": 3,
+    "action": "Recommencer avec une capacité de 24",
+    "attendu": "La salle « Labo Robotique — 24 places » apparaît",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-01",
+    "n": 4,
+    "action": "Clubs → + Nouveau Club « Club Robotique », président Sami Ben Ali (sami@enicar.tn)",
+    "attendu": "Le club apparaît dans la liste",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-01",
+    "n": 5,
+    "action": "Créer « Club Théâtre » avec un président déjà inscrit (ahmed@enicar.tn)",
+    "attendu": "Message : un compte existe déjà ; aucun club créé",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-01",
+    "n": 6,
+    "action": "Réservations → approuver la réservation #2 (PENDING)",
+    "attendu": "Le statut passe à APPROVED",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-02",
+    "n": 1,
+    "action": "Se connecter avec sami@enicar.tn / secret1 (compte créé en TA-01)",
+    "attendu": "Rôle CLUB_PRESIDENT affiché",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-02",
+    "n": 2,
+    "action": "Événements → + Nouvel Événement « Atelier Arduino », Labo Robotique, 15/03/2027, 20 participants",
+    "attendu": "Seul « Club Robotique » est proposé ; événement créé, statut PENDING, « Par Club Robotique »",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-02",
+    "n": 3,
+    "action": "Créer « Compétition » dans Labo Robotique avec 25 participants (capacité 24)",
+    "attendu": "Message : participants entre 0 et 24",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-02",
+    "n": 4,
+    "action": "Observer l'événement « Hackathon IEEE 2025 » d'un autre club",
+    "attendu": "Aucun bouton de suppression",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-02",
+    "n": 5,
+    "action": "Ouvrir le tableau de bord",
+    "attendu": "Événements = 2 dont « 1 en attente »",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-03",
+    "n": 1,
+    "action": "S'inscrire avec youssef@gmail.com",
+    "attendu": "Refus : adresse institutionnelle @enicar.tn obligatoire",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-03",
+    "n": 2,
+    "action": "S'inscrire avec youssef@enicar.tn / secret1",
+    "attendu": "Tableau de bord, rôle CLUB_MEMBER",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-03",
+    "n": 3,
+    "action": "Ouvrir Clubs puis Événements",
+    "attendu": "Aucun bouton de création ni de suppression",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-03",
+    "n": 4,
+    "action": "Réservations → réserver la salle n°2 (Labo Robotique) le 20/03/2027",
+    "attendu": "Réservation créée avec le statut PENDING",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-03",
+    "n": 5,
+    "action": "Réserver à nouveau la même salle à la même date",
+    "attendu": "Message : ressource déjà réservée à cette date",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-03",
+    "n": 6,
+    "action": "Test exploratoire : appeler directement l'API pour approuver sa propre réservation",
+    "attendu": "Refus HTTP 403",
+    "obtenu": "Conforme"
+  },
+  {
+    "ta": "TA-03",
+    "n": 7,
+    "action": "Smartphone (360 px) : ouvrir le menu ☰",
+    "attendu": "Le menu s'ouvre en tiroir, le contenu reste lisible",
+    "obtenu": "Conforme"
+  }
+]

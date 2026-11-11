@@ -1,0 +1,80 @@
+Running one project: unit
+FAIL unit tests/unit/TU06_login_register_app.test.jsx (8.792 s)
+  ● TU-06 Pages de compte (EF-10) › paramètres : le bouton « Désactiver mon compte » a un effet (appel API ou confirmation)
+
+    expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+    [0m [90m  96 |[39m     renderAs([32m"member"[39m[33m,[39m [33m<[39m[33mSettingsPage[39m [33m/[39m[33m>[39m)[33m;[39m
+     [90m  97 |[39m     [36mawait[39m userEvent[33m.[39msetup()[33m.[39mclick(screen[33m.[39mgetByRole([32m"button"[39m[33m,[39m { name[33m:[39m [35m/désactiver mon compte/i[39m }))[33m;[39m
+    [31m[1m>[22m[39m[90m  98 |[39m     expect(window[33m.[39mconfirm[33m.[39mmock[33m.[39mcalls[33m.[39mlength [33m+[39m api[33m.[39m[36mdelete[39m[33m.[39mmock[33m.[39mcalls[33m.[39mlength [33m+[39m api[33m.[39mput[33m.[39mmock[33m.[39mcalls[33m.[39mlength)[33m.[39mtoBeGreaterThan([35m0[39m)[33m;[39m
+     [90m     |[39m                                                                                                         [31m[1m^[22m[39m
+     [90m  99 |[39m   })[33m;[39m
+     [90m 100 |[39m
+     [90m 101 |[39m   test([32m"notifications : les notifications proviennent de l'API (pas de données fixes)"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/unit/TU06_login_register_app.test.jsx:98:105)
+
+  ● TU-06 Pages de compte (EF-10) › notifications : les notifications proviennent de l'API (pas de données fixes)
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: StringContaining "notification"
+
+    Number of calls: 0
+
+    [0m [90m 101 |[39m   test([32m"notifications : les notifications proviennent de l'API (pas de données fixes)"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 102 |[39m     renderAs([32m"member"[39m[33m,[39m [33m<[39m[33mNotificationsPage[39m [33m/[39m[33m>[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 103 |[39m     expect(api[33m.[39m[36mget[39m)[33m.[39mtoHaveBeenCalledWith(expect[33m.[39mstringContaining([32m"notification"[39m))[33m;[39m
+     [90m     |[39m                     [31m[1m^[22m[39m
+     [90m 104 |[39m   })[33m;[39m
+     [90m 105 |[39m })[33m;[39m
+     [90m 106 |[39m[0m
+
+      at Object.<anonymous> (tests/unit/TU06_login_register_app.test.jsx:103:21)
+
+------------------------|---------|----------|---------|---------|----------------------------------
+File                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                
+------------------------|---------|----------|---------|---------|----------------------------------
+All files               |   79.01 |    78.85 |   72.97 |   81.03 |                                  
+ src                    |     100 |      100 |     100 |     100 |                                  
+  App.jsx               |     100 |      100 |     100 |     100 |                                  
+ src/api                |     100 |       75 |     100 |     100 |                                  
+  errors.js             |     100 |       75 |     100 |     100 | 4                                
+ src/components         |   82.35 |     87.5 |   71.42 |   85.71 |                                  
+  ErrorAlert.jsx        |     100 |      100 |     100 |     100 |                                  
+  Layout.jsx            |   57.14 |       75 |   42.85 |   63.63 | 17-23,54-57                      
+  ProtectedRoute.jsx    |     100 |      100 |     100 |     100 |                                  
+  Sidebar.jsx           |     100 |    83.33 |     100 |     100 | 63                               
+ src/context            |   97.05 |       90 |     100 |     100 |                                  
+  AuthContext.jsx       |   96.77 |       90 |     100 |     100 | 7                                
+  useAuth.js            |     100 |      100 |     100 |     100 |                                  
+ src/pages              |   76.35 |    76.64 |   70.96 |   78.03 |                                  
+  ClubsPage.jsx         |   89.58 |    94.44 |   85.71 |    90.9 | 83,135,143,175                   
+  DashboardPage.jsx     |    91.3 |    64.28 |   83.33 |   94.73 | 20                               
+  EquipmentPage.jsx     |   45.45 |    54.54 |   38.46 |   46.66 | 7-27,54-58,66,85,117             
+  EventsPage.jsx        |   77.58 |     87.5 |   70.37 |      82 | 50-54,93,143-147,157,180         
+  LoginPage.jsx         |     100 |      100 |     100 |     100 |                                  
+  NotificationsPage.jsx |     100 |      100 |     100 |     100 |                                  
+  ProfilePage.jsx       |     100 |      100 |     100 |     100 |                                  
+  RegisterPage.jsx      |     100 |      100 |     100 |     100 |                                  
+  ReservationsPage.jsx  |   67.34 |    73.33 |   60.86 |   65.85 | 14-22,32,43,71-76,85,110,143-165 
+  RoomsPage.jsx         |   57.89 |    43.75 |      60 |      60 | 14-20,38,67-72,79-81,100,133     
+  SettingsPage.jsx      |     100 |      100 |     100 |     100 |                                  
+------------------------|---------|----------|---------|---------|----------------------------------
+
+=============================== Coverage summary ===============================
+Statements   : 79.01% ( 290/367 )
+Branches     : 78.85% ( 138/175 )
+Functions    : 72.97% ( 108/148 )
+Lines        : 81.03% ( 265/327 )
+================================================================================
+
+Test Suites: 1 failed, 5 passed, 6 total
+Tests:       2 failed, 69 passed, 71 total
+Snapshots:   0 total
+Time:        14.876 s
+Ran all test suites.
+Test results written to: ..\qa\results\jest-unit-iteration2.json

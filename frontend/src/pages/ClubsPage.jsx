@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import api from "../api/axios";
-import { useAuth } from "../context/AuthContext";
+import { apiMessage } from "../api/errors";
+import ErrorAlert from "../components/ErrorAlert";
+import { useAuth } from "../context/useAuth";
 
 function ClubCard({ club, onDelete, isAdmin }) {
   const presidentName = "President"; // We would fetch this properly in a real app or include it in club DTO
@@ -122,37 +124,33 @@ function NewClubModal({ onClose, onSave }) {
 export default function ClubsPage() {
   const [clubs, setClubs] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState("");
   const { user } = useAuth();
   const isAdmin = user?.role === "ADMINISTRATOR";
 
   useEffect(() => {
-    fetchClubs();
+    api
+      .get("/clubs")
+      .then((response) => setClubs(response.data))
+      .catch(() => setError("Impossible de charger les clubs"));
   }, []);
-
-  const fetchClubs = async () => {
-    try {
-      const response = await api.get("/clubs");
-      setClubs(response.data);
-    } catch (error) {
-      console.error("Failed to fetch clubs", error);
-    }
-  };
 
   const handleDelete = async (id) => {
     try {
       await api.delete(`/clubs/${id}`);
       setClubs(clubs.filter((c) => c.id !== id));
-    } catch (error) {
-      console.error("Failed to delete club", error);
+    } catch (e) {
+      setError(apiMessage(e, "Suppression du club impossible"));
     }
   };
 
   const handleAdd = async (clubData) => {
+    setError("");
     try {
       const response = await api.post("/clubs", clubData);
       setClubs([...clubs, response.data]);
-    } catch (error) {
-      console.error("Failed to create club", error);
+    } catch (e) {
+      setError(apiMessage(e, "Création du club impossible"));
     }
   };
 
@@ -173,6 +171,8 @@ export default function ClubsPage() {
             </button>
           )}
         </div>
+
+        <ErrorAlert message={error} onClose={() => setError("")} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {clubs.map((club) => (
