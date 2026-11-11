@@ -1,0 +1,245 @@
+
+Running 22 tests using 1 worker
+
+  ok  1 [edge] › tests\e2e\TS_system.spec.js:9:3 › TS-01 Authentification › connexion administrateur -> tableau de bord personnalisé (1.2s)
+  x   2 [edge] › tests\e2e\TS_system.spec.js:18:3 › TS-01 Authentification › mot de passe erroné -> message d'erreur visible sur la page de connexion (7.1s)
+  ok  3 [edge] › tests\e2e\TS_system.spec.js:28:3 › TS-01 Authentification › accès direct à /reservations sans session -> redirection vers /login (574ms)
+  ok  4 [edge] › tests\e2e\TS_system.spec.js:35:3 › TS-02 Inscription › inscription -> tableau de bord -> déconnexion -> reconnexion (1.4s)
+  ok  5 [edge] › tests\e2e\TS_system.spec.js:52:3 › TS-03 Clubs › l'administrateur crée un club -> le président créé peut se connecter (2.2s)
+  ok  6 [edge] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING (1.8s)
+  ok  7 [edge] › tests\e2e\TS_system.spec.js:94:3 › TS-05 Réservations › un membre réserve une salle -> l'administrateur l'approuve (2.9s)
+  x   8 [edge] › tests\e2e\TS_system.spec.js:117:3 › TS-06 Tableau de bord › le nombre de clubs affiché est celui de la base de données (6.2s)
+  ok  9 [edge] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /login : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (1.4s)
+  x  10 [edge] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /dashboard : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (1.4s)
+  x  11 [edge] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /reservations : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (1.6s)
+  ok 12 [firefox] › tests\e2e\TS_system.spec.js:9:3 › TS-01 Authentification › connexion administrateur -> tableau de bord personnalisé (4.8s)
+  x  13 [firefox] › tests\e2e\TS_system.spec.js:18:3 › TS-01 Authentification › mot de passe erroné -> message d'erreur visible sur la page de connexion (10.0s)
+  ok 14 [firefox] › tests\e2e\TS_system.spec.js:28:3 › TS-01 Authentification › accès direct à /reservations sans session -> redirection vers /login (4.0s)
+  ok 15 [firefox] › tests\e2e\TS_system.spec.js:35:3 › TS-02 Inscription › inscription -> tableau de bord -> déconnexion -> reconnexion (5.4s)
+  ok 16 [firefox] › tests\e2e\TS_system.spec.js:52:3 › TS-03 Clubs › l'administrateur crée un club -> le président créé peut se connecter (5.8s)
+  ok 17 [firefox] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING (4.9s)
+  ok 18 [firefox] › tests\e2e\TS_system.spec.js:94:3 › TS-05 Réservations › un membre réserve une salle -> l'administrateur l'approuve (6.3s)
+  x  19 [firefox] › tests\e2e\TS_system.spec.js:117:3 › TS-06 Tableau de bord › le nombre de clubs affiché est celui de la base de données (8.8s)
+  ok 20 [firefox] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /login : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (4.2s)
+  x  21 [firefox] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /dashboard : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (4.8s)
+  x  22 [firefox] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /reservations : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) (5.1s)
+
+
+  1) [edge] › tests\e2e\TS_system.spec.js:18:3 › TS-01 Authentification › mot de passe erroné -> message d'erreur visible sur la page de connexion 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Email ou mot de passe incorrect')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Email ou mot de passe incorrect') with timeout 5000ms
+      - waiting for getByText('Email ou mot de passe incorrect')
+
+
+      23 |     await page.waitForTimeout(1500);
+      24 |     await shot(page, ti, "TS01-3-mauvais-mdp");
+    > 25 |     await expect(page.getByText("Email ou mot de passe incorrect")).toBeVisible();
+         |                                                                     ^
+      26 |   });
+      27 |
+      28 |   test("accès direct à /reservations sans session -> redirection vers /login", async ({ page }) => {
+        at C:\Users\HP\atelier-test\enicar-platform\frontend\tests\e2e\TS_system.spec.js:25:69
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\qa\results\e2e-artifacts\TS_system-TS-01-Authentifi-586c4-le-sur-la-page-de-connexion-edge\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\qa\results\e2e-artifacts\TS_system-TS-01-Authentifi-586c4-le-sur-la-page-de-connexion-edge\error-context.md
+
+  2) [edge] › tests\e2e\TS_system.spec.js:117:3 › TS-06 Tableau de bord › le nombre de clubs affiché est celui de la base de données 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('div.grid > div').filter({ hasText: 'Clubs actifs' }).first()
+    Expected substring: "8"
+    Received string:    "3Clubs actifs↑ 1 ce mois"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('div.grid > div').filter({ hasText: 'Clubs actifs' }).first() with timeout 5000ms
+      - waiting for locator('div.grid > div').filter({ hasText: 'Clubs actifs' }).first()
+        14 × locator resolved to <div class="bg-[#161924] border border-[#1e2540] rounded-xl p-4">…</div>
+           - unexpected value "3Clubs actifs↑ 1 ce mois"
+
+
+      120 |     await shot(page, ti, "TS06-dashboard");
+      121 |     const card = page.locator("div.grid > div", { hasText: "Clubs actifs" }).first();
+    > 122 |     await expect(card).toContainText(String(clubs.length));
+          |                        ^
+      123 |   });
+      124 | });
+      125 |
+        at C:\Users\HP\atelier-test\enicar-platform\frontend\tests\e2e\TS_system.spec.js:122:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\qa\results\e2e-artifacts\TS_system-TS-06-Tableau-de-8250f-celui-de-la-base-de-données-edge\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\qa\results\e2e-artifacts\TS_system-TS-06-Tableau-de-8250f-celui-de-la-base-de-données-edge\error-context.md
+
+  3) [edge] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /dashboard : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 256
+    Received:    136
+
+      140 |       const content = path === "/login" ? page.locator("form") : page.locator("main");
+      141 |       const box = await content.boundingBox();
+    > 142 |       expect(box.width).toBeGreaterThanOrEqual(360 * 0.8 - 32);
+          |                         ^
+      143 |     });
+      144 |   }
+      145 | });
+        at C:\Users\HP\atelier-test\enicar-platform\frontend\tests\e2e\TS_system.spec.js:142:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\qa\results\e2e-artifacts\TS_system-TS-07-Affichage--ea5bc-lisible-≥-80-de-la-largeur--edge\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\qa\results\e2e-artifacts\TS_system-TS-07-Affichage--ea5bc-lisible-≥-80-de-la-largeur--edge\error-context.md
+
+  4) [edge] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /reservations : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 256
+    Received:    136
+
+      140 |       const content = path === "/login" ? page.locator("form") : page.locator("main");
+      141 |       const box = await content.boundingBox();
+    > 142 |       expect(box.width).toBeGreaterThanOrEqual(360 * 0.8 - 32);
+          |                         ^
+      143 |     });
+      144 |   }
+      145 | });
+        at C:\Users\HP\atelier-test\enicar-platform\frontend\tests\e2e\TS_system.spec.js:142:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\qa\results\e2e-artifacts\TS_system-TS-07-Affichage--a160e-lisible-≥-80-de-la-largeur--edge\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\qa\results\e2e-artifacts\TS_system-TS-07-Affichage--a160e-lisible-≥-80-de-la-largeur--edge\error-context.md
+
+  5) [firefox] › tests\e2e\TS_system.spec.js:18:3 › TS-01 Authentification › mot de passe erroné -> message d'erreur visible sur la page de connexion 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Email ou mot de passe incorrect')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Email ou mot de passe incorrect') with timeout 5000ms
+      - waiting for getByText('Email ou mot de passe incorrect')
+
+
+      23 |     await page.waitForTimeout(1500);
+      24 |     await shot(page, ti, "TS01-3-mauvais-mdp");
+    > 25 |     await expect(page.getByText("Email ou mot de passe incorrect")).toBeVisible();
+         |                                                                     ^
+      26 |   });
+      27 |
+      28 |   test("accès direct à /reservations sans session -> redirection vers /login", async ({ page }) => {
+        at C:\Users\HP\atelier-test\enicar-platform\frontend\tests\e2e\TS_system.spec.js:25:69
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\qa\results\e2e-artifacts\TS_system-TS-01-Authentifi-586c4-le-sur-la-page-de-connexion-firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\qa\results\e2e-artifacts\TS_system-TS-01-Authentifi-586c4-le-sur-la-page-de-connexion-firefox\error-context.md
+
+  6) [firefox] › tests\e2e\TS_system.spec.js:117:3 › TS-06 Tableau de bord › le nombre de clubs affiché est celui de la base de données 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('div.grid > div').filter({ hasText: 'Clubs actifs' }).first()
+    Expected substring: "9"
+    Received string:    "3Clubs actifs↑ 1 ce mois"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('div.grid > div').filter({ hasText: 'Clubs actifs' }).first() with timeout 5000ms
+      - waiting for locator('div.grid > div').filter({ hasText: 'Clubs actifs' }).first()
+        13 × locator resolved to <div class="bg-[#161924] border border-[#1e2540] rounded-xl p-4">…</div>
+           - unexpected value "3Clubs actifs↑ 1 ce mois"
+
+
+      120 |     await shot(page, ti, "TS06-dashboard");
+      121 |     const card = page.locator("div.grid > div", { hasText: "Clubs actifs" }).first();
+    > 122 |     await expect(card).toContainText(String(clubs.length));
+          |                        ^
+      123 |   });
+      124 | });
+      125 |
+        at C:\Users\HP\atelier-test\enicar-platform\frontend\tests\e2e\TS_system.spec.js:122:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\qa\results\e2e-artifacts\TS_system-TS-06-Tableau-de-8250f-celui-de-la-base-de-données-firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\qa\results\e2e-artifacts\TS_system-TS-06-Tableau-de-8250f-celui-de-la-base-de-données-firefox\error-context.md
+
+  7) [firefox] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /dashboard : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 256
+    Received:    136
+
+      140 |       const content = path === "/login" ? page.locator("form") : page.locator("main");
+      141 |       const box = await content.boundingBox();
+    > 142 |       expect(box.width).toBeGreaterThanOrEqual(360 * 0.8 - 32);
+          |                         ^
+      143 |     });
+      144 |   }
+      145 | });
+        at C:\Users\HP\atelier-test\enicar-platform\frontend\tests\e2e\TS_system.spec.js:142:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\qa\results\e2e-artifacts\TS_system-TS-07-Affichage--ea5bc-lisible-≥-80-de-la-largeur--firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\qa\results\e2e-artifacts\TS_system-TS-07-Affichage--ea5bc-lisible-≥-80-de-la-largeur--firefox\error-context.md
+
+  8) [firefox] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /reservations : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 256
+    Received:    136
+
+      140 |       const content = path === "/login" ? page.locator("form") : page.locator("main");
+      141 |       const box = await content.boundingBox();
+    > 142 |       expect(box.width).toBeGreaterThanOrEqual(360 * 0.8 - 32);
+          |                         ^
+      143 |     });
+      144 |   }
+      145 | });
+        at C:\Users\HP\atelier-test\enicar-platform\frontend\tests\e2e\TS_system.spec.js:142:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\qa\results\e2e-artifacts\TS_system-TS-07-Affichage--a160e-lisible-≥-80-de-la-largeur--firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\qa\results\e2e-artifacts\TS_system-TS-07-Affichage--a160e-lisible-≥-80-de-la-largeur--firefox\error-context.md
+
+  8 failed
+    [edge] › tests\e2e\TS_system.spec.js:18:3 › TS-01 Authentification › mot de passe erroné -> message d'erreur visible sur la page de connexion 
+    [edge] › tests\e2e\TS_system.spec.js:117:3 › TS-06 Tableau de bord › le nombre de clubs affiché est celui de la base de données 
+    [edge] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /dashboard : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) 
+    [edge] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /reservations : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) 
+    [firefox] › tests\e2e\TS_system.spec.js:18:3 › TS-01 Authentification › mot de passe erroné -> message d'erreur visible sur la page de connexion 
+    [firefox] › tests\e2e\TS_system.spec.js:117:3 › TS-06 Tableau de bord › le nombre de clubs affiché est celui de la base de données 
+    [firefox] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /dashboard : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) 
+    [firefox] › tests\e2e\TS_system.spec.js:129:5 › TS-07 Affichage sur smartphone (360 × 800) › /reservations : pas de défilement horizontal et contenu lisible (≥ 80 % de la largeur) 
+  14 passed (1.8m)

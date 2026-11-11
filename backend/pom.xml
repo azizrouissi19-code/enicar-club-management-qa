@@ -128,5 +128,30 @@
 			</plugin>
 		</plugins>
 	</build>
+	<!-- Profil QA (atelier de test) : analyse statique PMD/CPD + couverture JaCoCo -->
+	<profiles>
+		<profile>
+			<id>qa</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-pmd-plugin</artifactId>
+						<version>3.26.0</version>
+						<configuration>
+							<format>xml</format>
+							<minimumTokens>40</minimumTokens>
+							<rulesets>
+								<ruleset>/category/java/bestpractices.xml</ruleset>
+								<ruleset>/category/java/errorprone.xml</ruleset>
+								<ruleset>/category/java/security.xml</ruleset>
+								<ruleset>/category/java/design.xml</ruleset>
+							</rulesets>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

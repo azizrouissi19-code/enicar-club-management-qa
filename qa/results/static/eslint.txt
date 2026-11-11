@@ -1,0 +1,185 @@
+
+C:\Users\HP\atelier-test\enicar-platform\frontend\src\components\Sidebar.jsx
+  43:30  error  'i' is defined but never used  no-unused-vars
+
+C:\Users\HP\atelier-test\enicar-platform\frontend\src\context\AuthContext.jsx
+  36:14  error  'error' is defined but never used                                                                                               no-unused-vars
+  54:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\HP\atelier-test\enicar-platform\frontend\src\pages\ClubsPage.jsx
+  129:5  error  Error: Cannot access variable before it is declared
+
+`fetchClubs` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  127 |
+  128 |   useEffect(() => {
+> 129 |     fetchClubs();
+      |     ^^^^^^^^^^ `fetchClubs` accessed before it is declared
+  130 |   }, []);
+  131 |
+  132 |   const fetchClubs = async () => {
+
+  130 |   }, []);
+  131 |
+> 132 |   const fetchClubs = async () => {
+      |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 133 |     try {
+      | ^^^^^^^^^
+> 134 |       const response = await api.get("/clubs");
+      | ^^^^^^^^^
+> 135 |       setClubs(response.data);
+      | ^^^^^^^^^
+> 136 |     } catch (error) {
+      | ^^^^^^^^^
+> 137 |       console.error("Failed to fetch clubs", error);
+      | ^^^^^^^^^
+> 138 |     }
+      | ^^^^^^^^^
+> 139 |   };
+      | ^^^^^ `fetchClubs` is declared here
+  140 |
+  141 |   const handleDelete = async (id) => {
+  142 |     try {  react-hooks/immutability
+
+C:\Users\HP\atelier-test\enicar-platform\frontend\src\pages\EquipmentPage.jsx
+  50:5  error  Error: Cannot access variable before it is declared
+
+`fetchEquipment` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  48 |
+  49 |   useEffect(() => {
+> 50 |     fetchEquipment();
+     |     ^^^^^^^^^^^^^^ `fetchEquipment` accessed before it is declared
+  51 |   }, []);
+  52 |
+  53 |   const fetchEquipment = async () => {
+
+  51 |   }, []);
+  52 |
+> 53 |   const fetchEquipment = async () => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 54 |     try {
+     | ^^^^^^^^^
+> 55 |       const response = await api.get("/equipment");
+     | ^^^^^^^^^
+> 56 |       setEquipment(response.data);
+     | ^^^^^^^^^
+> 57 |     } catch (error) {
+     | ^^^^^^^^^
+> 58 |       console.error("Failed to fetch equipment", error);
+     | ^^^^^^^^^
+> 59 |     }
+     | ^^^^^^^^^
+> 60 |   };
+     | ^^^^^ `fetchEquipment` is declared here
+  61 |
+  62 |   const handleAdd = async (equipmentData) => {
+  63 |     try {  react-hooks/immutability
+
+C:\Users\HP\atelier-test\enicar-platform\frontend\src\pages\EventsPage.jsx
+  114:5  error  Error: Cannot access variable before it is declared
+
+`fetchEvents` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  112 |
+  113 |   useEffect(() => {
+> 114 |     fetchEvents();
+      |     ^^^^^^^^^^^ `fetchEvents` accessed before it is declared
+  115 |   }, []);
+  116 |
+  117 |   const fetchEvents = async () => {
+
+  115 |   }, []);
+  116 |
+> 117 |   const fetchEvents = async () => {
+      |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 118 |     try {
+      | ^^^^^^^^^
+> 119 |       const response = await api.get("/events");
+      | ^^^^^^^^^
+> 120 |       setEvents(response.data);
+      | ^^^^^^^^^
+> 121 |     } catch (error) {
+      | ^^^^^^^^^
+> 122 |       console.error("Failed to fetch events", error);
+      | ^^^^^^^^^
+> 123 |     }
+      | ^^^^^^^^^
+> 124 |   };
+      | ^^^^^ `fetchEvents` is declared here
+  125 |
+  126 |   const handleDelete = async (id) => {
+  127 |     try {  react-hooks/immutability
+
+C:\Users\HP\atelier-test\enicar-platform\frontend\src\pages\ReservationsPage.jsx
+  60:5  error  Error: Cannot access variable before it is declared
+
+`fetchReservations` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  58 |
+  59 |   useEffect(() => {
+> 60 |     fetchReservations();
+     |     ^^^^^^^^^^^^^^^^^ `fetchReservations` accessed before it is declared
+  61 |   }, []);
+  62 |
+  63 |   const fetchReservations = async () => {
+
+  61 |   }, []);
+  62 |
+> 63 |   const fetchReservations = async () => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 64 |     try {
+     | ^^^^^^^^^
+> 65 |       const response = await api.get("/reservations");
+     | ^^^^^^^^^
+> 66 |       setReservations(response.data);
+     | ^^^^^^^^^
+> 67 |     } catch (error) {
+     | ^^^^^^^^^
+> 68 |       console.error("Failed to fetch reservations", error);
+     | ^^^^^^^^^
+> 69 |     }
+     | ^^^^^^^^^
+> 70 |   };
+     | ^^^^^ `fetchReservations` is declared here
+  71 |
+  72 |   const handleAdd = async (reservationData) => {
+  73 |     try {  react-hooks/immutability
+
+C:\Users\HP\atelier-test\enicar-platform\frontend\src\pages\RoomsPage.jsx
+  59:5  error  Error: Cannot access variable before it is declared
+
+`fetchRooms` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  57 |
+  58 |   useEffect(() => {
+> 59 |     fetchRooms();
+     |     ^^^^^^^^^^ `fetchRooms` accessed before it is declared
+  60 |   }, []);
+  61 |
+  62 |   const fetchRooms = async () => {
+
+  60 |   }, []);
+  61 |
+> 62 |   const fetchRooms = async () => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 63 |     try {
+     | ^^^^^^^^^
+> 64 |       const response = await api.get("/rooms");
+     | ^^^^^^^^^
+> 65 |       setRooms(response.data);
+     | ^^^^^^^^^
+> 66 |     } catch (error) {
+     | ^^^^^^^^^
+> 67 |       console.error("Failed to fetch rooms", error);
+     | ^^^^^^^^^
+> 68 |     }
+     | ^^^^^^^^^
+> 69 |   };
+     | ^^^^^ `fetchRooms` is declared here
+  70 |
+  71 |   const handleAdd = async (roomData) => {
+  72 |     try {  react-hooks/immutability
+
+✖ 8 problems (8 errors, 0 warnings)
+

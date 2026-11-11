@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd" version="7.7.0" timestamp="2026-11-11T11:41:39.351">
+<file name="C:\Users\HP\atelier-test\enicar-platform\backend\src\main\java\com\example\backend\BackendApplication.java">
+<violation beginline="7" endline="7" begincolumn="8" endcolumn="13" rule="UseUtilityClass" ruleset="Design" package="com.example.backend" class="BackendApplication" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.7.0/pmd_rules_java_design.html#useutilityclass" priority="3">
+This utility class has a non-private constructor
+</violation>
+</file>
+<file name="C:\Users\HP\atelier-test\enicar-platform\backend\src\main\java\com\example\backend\security\SecurityConfig.java">
+<violation beginline="22" endline="22" begincolumn="63" endcolumn="79" rule="SignatureDeclareThrowsException" ruleset="Design" package="com.example.backend.security" class="SecurityConfig" method="filterChain" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.7.0/pmd_rules_java_design.html#signaturedeclarethrowsexception" priority="3">
+A method/constructor should not explicitly throw java.lang.Exception
+</violation>
+</file>
+<configerror rule="LoosePackageCoupling" msg="No packages or classes specified"/>
+</pmd>

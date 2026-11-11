@@ -1,0 +1,631 @@
+Running one project: unit
+FAIL unit tests/unit/TU01_auth_context.test.jsx
+  ● TU-01 Connexion › le hash du mot de passe n'est jamais conservé dans le navigateur
+
+    expect(received).not.toHaveProperty(path)
+
+    Expected path: not "password"
+
+    Received value: "$2a$10$hash"
+
+    [0m [90m 32 |[39m     [36mconst[39m { result } [33m=[39m setup()[33m;[39m
+     [90m 33 |[39m     [36mawait[39m act(() [33m=>[39m result[33m.[39mcurrent[33m.[39mlogin([32m"ahmed@enicar.tn"[39m[33m,[39m [32m"123456"[39m))[33m;[39m
+    [31m[1m>[22m[39m[90m 34 |[39m     expect(result[33m.[39mcurrent[33m.[39muser)[33m.[39mnot[33m.[39mtoHaveProperty([32m"password"[39m)[33m;[39m
+     [90m    |[39m                                     [31m[1m^[22m[39m
+     [90m 35 |[39m     expect(localStorage[33m.[39mgetItem([32m"user"[39m))[33m.[39mnot[33m.[39mtoContain([32m"$2a$"[39m)[33m;[39m
+     [90m 36 |[39m   })[33m;[39m
+     [90m 37 |[39m[0m
+
+      at Object.<anonymous> (tests/unit/TU01_auth_context.test.jsx:34:37)
+
+FAIL unit tests/unit/TU04_roles_ui.test.jsx
+  ● TU-04 Bouton de création selon le rôle › events / member -> création visible = false
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+    [0m [90m 38 |[39m     renderAs(role[33m,[39m element)[33m;[39m
+     [90m 39 |[39m     [36mawait[39m screen[33m.[39mfindByText(item)[33m;[39m
+    [31m[1m>[22m[39m[90m 40 |[39m     expect([33mBoolean[39m(screen[33m.[39mqueryByRole([32m"button"[39m[33m,[39m { name[33m:[39m button })))[33m.[39mtoBe(visible)[33m;[39m
+     [90m    |[39m                                                                     [31m[1m^[22m[39m
+     [90m 41 |[39m   })[33m;[39m
+     [90m 42 |[39m })[33m;[39m
+     [90m 43 |[39m[0m
+
+      at tests/unit/TU04_roles_ui.test.jsx:40:69
+
+  ● TU-04 Suppression selon le rôle › events / member -> suppression possible = false
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+    [0m [90m 52 |[39m     renderAs(role[33m,[39m element)[33m;[39m
+     [90m 53 |[39m     [36mawait[39m screen[33m.[39mfindByText(item)[33m;[39m
+    [31m[1m>[22m[39m[90m 54 |[39m     expect(deleteButtons()[33m.[39mlength [33m>[39m [35m0[39m)[33m.[39mtoBe(allowed)[33m;[39m
+     [90m    |[39m                                        [31m[1m^[22m[39m
+     [90m 55 |[39m   })[33m;[39m
+     [90m 56 |[39m
+     [90m 57 |[39m   test([32m"administrateur : suppression d'un club -> DELETE /clubs/1 et retrait de la liste"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/unit/TU04_roles_ui.test.jsx:54:40
+
+FAIL unit tests/unit/TU05_dashboard_layout.test.jsx
+  ● TU-05 Tableau de bord alimenté par l'API › statistique « Clubs actifs » = 1 (données de l'API)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "1"
+    Received: "3"
+
+    [0m [90m 34 |[39m     [36mawait[39m screen[33m.[39mfindByText([32m"Bienvenue, Admin ENICarthage"[39m)[33m;[39m
+     [90m 35 |[39m     [36mawait[39m [36mnew[39m [33mPromise[39m((r) [33m=>[39m setTimeout(r[33m,[39m [35m50[39m))[33m;[39m
+    [31m[1m>[22m[39m[90m 36 |[39m     expect(statValue(label))[33m.[39mtoBe([33mString[39m(expected))[33m;[39m
+     [90m    |[39m                              [31m[1m^[22m[39m
+     [90m 37 |[39m   })[33m;[39m
+     [90m 38 |[39m
+     [90m 39 |[39m   test([32m"les événements affichés sont ceux de l'API"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/unit/TU05_dashboard_layout.test.jsx:36:30
+
+  ● TU-05 Tableau de bord alimenté par l'API › statistique « Événements » = 1 (données de l'API)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "1"
+    Received: "3"
+
+    [0m [90m 34 |[39m     [36mawait[39m screen[33m.[39mfindByText([32m"Bienvenue, Admin ENICarthage"[39m)[33m;[39m
+     [90m 35 |[39m     [36mawait[39m [36mnew[39m [33mPromise[39m((r) [33m=>[39m setTimeout(r[33m,[39m [35m50[39m))[33m;[39m
+    [31m[1m>[22m[39m[90m 36 |[39m     expect(statValue(label))[33m.[39mtoBe([33mString[39m(expected))[33m;[39m
+     [90m    |[39m                              [31m[1m^[22m[39m
+     [90m 37 |[39m   })[33m;[39m
+     [90m 38 |[39m
+     [90m 39 |[39m   test([32m"les événements affichés sont ceux de l'API"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/unit/TU05_dashboard_layout.test.jsx:36:30
+
+  ● TU-05 Tableau de bord alimenté par l'API › statistique « Salles » = 1 (données de l'API)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "1"
+    Received: "4"
+
+    [0m [90m 34 |[39m     [36mawait[39m screen[33m.[39mfindByText([32m"Bienvenue, Admin ENICarthage"[39m)[33m;[39m
+     [90m 35 |[39m     [36mawait[39m [36mnew[39m [33mPromise[39m((r) [33m=>[39m setTimeout(r[33m,[39m [35m50[39m))[33m;[39m
+    [31m[1m>[22m[39m[90m 36 |[39m     expect(statValue(label))[33m.[39mtoBe([33mString[39m(expected))[33m;[39m
+     [90m    |[39m                              [31m[1m^[22m[39m
+     [90m 37 |[39m   })[33m;[39m
+     [90m 38 |[39m
+     [90m 39 |[39m   test([32m"les événements affichés sont ceux de l'API"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/unit/TU05_dashboard_layout.test.jsx:36:30
+
+  ● TU-05 Tableau de bord alimenté par l'API › les événements affichés sont ceux de l'API
+
+    Unable to find an element with the text: Forum des clubs 2026. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex h-screen bg-[#0f1117] overflow-hidden"[39m
+        [36m>[39m
+          [36m<aside[39m
+            [33mclass[39m=[32m"w-56 bg-[#0b0e16] border-r border-[#1e2130] flex flex-col flex-shrink-0 h-screen"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"px-4 py-5 border-b border-[#1e2130]"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"font-black text-white text-sm tracking-wide"[39m
+                [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+              [36m>[39m
+                [0mENICarthage[0m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"text-[#4f7fff] text-[10px] tracking-widest uppercase mt-1"[39m
+              [36m>[39m
+                [0mClub Platform[0m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<nav[39m
+              [33mclass[39m=[32m"flex-1 px-2 py-3 overflow-y-auto"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"text-[#2e3455] text-[10px] tracking-widest uppercase px-2 pt-4 pb-1"[39m
+                  [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                [36m>[39m
+                  [0mPrincipal[0m
+                [36m</div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/dashboard"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mDashboard[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/clubs"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mClubs[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"ml-auto bg-[#4f7fff] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"[39m
+                    [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                  [36m>[39m
+                    [0m3[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/events"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mÉvénements[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"ml-auto bg-[#4f7fff] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"[39m
+                    [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                  [36m>[39m
+                    [0m5[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"text-[#2e3455] text-[10px] tracking-widest uppercase px-2 pt-4 pb-1"[39m
+                  [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                [36m>[39m
+                  [0mRessources[0m
+                [36m</div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/rooms"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mSalles[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/equipment"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mÉquipements[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"text-[#2e3455] text-[10px] tracking-widest uppercase px-2 pt-4 pb-1"[39m
+                  [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                [36m>[39m
+                  [0mAdmin[0m
+                [36m</div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/reservations"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mRéservations[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+            [36m</nav>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"p-3 border-t border-[#1e2130]"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"bg-[#161924] border border-[#1e2540] rounded-lg p-2.5 flex items-center gap-2"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"w-8 h-8 rounded-full bg-[#1a2040] border border-[#4f7fff] flex items-center justify-center text-[#4f7fff] text-xs font-bold flex-shrink-0"[39m
+                  [33mstyle[39m=[32m"fon...
+
+    [0m [90m 40 |[39m     mockApi({ [32m"/events"[39m[33m:[39m [{ id[33m:[39m [35m9[39m[33m,[39m title[33m:[39m [32m"Forum des clubs 2026"[39m[33m,[39m clubId[33m:[39m [35m1[39m[33m,[39m date[33m:[39m [32m"2026-12-15"[39m[33m,[39m status[33m:[39m [32m"PENDING"[39m[33m,[39m room[33m:[39m [32m"Amphi A"[39m[33m,[39m attendees[33m:[39m [35m100[39m }] })[33m;[39m
+     [90m 41 |[39m     renderAs([32m"admin"[39m[33m,[39m [33m<[39m[33mDashboardPage[39m [33m/[39m[33m>[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 42 |[39m     expect([36mawait[39m screen[33m.[39mfindByText([32m"Forum des clubs 2026"[39m))[33m.[39mtoBeInTheDocument()[33m;[39m
+     [90m    |[39m                         [31m[1m^[22m[39m
+     [90m 43 |[39m   })[33m;[39m
+     [90m 44 |[39m })[33m;[39m
+     [90m 45 |[39m[0m
+
+      at waitForWrapper (node_modules/@testing-library/dom/dist/wait-for.js:163:27)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+      at Object.<anonymous> (tests/unit/TU05_dashboard_layout.test.jsx:42:25)
+
+  ● TU-05 Menu latéral et menu utilisateur › les badges du menu reflètent les données réelles (1 club, 1 événement)
+
+    expect(element).not.toHaveTextContent()
+
+    Expected element not to have text content:
+      3
+    Received:
+      Clubs3
+
+    [0m [90m 61 |[39m   test([32m"les badges du menu reflètent les données réelles (1 club, 1 événement)"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 62 |[39m     renderAs([32m"member"[39m[33m,[39m [33m<[39m[33mDashboardPage[39m [33m/[39m[33m>[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 63 |[39m     expect(screen[33m.[39mgetByRole([32m"link"[39m[33m,[39m { name[33m:[39m [35m/Clubs/[39m }))[33m.[39mnot[33m.[39mtoHaveTextContent([32m"3"[39m)[33m;[39m
+     [90m    |[39m                                                             [31m[1m^[22m[39m
+     [90m 64 |[39m     expect(screen[33m.[39mgetByRole([32m"link"[39m[33m,[39m { name[33m:[39m [35m/Événements/[39m }))[33m.[39mnot[33m.[39mtoHaveTextContent([32m"5"[39m)[33m;[39m
+     [90m 65 |[39m   })[33m;[39m
+     [90m 66 |[39m[0m
+
+      at Object.<anonymous> (tests/unit/TU05_dashboard_layout.test.jsx:63:61)
+
+FAIL unit tests/unit/TU03_forms.test.jsx (11.03 s)
+  ● TU-03 Formulaire « Nouveau club » (administrateur) › échec de l'API (e-mail déjà utilisé) : un message d'erreur est affiché à l'utilisateur
+
+    Unable to find role="alert"
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex h-screen bg-[#0f1117] overflow-hidden"[39m
+        [36m>[39m
+          [36m<aside[39m
+            [33mclass[39m=[32m"w-56 bg-[#0b0e16] border-r border-[#1e2130] flex flex-col flex-shrink-0 h-screen"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"px-4 py-5 border-b border-[#1e2130]"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"font-black text-white text-sm tracking-wide"[39m
+                [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+              [36m>[39m
+                [0mENICarthage[0m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"text-[#4f7fff] text-[10px] tracking-widest uppercase mt-1"[39m
+              [36m>[39m
+                [0mClub Platform[0m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<nav[39m
+              [33mclass[39m=[32m"flex-1 px-2 py-3 overflow-y-auto"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"text-[#2e3455] text-[10px] tracking-widest uppercase px-2 pt-4 pb-1"[39m
+                  [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                [36m>[39m
+                  [0mPrincipal[0m
+                [36m</div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/dashboard"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mDashboard[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/clubs"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mClubs[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"ml-auto bg-[#4f7fff] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"[39m
+                    [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                  [36m>[39m
+                    [0m3[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/events"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mÉvénements[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"ml-auto bg-[#4f7fff] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"[39m
+                    [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                  [36m>[39m
+                    [0m5[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"text-[#2e3455] text-[10px] tracking-widest uppercase px-2 pt-4 pb-1"[39m
+                  [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                [36m>[39m
+                  [0mRessources[0m
+                [36m</div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/rooms"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mSalles[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/equipment"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mÉquipements[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+              [36m<div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"text-[#2e3455] text-[10px] tracking-widest uppercase px-2 pt-4 pb-1"[39m
+                  [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                [36m>[39m
+                  [0mAdmin[0m
+                [36m</div>[39m
+                [36m<a[39m
+                  [33mclass[39m=[32m"flex items-center gap-2 px-3 py-2 rounded-lg mb-0.5 text-sm transition-all text-[#5a6080] hover:bg-[#161924]"[39m
+                  [33mdata-discover[39m=[32m"true"[39m
+                  [33mhref[39m=[32m"/reservations"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-4 h-4 rounded-sm bg-[#161924] border border-[#1e2540] flex-shrink-0"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mRéservations[0m
+                  [36m</span>[39m
+                [36m</a>[39m
+              [36m</div>[39m
+            [36m</nav>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"p-3 border-t border-[#1e2130]"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"bg-[#161924] border border-[#1e2540] rounded-lg p-2.5 flex items-center gap-2"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"w-8 h-8 rounded-full bg-[#1a2040] border border-[#4f7fff] flex items-center justify-center text-[#4f7fff] text-xs font-bold flex-shrink-0"[39m
+                  [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                [36m>[39m
+                  [0mAE[0m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex-1 min-w-0"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-white text-xs font-medium truncate"[39m
+                  [36m>[39m
+                    [0mAdmin ENICarthage[0m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"text-[#4f7fff] text-[10px]"[39m
+                  [36m>[39m
+                    [0mADMINISTRATOR[0m
+                  [36m</div>[39m
+                [36m</div>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"text-[#2e3455] hover:text-red-400 text-xs transition-colors"[39m
+                [36m>[39m
+                  [0m✕[0m
+                [36m</button>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</aside>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex-1 flex flex-col overflow-hidden"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"px-6 py-4 border-b border-[#1e2130] flex items-center justify-between flex-shrink-0 relative z-10"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<h1[39m
+                  [33mclass[39m=[32m"text-white font-black text-lg"[39m
+                  [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                [36m/>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"relative"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"w-8 h-8 bg-[#161924] hover:border-[#4f7fff] transition-colors border border-[#1e2540] rounded-lg flex items-center justify-center relative cursor-pointer"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-3 h-0.5 bg-[#5a6080] rounded"[39m
+                    [33mstyle[39m=[32m"box-shadow: 0 4px 0 #5a6080, 0 -4px 0 #5a6080;"[39m
+                  [36m/>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"w-1.5 h-1.5 bg-[#4f7fff] rounded-full absolute top-1.5 right-1.5"[39m
+                  [36m/>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<main[39m
+              [33mclass[39m=[32m"flex-1 overflow-y-auto p-6"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"p-8 max-w-7xl mx-auto"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex items-center justify-between mb-8"[39m
+                [36m>[39m
+                  [36m<div>[39m
+                    [36m<h1[39m
+                      [33mclass[39m=[32m"text-3xl font-black text-white mb-2"[39m
+                      [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                    [36m>[39m
+                      [0mClubs[0m
+                    [36m</h1>[39m
+                    [36m<p[39m
+                      [33mclass[39m=[32m"text-[#5a6080] text-sm"[39m
+                    [36m>[39m
+                      [0mGérez les clubs et leurs membres[0m
+                    [36m</p>[39m
+                  [36m</div>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"bg-[#4f7fff] hover:bg-[#3a62e8] text-white px-5 py-2.5 rounded-lg text-sm font-bold tracking-wide transition-all shadow-lg shadow-[#4f7fff]/20"[39m
+                  [36m>[39m
+                    [0m+ Nouveau Club[0m
+                  [36m</button>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"bg-[#161924] border border-[#1e2540] hover:border-[#4f7fff] rounded-xl p-4 transition-all cursor-pointer"[39m
+                  [36m>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"w-10 h-10 rounded-lg bg-[#1a2040] border border-[#2a3060] flex items-center justify-center text-[#4f7fff] text-sm font-black mb-3"[39m
+                      [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                    [36m>[39m
+                      [0mCI[0m
+                    [36m</div>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"text-white text-sm font-bold mb-1"[39m
+                      [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                    [36m>[39m
+                      [0mClub IEEE[0m
+                    [36m</div>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"text-[#5a6080] text-xs mb-4 leading-relaxed"[39m
+                    [36m>[39m
+                      [0mÉlectronique & informatique[0m
+                    [36m</div>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"flex items-center justify-between border-t border-[#1e2130] pt-3"[39m
+                    [36m>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"text-xs text-[#5a6080]"[39m
+                      [36m>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"text-[#4f7fff] font-semibold"[39m
+                        [36m>[39m
+                          [0m2[0m
+                        [36m</span>[39m
+                        [0m membres[0m
+                      [36m</div>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"flex gap-2"[39m
+                      [36m>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"text-[10px] font-bold px-2 py-0.5 rounded bg-[#1a2040] text-[#4f7fff] border border-[#2a3060]"[39m
+                          [33mstyle[39m=[32m"font-family: Syne, sans-serif;"[39m
+                        [36m>[39m
+                          [0mPresident[0m
+                        [36m</span>[39m
+                        [36m<button[39m
+                          [33mclass[39m=[32m"text-[10px] text-[#2e3455] hover:text-red-400 transition-colors font-bold"[39m
+                        [36m>[39m
+                          [0m✕[0m
+                        [36m</button>[39m
+                      [36m</div>[39m
+                    [36m</div>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</main>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+    [0m [90m 60 |[39m     [36mawait[39m user[33m.[39mtype(screen[33m.[39mgetByPlaceholderText(fields[33m.[39mmdp)[33m,[39m [32m"x"[39m)[33m;[39m
+     [90m 61 |[39m     [36mawait[39m user[33m.[39mclick(screen[33m.[39mgetByRole([32m"button"[39m[33m,[39m { name[33m:[39m [32m"Créer"[39m }))[33m;[39m
+    [31m[1m>[22m[39m[90m 62 |[39m     [36mawait[39m waitFor(() [33m=>[39m expect(screen[33m.[39mgetByRole([32m"alert"[39m))[33m.[39mtoBeInTheDocument())[33m;[39m
+     [90m    |[39m                  [31m[1m^[22m[39m
+     [90m 63 |[39m   })[33m;[39m
+     [90m 64 |[39m })[33m;[39m
+     [90m 65 |[39m[0m
+
+      at waitForWrapper (node_modules/@testing-library/dom/dist/wait-for.js:163:27)
+      at Object.<anonymous> (tests/unit/TU03_forms.test.jsx:62:18)
+
+  ● TU-03 Formulaire « Nouvel événement » › le club de l'événement est celui du président connecté (pas une valeur fixe)
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "/events", ObjectContaining {"clubId": 7}
+    Received
+           1: "/clubs", {"description": "", "name": "Club Robotique", "presidentEmail": "sami@enicar.tn", "presidentName": "Sami Ben Ali", "presidentPassword": "secret1"}
+           2: "/clubs", {"description": "", "name": "Club X", "presidentEmail": "ahmed@enicar.tn", "presidentName": "Ahmed", "presidentPassword": "x"}
+           3: "/events", {"attendees": 0, "clubId": 1, "date": "2031-01-15", "room": "Amphi A", "status": "PENDING", "title": "Atelier"}
+
+    Number of calls: 4
+
+    [0m [90m 101 |[39m     [36mawait[39m user[33m.[39mtype(date[33m,[39m [32m"2031-01-15"[39m)[33m;[39m
+     [90m 102 |[39m     [36mawait[39m user[33m.[39mclick(screen[33m.[39mgetByRole([32m"button"[39m[33m,[39m { name[33m:[39m [32m"Créer"[39m }))[33m;[39m
+    [31m[1m>[22m[39m[90m 103 |[39m     expect(api[33m.[39mpost)[33m.[39mtoHaveBeenCalledWith([32m"/events"[39m[33m,[39m expect[33m.[39mobjectContaining({ clubId[33m:[39m [35m7[39m }))[33m;[39m
+     [90m     |[39m                      [31m[1m^[22m[39m
+     [90m 104 |[39m   })[33m;[39m
+     [90m 105 |[39m })[33m;[39m
+     [90m 106 |[39m[0m
+
+      at Object.<anonymous> (tests/unit/TU03_forms.test.jsx:103:22)
+
+Test Suites: 4 failed, 1 passed, 5 total
+Tests:       10 failed, 45 passed, 55 total
+Snapshots:   0 total
+Time:        13.222 s, estimated 28 s
+Ran all test suites.
+Test results written to: ..\qa\results\jest-unit-iteration1.json

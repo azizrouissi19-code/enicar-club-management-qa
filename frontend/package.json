@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "jest",
+    "test:unit": "jest --selectProjects unit --coverage",
+    "test:api": "jest --selectProjects api --runInBand",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "axios": "^1.15.1",
@@ -16,15 +20,26 @@
     "react-router-dom": "^7.14.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^8.0.7",
+    "@babel/preset-react": "^8.0.1",
     "@eslint/js": "^9.39.4",
+    "@playwright/test": "^1.65.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.9",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.5.0",
+    "babel-jest": "^30.5.2",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2",
     "postcss": "^8.5.10",
     "tailwindcss": "^3.4.19",
     "vite": "^8.0.9"

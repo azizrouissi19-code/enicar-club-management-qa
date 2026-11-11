@@ -1,0 +1,419 @@
+Running one project: api
+FAIL api tests/api/TI04_TI07_resources.api.test.js
+  ● TI-04 Clubs — /api/clubs › président déjà inscrit (e-mail existant) : 409/400, sans erreur 500
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: 500
+    Received array: [400, 409]
+
+    [0m [90m 30 |[39m   test([32m"président déjà inscrit (e-mail existant) : 409/400, sans erreur 500"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 31 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/clubs"[39m[33m,[39m { name[33m:[39m [32m`Club ${uid()}`[39m[33m,[39m description[33m:[39m [32m"x"[39m[33m,[39m presidentName[33m:[39m [32m"Ahmed"[39m[33m,[39m presidentEmail[33m:[39m [33mPRESIDENT[39m[33m.[39memail[33m,[39m presidentPassword[33m:[39m [32m"x"[39m }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 32 |[39m     expect([[35m400[39m[33m,[39m [35m409[39m])[33m.[39mtoContain(r[33m.[39mstatus)[33m;[39m
+     [90m    |[39m                        [31m[1m^[22m[39m
+     [90m 33 |[39m   })[33m;[39m
+     [90m 34 |[39m
+     [90m 35 |[39m   test([32m"nom de club vide : 400"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/api/TI04_TI07_resources.api.test.js:32:24)
+
+  ● TI-04 Clubs — /api/clubs › nom de club vide : 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 35 |[39m   test([32m"nom de club vide : 400"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 36 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/clubs"[39m[33m,[39m { name[33m:[39m [32m""[39m[33m,[39m description[33m:[39m [32m"x"[39m[33m,[39m presidentName[33m:[39m [32m"P"[39m[33m,[39m presidentEmail[33m:[39m [32m`p${uid()}@enicar.tn`[39m[33m,[39m presidentPassword[33m:[39m [32m"secret1"[39m }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 37 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 38 |[39m   })[33m;[39m
+     [90m 39 |[39m
+     [90m 40 |[39m   test([32m"suppression : le club disparaît de la liste"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/api/TI04_TI07_resources.api.test.js:37:22)
+
+  ● TI-05 Événements — /api/events › refus : participants > capacité de la salle (41 pour 40) -> 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 59 |[39m     [36mconst[39m room [33m=[39m [36mawait[39m newRoom([35m40[39m)[33m;[39m
+     [90m 60 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/events"[39m[33m,[39m { title[33m:[39m [32m`Evt ${uid()}`[39m[33m,[39m clubId[33m:[39m [35m1[39m[33m,[39m date[33m:[39m futureDate()[33m,[39m status[33m:[39m [32m"PENDING"[39m[33m,[39m room[33m:[39m room[33m.[39mname[33m,[39m attendees }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 61 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 62 |[39m   })[33m;[39m
+     [90m 63 |[39m
+     [90m 64 |[39m   test([32m"participants = capacité (40 pour 40, valeur limite) : accepté"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/api/TI04_TI07_resources.api.test.js:61:22
+
+  ● TI-05 Événements — /api/events › refus : participants négatifs -> 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 59 |[39m     [36mconst[39m room [33m=[39m [36mawait[39m newRoom([35m40[39m)[33m;[39m
+     [90m 60 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/events"[39m[33m,[39m { title[33m:[39m [32m`Evt ${uid()}`[39m[33m,[39m clubId[33m:[39m [35m1[39m[33m,[39m date[33m:[39m futureDate()[33m,[39m status[33m:[39m [32m"PENDING"[39m[33m,[39m room[33m:[39m room[33m.[39mname[33m,[39m attendees }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 61 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 62 |[39m   })[33m;[39m
+     [90m 63 |[39m
+     [90m 64 |[39m   test([32m"participants = capacité (40 pour 40, valeur limite) : accepté"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/api/TI04_TI07_resources.api.test.js:61:22
+
+  ● TI-05 Événements — /api/events › refus : salle inexistante -> 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 75 |[39m     [36mconst[39m room [33m=[39m [36mawait[39m newRoom([35m100[39m)[33m;[39m
+     [90m 76 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/events"[39m[33m,[39m { title[33m:[39m [32m`Evt ${uid()}`[39m[33m,[39m clubId[33m:[39m [35m1[39m[33m,[39m date[33m:[39m futureDate()[33m,[39m status[33m:[39m [32m"PENDING"[39m[33m,[39m room[33m:[39m room[33m.[39mname[33m,[39m attendees[33m:[39m [35m10[39m[33m,[39m [33m...[39moverride }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 77 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 78 |[39m   })[33m;[39m
+     [90m 79 |[39m })[33m;[39m
+     [90m 80 |[39m[0m
+
+      at tests/api/TI04_TI07_resources.api.test.js:77:22
+
+  ● TI-05 Événements — /api/events › refus : club inexistant -> 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 75 |[39m     [36mconst[39m room [33m=[39m [36mawait[39m newRoom([35m100[39m)[33m;[39m
+     [90m 76 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/events"[39m[33m,[39m { title[33m:[39m [32m`Evt ${uid()}`[39m[33m,[39m clubId[33m:[39m [35m1[39m[33m,[39m date[33m:[39m futureDate()[33m,[39m status[33m:[39m [32m"PENDING"[39m[33m,[39m room[33m:[39m room[33m.[39mname[33m,[39m attendees[33m:[39m [35m10[39m[33m,[39m [33m...[39moverride }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 77 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 78 |[39m   })[33m;[39m
+     [90m 79 |[39m })[33m;[39m
+     [90m 80 |[39m[0m
+
+      at tests/api/TI04_TI07_resources.api.test.js:77:22
+
+  ● TI-05 Événements — /api/events › refus : date passée -> 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 75 |[39m     [36mconst[39m room [33m=[39m [36mawait[39m newRoom([35m100[39m)[33m;[39m
+     [90m 76 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/events"[39m[33m,[39m { title[33m:[39m [32m`Evt ${uid()}`[39m[33m,[39m clubId[33m:[39m [35m1[39m[33m,[39m date[33m:[39m futureDate()[33m,[39m status[33m:[39m [32m"PENDING"[39m[33m,[39m room[33m:[39m room[33m.[39mname[33m,[39m attendees[33m:[39m [35m10[39m[33m,[39m [33m...[39moverride }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 77 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 78 |[39m   })[33m;[39m
+     [90m 79 |[39m })[33m;[39m
+     [90m 80 |[39m[0m
+
+      at tests/api/TI04_TI07_resources.api.test.js:77:22
+
+  ● TI-06 Réservations — /api/reservations › double réservation de la même salle à la même date : 409
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+    [0m [90m 93 |[39m     [36mawait[39m post([32m"/reservations"[39m[33m,[39m { clubId[33m:[39m [35m1[39m[33m,[39m resourceType[33m:[39m [32m"ROOM"[39m[33m,[39m resourceId[33m:[39m room[33m.[39mid[33m,[39m date[33m,[39m status[33m:[39m [32m"PENDING"[39m }[33m,[39m admin)[33m;[39m
+     [90m 94 |[39m     [36mconst[39m second [33m=[39m [36mawait[39m post([32m"/reservations"[39m[33m,[39m { clubId[33m:[39m [35m1[39m[33m,[39m resourceType[33m:[39m [32m"ROOM"[39m[33m,[39m resourceId[33m:[39m room[33m.[39mid[33m,[39m date[33m,[39m status[33m:[39m [32m"PENDING"[39m }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 95 |[39m     expect(second[33m.[39mstatus)[33m.[39mtoBe([35m409[39m)[33m;[39m
+     [90m    |[39m                           [31m[1m^[22m[39m
+     [90m 96 |[39m   })[33m;[39m
+     [90m 97 |[39m
+     [90m 98 |[39m   test([32m"ressource inexistante : 400"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/api/TI04_TI07_resources.api.test.js:95:27)
+
+  ● TI-06 Réservations — /api/reservations › ressource inexistante : 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m  98 |[39m   test([32m"ressource inexistante : 400"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m  99 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/reservations"[39m[33m,[39m { clubId[33m:[39m [35m1[39m[33m,[39m resourceType[33m:[39m [32m"ROOM"[39m[33m,[39m resourceId[33m:[39m [35m999999[39m[33m,[39m date[33m:[39m futureDate()[33m,[39m status[33m:[39m [32m"PENDING"[39m }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 100 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m     |[39m                      [31m[1m^[22m[39m
+     [90m 101 |[39m   })[33m;[39m
+     [90m 102 |[39m
+     [90m 103 |[39m   test([32m"statut inconnu (« FOO ») : 400"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/api/TI04_TI07_resources.api.test.js:100:22)
+
+  ● TI-06 Réservations — /api/reservations › statut inconnu (« FOO ») : 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 104 |[39m     [36mconst[39m room [33m=[39m [36mawait[39m newRoom()[33m;[39m
+     [90m 105 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/reservations"[39m[33m,[39m { clubId[33m:[39m [35m1[39m[33m,[39m resourceType[33m:[39m [32m"ROOM"[39m[33m,[39m resourceId[33m:[39m room[33m.[39mid[33m,[39m date[33m:[39m futureDate()[33m,[39m status[33m:[39m [32m"PENDING"[39m }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 106 |[39m     expect(([36mawait[39m put([32m`/reservations/${r.data.id}/status`[39m[33m,[39m { status[33m:[39m [32m"FOO"[39m }[33m,[39m admin))[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m     |[39m                                                                                               [31m[1m^[22m[39m
+     [90m 107 |[39m   })[33m;[39m
+     [90m 108 |[39m
+     [90m 109 |[39m   test([32m"réservation inexistante : 404, jamais 500"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/api/TI04_TI07_resources.api.test.js:106:95)
+
+  ● TI-06 Réservations — /api/reservations › réservation inexistante : 404, jamais 500
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 404
+    Received: 500
+
+    [0m [90m 108 |[39m
+     [90m 109 |[39m   test([32m"réservation inexistante : 404, jamais 500"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 110 |[39m     expect(([36mawait[39m put([32m"/reservations/999999/status"[39m[33m,[39m { status[33m:[39m [32m"APPROVED"[39m }[33m,[39m admin))[33m.[39mstatus)[33m.[39mtoBe([35m404[39m)[33m;[39m
+     [90m     |[39m                                                                                              [31m[1m^[22m[39m
+     [90m 111 |[39m   })[33m;[39m
+     [90m 112 |[39m })[33m;[39m
+     [90m 113 |[39m[0m
+
+      at Object.<anonymous> (tests/api/TI04_TI07_resources.api.test.js:110:94)
+
+  ● TI-07 Salles et équipements › capacité 0 : refusée (400)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 120 |[39m   test[33m.[39meach([[35m0[39m[33m,[39m [33m-[39m[35m10[39m])([32m"capacité %i : refusée (400)"[39m[33m,[39m [36masync[39m (capacity) [33m=>[39m {
+     [90m 121 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/rooms"[39m[33m,[39m { name[33m:[39m [32m`Salle-${uid()}`[39m[33m,[39m capacity[33m,[39m type[33m:[39m [32m"SALLE"[39m }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 122 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m     |[39m                      [31m[1m^[22m[39m
+     [90m 123 |[39m   })[33m;[39m
+     [90m 124 |[39m
+     [90m 125 |[39m   test([32m"ajout d'un équipement : statut AVAILABLE"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/api/TI04_TI07_resources.api.test.js:122:22
+
+  ● TI-07 Salles et équipements › capacité -10 : refusée (400)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 120 |[39m   test[33m.[39meach([[35m0[39m[33m,[39m [33m-[39m[35m10[39m])([32m"capacité %i : refusée (400)"[39m[33m,[39m [36masync[39m (capacity) [33m=>[39m {
+     [90m 121 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/rooms"[39m[33m,[39m { name[33m:[39m [32m`Salle-${uid()}`[39m[33m,[39m capacity[33m,[39m type[33m:[39m [32m"SALLE"[39m }[33m,[39m admin)[33m;[39m
+    [31m[1m>[22m[39m[90m 122 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m     |[39m                      [31m[1m^[22m[39m
+     [90m 123 |[39m   })[33m;[39m
+     [90m 124 |[39m
+     [90m 125 |[39m   test([32m"ajout d'un équipement : statut AVAILABLE"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/api/TI04_TI07_resources.api.test.js:122:22
+
+FAIL api tests/api/TI01_TI02_auth.api.test.js
+  ● TI-01 Connexion — POST /api/auth/login › le hash du mot de passe n'est jamais renvoyé au client
+
+    expect(received).not.toHaveProperty(path)
+
+    Expected path: not "password"
+
+    Received value: "$2a$10$foITRe7t5YAAU4nOMZhGbOi9FdsLZ7leXV79huH23aMU5QuaUy7zu"
+
+    [0m [90m 20 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/auth/login"[39m[33m,[39m [33mADMIN[39m)[33m;[39m
+     [90m 21 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 22 |[39m     expect(r[33m.[39mdata[33m.[39muser)[33m.[39mnot[33m.[39mtoHaveProperty([32m"password"[39m)[33m;[39m
+     [90m    |[39m                             [31m[1m^[22m[39m
+     [90m 23 |[39m   })[33m;[39m
+     [90m 24 |[39m
+     [90m 25 |[39m   test[33m.[39meach([[0m
+
+      at Object.<anonymous> (tests/api/TI01_TI02_auth.api.test.js:22:29)
+
+  ● TI-02 Inscription — POST /api/auth/register › entrée invalide (adresse non institutionnelle) : 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 72 |[39m     [[32m"e-mail mal formé"[39m[33m,[39m { fullName[33m:[39m [32m"A"[39m[33m,[39m email[33m:[39m [32m"pas-un-email"[39m[33m,[39m password[33m:[39m [32m"secret1"[39m }][33m,[39m
+     [90m 73 |[39m   ])([32m"entrée invalide (%s) : 400"[39m[33m,[39m [36masync[39m (_c[33m,[39m body) [33m=>[39m {
+    [31m[1m>[22m[39m[90m 74 |[39m     expect(([36mawait[39m post([32m"/auth/register"[39m[33m,[39m body))[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                                                         [31m[1m^[22m[39m
+     [90m 75 |[39m   })[33m;[39m
+     [90m 76 |[39m
+     [90m 77 |[39m   test([32m"mot de passe de 6 caractères (limite) : accepté"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/api/TI01_TI02_auth.api.test.js:74:57
+
+  ● TI-02 Inscription — POST /api/auth/register › entrée invalide (mot de passe de 5 caractères (limite - 1)) : 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 72 |[39m     [[32m"e-mail mal formé"[39m[33m,[39m { fullName[33m:[39m [32m"A"[39m[33m,[39m email[33m:[39m [32m"pas-un-email"[39m[33m,[39m password[33m:[39m [32m"secret1"[39m }][33m,[39m
+     [90m 73 |[39m   ])([32m"entrée invalide (%s) : 400"[39m[33m,[39m [36masync[39m (_c[33m,[39m body) [33m=>[39m {
+    [31m[1m>[22m[39m[90m 74 |[39m     expect(([36mawait[39m post([32m"/auth/register"[39m[33m,[39m body))[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                                                         [31m[1m^[22m[39m
+     [90m 75 |[39m   })[33m;[39m
+     [90m 76 |[39m
+     [90m 77 |[39m   test([32m"mot de passe de 6 caractères (limite) : accepté"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/api/TI01_TI02_auth.api.test.js:74:57
+
+  ● TI-02 Inscription — POST /api/auth/register › entrée invalide (nom vide) : 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 72 |[39m     [[32m"e-mail mal formé"[39m[33m,[39m { fullName[33m:[39m [32m"A"[39m[33m,[39m email[33m:[39m [32m"pas-un-email"[39m[33m,[39m password[33m:[39m [32m"secret1"[39m }][33m,[39m
+     [90m 73 |[39m   ])([32m"entrée invalide (%s) : 400"[39m[33m,[39m [36masync[39m (_c[33m,[39m body) [33m=>[39m {
+    [31m[1m>[22m[39m[90m 74 |[39m     expect(([36mawait[39m post([32m"/auth/register"[39m[33m,[39m body))[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                                                         [31m[1m^[22m[39m
+     [90m 75 |[39m   })[33m;[39m
+     [90m 76 |[39m
+     [90m 77 |[39m   test([32m"mot de passe de 6 caractères (limite) : accepté"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/api/TI01_TI02_auth.api.test.js:74:57
+
+  ● TI-02 Inscription — POST /api/auth/register › entrée invalide (e-mail mal formé) : 400
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 72 |[39m     [[32m"e-mail mal formé"[39m[33m,[39m { fullName[33m:[39m [32m"A"[39m[33m,[39m email[33m:[39m [32m"pas-un-email"[39m[33m,[39m password[33m:[39m [32m"secret1"[39m }][33m,[39m
+     [90m 73 |[39m   ])([32m"entrée invalide (%s) : 400"[39m[33m,[39m [36masync[39m (_c[33m,[39m body) [33m=>[39m {
+    [31m[1m>[22m[39m[90m 74 |[39m     expect(([36mawait[39m post([32m"/auth/register"[39m[33m,[39m body))[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                                                         [31m[1m^[22m[39m
+     [90m 75 |[39m   })[33m;[39m
+     [90m 76 |[39m
+     [90m 77 |[39m   test([32m"mot de passe de 6 caractères (limite) : accepté"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at tests/api/TI01_TI02_auth.api.test.js:74:57
+
+  ● TI-02 Inscription — POST /api/auth/register › corps vide : 400, jamais 500
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+    [0m [90m 81 |[39m
+     [90m 82 |[39m   test([32m"corps vide : 400, jamais 500"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 83 |[39m     expect(([36mawait[39m post([32m"/auth/register"[39m[33m,[39m {}))[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                                                       [31m[1m^[22m[39m
+     [90m 84 |[39m   })[33m;[39m
+     [90m 85 |[39m })[33m;[39m
+     [90m 86 |[39m[0m
+
+      at Object.<anonymous> (tests/api/TI01_TI02_auth.api.test.js:83:55)
+
+FAIL api tests/api/TI03_access_control.api.test.js
+  ● TI-03 Contrôle d'accès de l'API › sans jeton : suppression d'une salle refusée (401)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 200
+
+    [0m [90m 24 |[39m   test([32m"sans jeton : suppression d'une salle refusée (401)"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 25 |[39m     [36mconst[39m id [33m=[39m [36mawait[39m newRoom()[33m;[39m
+    [31m[1m>[22m[39m[90m 26 |[39m     expect(([36mawait[39m del([32m`/rooms/${id}`[39m))[33m.[39mstatus)[33m.[39mtoBe([35m401[39m)[33m;[39m
+     [90m    |[39m                                                [31m[1m^[22m[39m
+     [90m 27 |[39m   })[33m;[39m
+     [90m 28 |[39m
+     [90m 29 |[39m   test([32m"jeton falsifié : création d'une salle refusée (401)"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/api/TI03_access_control.api.test.js:26:48)
+
+  ● TI-03 Contrôle d'accès de l'API › jeton falsifié : création d'une salle refusée (401)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 200
+
+    [0m [90m 29 |[39m   test([32m"jeton falsifié : création d'une salle refusée (401)"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 30 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/rooms"[39m[33m,[39m { name[33m:[39m [32m"Fausse"[39m[33m,[39m capacity[33m:[39m [35m10[39m[33m,[39m type[33m:[39m [32m"SALLE"[39m }[33m,[39m { [33mAuthorization[39m[33m:[39m [32m"Bearer dummy-jwt-token-1"[39m })[33m;[39m
+    [31m[1m>[22m[39m[90m 31 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m401[39m)[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 32 |[39m   })[33m;[39m
+     [90m 33 |[39m
+     [90m 34 |[39m   test([32m"membre : création d'une salle refusée (403)"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/api/TI03_access_control.api.test.js:31:22)
+
+  ● TI-03 Contrôle d'accès de l'API › membre : création d'une salle refusée (403)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+    [0m [90m 34 |[39m   test([32m"membre : création d'une salle refusée (403)"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 35 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/rooms"[39m[33m,[39m { name[33m:[39m [32m`Salle-membre-${uid()}`[39m[33m,[39m capacity[33m:[39m [35m10[39m[33m,[39m type[33m:[39m [32m"SALLE"[39m }[33m,[39m [36mawait[39m memberHeaders())[33m;[39m
+    [31m[1m>[22m[39m[90m 36 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m403[39m)[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 37 |[39m   })[33m;[39m
+     [90m 38 |[39m
+     [90m 39 |[39m   test([32m"membre : validation d'une réservation refusée (403)"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/api/TI03_access_control.api.test.js:36:22)
+
+  ● TI-03 Contrôle d'accès de l'API › membre : validation d'une réservation refusée (403)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+    [0m [90m 41 |[39m     [36mconst[39m res [33m=[39m [36mawait[39m post([32m"/reservations"[39m[33m,[39m { clubId[33m:[39m [35m1[39m[33m,[39m resourceType[33m:[39m [32m"ROOM"[39m[33m,[39m resourceId[33m:[39m [35m1[39m[33m,[39m date[33m:[39m [32m`2030-01-${String((Date.now() % 27) + 1).padStart(2, "0")}`[39m[33m,[39m status[33m:[39m [32m"PENDING"[39m }[33m,[39m admin)[33m;[39m
+     [90m 42 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m put([32m`/reservations/${res.data.id}/status`[39m[33m,[39m { status[33m:[39m [32m"APPROVED"[39m }[33m,[39m [36mawait[39m memberHeaders())[33m;[39m
+    [31m[1m>[22m[39m[90m 43 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m403[39m)[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 44 |[39m   })[33m;[39m
+     [90m 45 |[39m
+     [90m 46 |[39m   test([32m"sans jeton : création d’un club (et d’un compte président) refusée (401)"[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/api/TI03_access_control.api.test.js:43:22)
+
+  ● TI-03 Contrôle d'accès de l'API › sans jeton : création d’un club (et d’un compte président) refusée (401)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 200
+
+    [0m [90m 46 |[39m   test([32m"sans jeton : création d’un club (et d’un compte président) refusée (401)"[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 47 |[39m     [36mconst[39m r [33m=[39m [36mawait[39m post([32m"/clubs"[39m[33m,[39m { name[33m:[39m [32m`Club-${uid()}`[39m[33m,[39m description[33m:[39m [32m"x"[39m[33m,[39m presidentName[33m:[39m [32m"P"[39m[33m,[39m presidentEmail[33m:[39m [32m`p${uid()}@enicar.tn`[39m[33m,[39m presidentPassword[33m:[39m [32m"secret1"[39m })[33m;[39m
+    [31m[1m>[22m[39m[90m 48 |[39m     expect(r[33m.[39mstatus)[33m.[39mtoBe([35m401[39m)[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 49 |[39m   })[33m;[39m
+     [90m 50 |[39m })[33m;[39m
+     [90m 51 |[39m[0m
+
+      at Object.<anonymous> (tests/api/TI03_access_control.api.test.js:48:22)
+
+Test Suites: 3 failed, 3 total
+Tests:       24 failed, 21 passed, 45 total
+Snapshots:   0 total
+Time:        7.457 s
+Ran all test suites.
+Test results written to: ..\qa\results\jest-api-iteration1.json
