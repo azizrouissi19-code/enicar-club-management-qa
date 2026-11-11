@@ -13,6 +13,10 @@ public final class ApiError {
         return new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
     }
 
+    public static ResponseStatusException badRequest(String message, Throwable cause) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, message, cause);
+    }
+
     public static ResponseStatusException conflict(String message) {
         return new ResponseStatusException(HttpStatus.CONFLICT, message);
     }

@@ -45,16 +45,23 @@ public class EventController {
         if (attendees < 0 || attendees > room.getCapacity()) {
             throw ApiError.badRequest("Participants entre 0 et " + room.getCapacity() + " (capacité de la salle)");
         }
-        try {
-            if (LocalDate.parse(event.getDate()).isBefore(LocalDate.now())) {
-                throw ApiError.badRequest("La date de l'événement est passée");
-            }
-        } catch (DateTimeParseException | NullPointerException e) {
-            throw ApiError.badRequest("Date invalide (format AAAA-MM-JJ)");
+        if (parseDate(event.getDate()).isBefore(LocalDate.now())) {
+            throw ApiError.badRequest("La date de l'événement est passée");
         }
         event.setAttendees(attendees);
         event.setStatus("PENDING"); // le statut initial ne peut pas être choisi par le client
         return eventRepository.save(event);
+    }
+
+    private static LocalDate parseDate(String date) {
+        if (date == null) {
+            throw ApiError.badRequest("La date est obligatoire");
+        }
+        try {
+            return LocalDate.parse(date);
+        } catch (DateTimeParseException e) {
+            throw ApiError.badRequest("Date invalide (format AAAA-MM-JJ)", e);
+        }
     }
 
     @DeleteMapping("/{id}")

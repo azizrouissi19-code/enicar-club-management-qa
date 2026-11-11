@@ -6,6 +6,7 @@ import com.example.backend.model.User;
 import com.example.backend.repository.ClubRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.web.ApiError;
+import java.util.Locale;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +37,7 @@ public class ClubController {
                 || ApiError.isBlank(request.getPresidentEmail()) || ApiError.isBlank(request.getPresidentPassword())) {
             throw ApiError.badRequest("Nom du club et informations du président obligatoires");
         }
-        String email = request.getPresidentEmail().trim().toLowerCase();
+        String email = request.getPresidentEmail().trim().toLowerCase(Locale.ROOT);
         if (userRepository.findByEmail(email).isPresent()) {
             throw ApiError.conflict("Un compte existe déjà avec l'e-mail " + email);
         }

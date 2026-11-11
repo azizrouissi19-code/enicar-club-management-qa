@@ -4,6 +4,7 @@ import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.security.TokenService;
 import com.example.backend.web.ApiError;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -37,7 +38,7 @@ public class AuthController {
             return ResponseEntity.status(401).body("Invalid credentials");
         }
 
-        Optional<User> userOpt = userRepository.findByEmail(email.trim().toLowerCase());
+        Optional<User> userOpt = userRepository.findByEmail(email.trim().toLowerCase(Locale.ROOT));
         if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getPassword())) {
             return ResponseEntity.ok(Map.of("token", tokenService.issue(userOpt.get().getId()), "user", userOpt.get()));
         }
@@ -47,7 +48,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> data) {
         String fullName = data.get("fullName");
-        String email = data.get("email") == null ? null : data.get("email").trim().toLowerCase();
+        String email = data.get("email") == null ? null : data.get("email").trim().toLowerCase(Locale.ROOT);
         String password = data.get("password");
 
         if (ApiError.isBlank(fullName)) {
