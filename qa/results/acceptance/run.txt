@@ -1,0 +1,8 @@
+
+Running 3 tests using 1 worker
+
+  ok 1 [edge] › tests\acceptance\TA_acceptance.spec.js:39:1 › TA-01 Parcours administrateur (10.5s)
+  ok 2 [edge] › tests\acceptance\TA_acceptance.spec.js:92:1 › TA-02 Parcours président de club (5.3s)
+  ok 3 [edge] › tests\acceptance\TA_acceptance.spec.js:136:1 › TA-03 Parcours membre de club (7.1s)
+
+  3 passed (29.4s)

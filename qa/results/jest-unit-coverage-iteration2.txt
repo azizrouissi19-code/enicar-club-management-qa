@@ -1,5 +1,5 @@
 Running one project: unit
-FAIL unit tests/unit/TU06_login_register_app.test.jsx (9.517 s)
+FAIL unit tests/unit/TU06_login_register_app.test.jsx (8.792 s)
   ● TU-06 Pages de compte (EF-10) › paramètres : le bouton « Désactiver mon compte » a un effet (appel API ou confirmation)
 
     expect(received).toBeGreaterThan(expected)
@@ -38,7 +38,7 @@ FAIL unit tests/unit/TU06_login_register_app.test.jsx (9.517 s)
 ------------------------|---------|----------|---------|---------|----------------------------------
 File                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                
 ------------------------|---------|----------|---------|---------|----------------------------------
-All files               |    78.9 |    78.85 |   72.78 |   80.98 |                                  
+All files               |   79.01 |    78.85 |   72.97 |   81.03 |                                  
  src                    |     100 |      100 |     100 |     100 |                                  
   App.jsx               |     100 |      100 |     100 |     100 |                                  
  src/api                |     100 |       75 |     100 |     100 |                                  
@@ -51,11 +51,11 @@ All files               |    78.9 |    78.85 |   72.78 |   80.98 |
  src/context            |   97.05 |       90 |     100 |     100 |                                  
   AuthContext.jsx       |   96.77 |       90 |     100 |     100 | 7                                
   useAuth.js            |     100 |      100 |     100 |     100 |                                  
- src/pages              |   76.19 |    76.64 |   70.73 |   77.94 |                                  
+ src/pages              |   76.35 |    76.64 |   70.96 |   78.03 |                                  
   ClubsPage.jsx         |   89.58 |    94.44 |   85.71 |    90.9 | 83,135,143,175                   
   DashboardPage.jsx     |    91.3 |    64.28 |   83.33 |   94.73 | 20                               
   EquipmentPage.jsx     |   45.45 |    54.54 |   38.46 |   46.66 | 7-27,54-58,66,85,117             
-  EventsPage.jsx        |   76.78 |     87.5 |   69.23 |   81.63 | 50-54,93,141-145,155,177         
+  EventsPage.jsx        |   77.58 |     87.5 |   70.37 |      82 | 50-54,93,143-147,157,180         
   LoginPage.jsx         |     100 |      100 |     100 |     100 |                                  
   NotificationsPage.jsx |     100 |      100 |     100 |     100 |                                  
   ProfilePage.jsx       |     100 |      100 |     100 |     100 |                                  
@@ -66,15 +66,15 @@ All files               |    78.9 |    78.85 |   72.78 |   80.98 |
 ------------------------|---------|----------|---------|---------|----------------------------------
 
 =============================== Coverage summary ===============================
-Statements   : 78.9% ( 288/365 )
+Statements   : 79.01% ( 290/367 )
 Branches     : 78.85% ( 138/175 )
-Functions    : 72.78% ( 107/147 )
-Lines        : 80.98% ( 264/326 )
+Functions    : 72.97% ( 108/148 )
+Lines        : 81.03% ( 265/327 )
 ================================================================================
 
 Test Suites: 1 failed, 5 passed, 6 total
 Tests:       2 failed, 69 passed, 71 total
 Snapshots:   0 total
-Time:        16.154 s
+Time:        14.876 s
 Ran all test suites.
 Test results written to: ..\qa\results\jest-unit-iteration2.json

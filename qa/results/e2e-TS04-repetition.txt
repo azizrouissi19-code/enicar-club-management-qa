@@ -1,0 +1,14 @@
+
+Running 10 tests using 1 worker
+
+[1/10] [edge] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING
+[2/10] [edge] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING
+[3/10] [edge] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING
+[4/10] [edge] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING
+[5/10] [edge] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING
+[6/10] [firefox] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING
+[7/10] [firefox] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING
+[8/10] [firefox] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING
+[9/10] [firefox] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING
+[10/10] [firefox] › tests\e2e\TS_system.spec.js:74:3 › TS-04 Événements › le président crée un événement -> visible avec le statut PENDING
+  10 passed (1.0m)

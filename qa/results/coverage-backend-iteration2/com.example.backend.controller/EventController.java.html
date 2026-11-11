@@ -45,21 +45,28 @@ import org.springframework.web.bind.annotation.*;
 <span class="fc bfc" id="L45" title="All 4 branches covered.">        if (attendees &lt; 0 || attendees &gt; room.getCapacity()) {</span>
 <span class="fc" id="L46">            throw ApiError.badRequest(&quot;Participants entre 0 et &quot; + room.getCapacity() + &quot; (capacitÃ© de la salle)&quot;);</span>
         }
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (parseDate(event.getDate()).isBefore(LocalDate.now())) {</span>
+<span class="fc" id="L49">            throw ApiError.badRequest(&quot;La date de l'Ã©vÃ©nement est passÃ©e&quot;);</span>
+        }
+<span class="fc" id="L51">        event.setAttendees(attendees);</span>
+<span class="fc" id="L52">        event.setStatus(&quot;PENDING&quot;); // le statut initial ne peut pas Ãªtre choisi par le client</span>
+<span class="fc" id="L53">        return eventRepository.save(event);</span>
+    }
+
+    private static LocalDate parseDate(String date) {
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (date == null) {</span>
+<span class="nc" id="L58">            throw ApiError.badRequest(&quot;La date est obligatoire&quot;);</span>
+        }
         try {
-<span class="fc bfc" id="L49" title="All 2 branches covered.">            if (LocalDate.parse(event.getDate()).isBefore(LocalDate.now())) {</span>
-<span class="fc" id="L50">                throw ApiError.badRequest(&quot;La date de l'Ã©vÃ©nement est passÃ©e&quot;);</span>
-            }
-<span class="nc" id="L52">        } catch (DateTimeParseException | NullPointerException e) {</span>
-<span class="nc" id="L53">            throw ApiError.badRequest(&quot;Date invalide (format AAAA-MM-JJ)&quot;);</span>
-<span class="fc" id="L54">        }</span>
-<span class="fc" id="L55">        event.setAttendees(attendees);</span>
-<span class="fc" id="L56">        event.setStatus(&quot;PENDING&quot;); // le statut initial ne peut pas Ãªtre choisi par le client</span>
-<span class="fc" id="L57">        return eventRepository.save(event);</span>
+<span class="fc" id="L61">            return LocalDate.parse(date);</span>
+<span class="nc" id="L62">        } catch (DateTimeParseException e) {</span>
+<span class="nc" id="L63">            throw ApiError.badRequest(&quot;Date invalide (format AAAA-MM-JJ)&quot;, e);</span>
+        }
     }
 
     @DeleteMapping(&quot;/{id}&quot;)
     public void deleteEvent(@PathVariable Long id) {
-<span class="nc" id="L62">        eventRepository.deleteById(id);</span>
-<span class="nc" id="L63">    }</span>
+<span class="nc" id="L69">        eventRepository.deleteById(id);</span>
+<span class="nc" id="L70">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

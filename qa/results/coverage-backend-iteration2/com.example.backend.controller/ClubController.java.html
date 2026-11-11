@@ -6,6 +6,7 @@ import com.example.backend.model.User;
 import com.example.backend.repository.ClubRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.web.ApiError;
+import java.util.Locale;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(&quot;/api/clubs&quot;)
-<span class="fc" id="L16">public class ClubController {</span>
+<span class="fc" id="L17">public class ClubController {</span>
 
     @Autowired
     private ClubRepository clubRepository;
@@ -26,39 +27,39 @@ import org.springframework.web.bind.annotation.*;
 
     @GetMapping
     public List&lt;Club&gt; getAllClubs() {
-<span class="fc" id="L29">        return clubRepository.findAll();</span>
+<span class="fc" id="L30">        return clubRepository.findAll();</span>
     }
 
     @PostMapping
     public Club createClub(@RequestBody ClubCreationRequest request) {
         // ANO-06 : champs obligatoires et e-mail du prÃ©sident unique (409 au lieu d'une erreur 500)
-<span class="pc bpc" id="L35" title="1 of 4 branches missed.">        if (ApiError.isBlank(request.getName()) || ApiError.isBlank(request.getPresidentName())</span>
-<span class="pc bpc" id="L36" title="2 of 4 branches missed.">                || ApiError.isBlank(request.getPresidentEmail()) || ApiError.isBlank(request.getPresidentPassword())) {</span>
-<span class="fc" id="L37">            throw ApiError.badRequest(&quot;Nom du club et informations du prÃ©sident obligatoires&quot;);</span>
+<span class="pc bpc" id="L36" title="1 of 4 branches missed.">        if (ApiError.isBlank(request.getName()) || ApiError.isBlank(request.getPresidentName())</span>
+<span class="pc bpc" id="L37" title="2 of 4 branches missed.">                || ApiError.isBlank(request.getPresidentEmail()) || ApiError.isBlank(request.getPresidentPassword())) {</span>
+<span class="fc" id="L38">            throw ApiError.badRequest(&quot;Nom du club et informations du prÃ©sident obligatoires&quot;);</span>
         }
-<span class="fc" id="L39">        String email = request.getPresidentEmail().trim().toLowerCase();</span>
-<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (userRepository.findByEmail(email).isPresent()) {</span>
-<span class="fc" id="L41">            throw ApiError.conflict(&quot;Un compte existe dÃ©jÃ  avec l'e-mail &quot; + email);</span>
+<span class="fc" id="L40">        String email = request.getPresidentEmail().trim().toLowerCase(Locale.ROOT);</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (userRepository.findByEmail(email).isPresent()) {</span>
+<span class="fc" id="L42">            throw ApiError.conflict(&quot;Un compte existe dÃ©jÃ  avec l'e-mail &quot; + email);</span>
         }
 
-<span class="fc" id="L44">        User president = new User();</span>
-<span class="fc" id="L45">        president.setFullName(request.getPresidentName().trim());</span>
-<span class="fc" id="L46">        president.setEmail(email);</span>
-<span class="fc" id="L47">        president.setPassword(passwordEncoder.encode(request.getPresidentPassword()));</span>
-<span class="fc" id="L48">        president.setRole(&quot;CLUB_PRESIDENT&quot;);</span>
-<span class="fc" id="L49">        User savedPresident = userRepository.save(president);</span>
+<span class="fc" id="L45">        User president = new User();</span>
+<span class="fc" id="L46">        president.setFullName(request.getPresidentName().trim());</span>
+<span class="fc" id="L47">        president.setEmail(email);</span>
+<span class="fc" id="L48">        president.setPassword(passwordEncoder.encode(request.getPresidentPassword()));</span>
+<span class="fc" id="L49">        president.setRole(&quot;CLUB_PRESIDENT&quot;);</span>
+<span class="fc" id="L50">        User savedPresident = userRepository.save(president);</span>
 
-<span class="fc" id="L51">        Club club = new Club();</span>
-<span class="fc" id="L52">        club.setName(request.getName().trim());</span>
-<span class="fc" id="L53">        club.setDescription(request.getDescription());</span>
-<span class="fc" id="L54">        club.setPresidentId(savedPresident.getId());</span>
-<span class="fc" id="L55">        club.setMembers(List.of(savedPresident.getId()));</span>
-<span class="fc" id="L56">        return clubRepository.save(club);</span>
+<span class="fc" id="L52">        Club club = new Club();</span>
+<span class="fc" id="L53">        club.setName(request.getName().trim());</span>
+<span class="fc" id="L54">        club.setDescription(request.getDescription());</span>
+<span class="fc" id="L55">        club.setPresidentId(savedPresident.getId());</span>
+<span class="fc" id="L56">        club.setMembers(List.of(savedPresident.getId()));</span>
+<span class="fc" id="L57">        return clubRepository.save(club);</span>
     }
 
     @DeleteMapping(&quot;/{id}&quot;)
     public void deleteClub(@PathVariable Long id) {
-<span class="fc" id="L61">        clubRepository.deleteById(id);</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L62">        clubRepository.deleteById(id);</span>
+<span class="fc" id="L63">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

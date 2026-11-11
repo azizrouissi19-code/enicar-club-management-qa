@@ -78,4 +78,15 @@ export const ANOMALIES = [
   { id: "ANO-13", grav: "Majeure", titre: "Dépendances de production vulnérables", desc: "npm audit --omit=dev : 5 vulnérabilités hautes (axios, react-router, react-router-dom, follow-redirects, form-data).", repro: "cd frontend && npm audit --omit=dev", par: ["TNF-02"], ex: ["ENF-07"] },
   { id: "ANO-14", grav: "Mineure", titre: "Qualité du code : 8 erreurs ESLint, alertes PMD", desc: "5 fonctions appelées dans useEffect avant leur déclaration (react-hooks/immutability), variables inutilisées, export mixte dans AuthContext ; PMD : classe utilitaire, throws Exception.", repro: "cd frontend && npx eslint src", par: ["TNF-03"], ex: ["ENF-06"] },
   { id: "ANO-15", grav: "Majeure", titre: "Configuration non sécurisée", desc: "Secret JWT et compte MySQL root sans mot de passe dans application.properties (publiés sur GitHub), CORS « * » avec credentials, spring.jpa.show-sql=true.", repro: "Lire backend/src/main/resources/application.properties et SecurityConfig.java.", par: ["Revue de code", "TNF-03"], ex: ["ENF-09"] },
+  { id: "ANO-16", grav: "Mineure", titre: "Sessions perdues à chaque redémarrage du backend", desc: "Effet de bord du correctif ANO-01 : les jetons sont conservés en mémoire ; après un redémarrage du serveur, tous les utilisateurs sont déconnectés (401 puis retour à la page de connexion).", repro: "Se connecter, redémarrer le backend, recharger une page protégée → retour à /login.", par: ["TNF-05"], ex: ["ENF-08", "EF-01"] },
+  { id: "ANO-17", grav: "Mineure", titre: "MariaDB 10.4 (XAMPP) non prise en charge par Hibernate 7", desc: "L'application fonctionne (45/45 tests d'API) mais Hibernate signale que la version détectée (5.5.5-10.4) n'est plus supportée (minimum MySQL 8.0) ; MariaDB 10.4 est en fin de vie depuis 2024.", repro: "Démarrer le backend avec DB_URL vers MariaDB 10.4 : avertissement HHH000511.", par: ["TM-01"], ex: ["ENF-10"] },
+  { id: "ANO-18", grav: "Majeure", titre: "Régression : « Aucun club associé » pour un président (condition de course)", desc: "Introduite par le correctif d'ANO-10 : si le président clique sur « + Nouvel Événement » avant la fin du chargement des clubs, la page conclut qu'il n'a pas de club. Détectée par la non-régression E2E (échec intermittent sous Edge).", repro: "Se connecter en président, ouvrir Événements et cliquer immédiatement sur « + Nouvel Événement ».", par: ["TR-02", "TS-04"], ex: ["EF-06"] },
 ];
+
+// Statut des anomalies après l'itération 2 (build v1.0.1)
+export const STATUT = Object.fromEntries([
+  ...["ANO-01", "ANO-02", "ANO-03", "ANO-04", "ANO-05", "ANO-06", "ANO-07", "ANO-08", "ANO-09", "ANO-10", "ANO-11", "ANO-13", "ANO-14", "ANO-15", "ANO-18"].map((a) => [a, "Corrigée et re-testée (v1.0.1)"]),
+  ["ANO-12", "Ouverte — fonctionnalité à développer"],
+  ["ANO-16", "Ouverte — détectée en itération 2"],
+  ["ANO-17", "Ouverte — détectée en itération 2"],
+]);

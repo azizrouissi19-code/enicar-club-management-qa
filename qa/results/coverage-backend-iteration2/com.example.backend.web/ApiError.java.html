@@ -13,16 +13,20 @@ public final class ApiError {
 <span class="fc" id="L13">        return new ResponseStatusException(HttpStatus.BAD_REQUEST, message);</span>
     }
 
+    public static ResponseStatusException badRequest(String message, Throwable cause) {
+<span class="nc" id="L17">        return new ResponseStatusException(HttpStatus.BAD_REQUEST, message, cause);</span>
+    }
+
     public static ResponseStatusException conflict(String message) {
-<span class="fc" id="L17">        return new ResponseStatusException(HttpStatus.CONFLICT, message);</span>
+<span class="fc" id="L21">        return new ResponseStatusException(HttpStatus.CONFLICT, message);</span>
     }
 
     public static ResponseStatusException notFound(String message) {
-<span class="fc" id="L21">        return new ResponseStatusException(HttpStatus.NOT_FOUND, message);</span>
+<span class="fc" id="L25">        return new ResponseStatusException(HttpStatus.NOT_FOUND, message);</span>
     }
 
     public static boolean isBlank(String s) {
-<span class="fc bfc" id="L25" title="All 4 branches covered.">        return s == null || s.isBlank();</span>
+<span class="fc bfc" id="L29" title="All 4 branches covered.">        return s == null || s.isBlank();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

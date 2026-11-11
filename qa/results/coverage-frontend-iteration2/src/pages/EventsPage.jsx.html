@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.78% </span>
+                <span class="strong">77.58% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>43/56</span>
+                <span class='fraction'>45/58</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.23% </span>
+                <span class="strong">70.37% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>18/26</span>
+                <span class='fraction'>19/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.63% </span>
+                <span class="strong">82% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>40/49</span>
+                <span class='fraction'>41/50</span>
             </div>
         
             
@@ -264,7 +264,10 @@
 <a name='L199'></a><a href='#L199'>199</a>
 <a name='L200'></a><a href='#L200'>200</a>
 <a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -388,6 +391,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">25x</span>
@@ -400,6 +404,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -433,6 +438,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -591,6 +597,7 @@ function EventCard({ event, onDelete, canManage, clubName }) {
 export default function EventsPage() {
   const [events, setEvents] = useState([]);
   const [clubs, setClubs] = useState([]);
+  const [clubsLoaded, setClubsLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
   const { user } = useAuth();
@@ -601,7 +608,8 @@ export default function EventsPage() {
 &nbsp;
   useEffect(() =&gt; {
     api.get("/events").then((r) =&gt; setEvents(r.data)).catch(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setError("Impossible de charger les événements"))</span>;
-    api.get("/clubs").then((r) =&gt; setClubs(r.data)).catch(<span class="fstat-no" title="function not covered" >()</span> =&gt; {});
+    // ANO-18 : le bouton de création reste désactivé tant que les clubs ne sont pas chargés
+    api.get("/clubs").then((r) =&gt; setClubs(r.data)).catch(<span class="fstat-no" title="function not covered" >()</span> =&gt; {}).finally(() =&gt; setClubsLoaded(true));
   }, []);
 &nbsp;
   const handleDelete = <span class="fstat-no" title="function not covered" >as</span>ync (id) =&gt; {
@@ -634,7 +642,8 @@ export default function EventsPage() {
           {canManage &amp;&amp; (
             &lt;button
               onClick={() =&gt; (myClubs.length ? setShowModal(true) : <span class="branch-1 cbranch-no" title="branch not covered" >setError("Aucun club associé à votre compte"))</span>}
-              className="bg-[#4f7fff] hover:bg-[#3a62e8] text-white px-5 py-2.5 rounded-lg text-sm font-bold tracking-wide transition-all shadow-lg shadow-[#4f7fff]/20"
+              disabled={!clubsLoaded}
+              className="bg-[#4f7fff] hover:bg-[#3a62e8] disabled:opacity-40 text-white px-5 py-2.5 rounded-lg text-sm font-bold tracking-wide transition-all shadow-lg shadow-[#4f7fff]/20"
             &gt;
               + Nouvel Événement
             &lt;/button&gt;
@@ -673,7 +682,7 @@ export default function EventsPage() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-11T11:15:05.970Z
+                at 2026-11-11T11:28:52.865Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
