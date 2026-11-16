@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Espace chef d'équipe</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="band">
+  <div class="band-in">
+    <div class="band-top">
+      <span class="brand">ENICarthage · Espace chef d'équipe</span>
+      <a class="switch" href="index.html">← Vue d'équipe</a>
+    </div>
+    <div class="band-top">
+      <div>
+        <h1>Préparer la semaine</h1>
+        <div class="meta" id="sous-titre"></div>
+      </div>
+      <div class="nav">
+        <button type="button" id="prev" aria-label="Semaine précédente">‹</button>
+        <select id="week" aria-label="Semaine à préparer"></select>
+        <button type="button" id="next" aria-label="Semaine suivante">›</button>
+        <button type="button" id="new-week">+ Nouvelle semaine</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="notice" id="notice">
+    <span id="notice-text"></span>
+    <div class="row">
+      <button type="button" class="primary" id="export">Exporter donnees.js</button>
+      <button type="button" class="danger" id="reset">Annuler mes modifications</button>
+    </div>
+  </div>
+
+  <section class="goals">
+    <h2>Objectifs de la semaine fixés par l'encadrant</h2>
+    <ul id="goals"></ul>
+    <form id="f-goal" class="goal-edit" style="margin-top:12px">
+      <input type="text" id="goal-text" required placeholder="Ex. : livrer le plan de test validé par M. Jaidi" aria-label="Nouvel objectif">
+      <button type="submit" class="primary">Ajouter l'objectif</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Assigner une tâche</h2>
+    <form id="f-task" class="form">
+      <label class="wide">Tâche<input id="t-tache" required placeholder="Ex. : écrire les tests Jest de la page Réservations"></label>
+      <label>Responsable<select id="t-membre"></select></label>
+      <label>Lot<select id="t-lot"><option>Analyse</option><option>Backend</option><option>Frontend</option><option selected>Tests</option><option>Infrastructure</option><option>Gestion</option><option>Rapport</option></select></label>
+      <label>Priorité<select id="t-prio"><option>Haute</option><option selected>Normale</option><option>Basse</option></select></label>
+      <label>Échéance<input id="t-echeance" type="date"></label>
+      <label>Statut<select id="t-statut"><option>À faire</option><option>En cours</option><option>Terminée</option></select></label>
+      <div class="row wide"><button class="primary" type="submit">Assigner la tâche</button><span class="status" id="t-msg"></span></div>
+    </form>
+  </section>
+
+  <section>
+    <h2>Tâches de la semaine</h2>
+    <div class="tasklist" id="tasks"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Bilan de la semaine</h2>
+    <form id="f-week" class="form">
+      <label>Statut<select id="f-statut"><option>Dans les temps</option><option>En retard</option><option>Bloqué</option></select></label>
+      <label>Début de semaine<input id="f-debut" type="date" required></label>
+      <label>Tests réussis<input id="f-tests-ok" type="number" min="0" required></label>
+      <label>Tests au total<input id="f-tests-total" type="number" min="0" required></label>
+      <label>Anomalies détectées (cumul)<input id="f-ano-det" type="number" min="0" required></label>
+      <label>Anomalies corrigées (cumul)<input id="f-ano-cor" type="number" min="0" required></label>
+      <label>Anomalies ouvertes<input id="f-ano-ouv" type="number" min="0" required></label>
+      <label class="wide">Faits marquants<textarea id="f-faits"></textarea></label>
+      <label class="wide">Difficultés<textarea id="f-diff"></textarea></label>
+      <label class="wide">Prochaines étapes<textarea id="f-next"></textarea></label>
+      <div class="row wide"><button class="primary" type="submit">Enregistrer le bilan</button><span class="status" id="f-msg"></span></div>
+    </form>
+  </section>
+
+  <details class="panel small">
+    <summary><b>Comment partager avec l'équipe</b></summary>
+    <ol>
+      <li>Préparez la semaine ici : objectifs de M. Jaidi, tâches de chacun, bilan. Tout est enregistré dans ce navigateur, et la vue d'équipe ouverte dans un autre onglet se met à jour.</li>
+      <li>Cliquez sur « Exporter donnees.js » et remplacez le fichier <code>suivi/donnees.js</code> du dépôt par celui téléchargé.</li>
+      <li><code>git add suivi/donnees.js</code>, <code>git commit -m "suivi : semaine …"</code>, <code>git push</code>. Bouchahda et Missaoui font <code>git pull</code> et ouvrent <code>suivi/index.html</code>.</li>
+    </ol>
+  </details>
+</main>
+
+<script src="donnees.js"></script>
+<script src="commun.js"></script>
+<script>
+(() => {
+  const S = window.Suivi, h = S.h, $ = (id) => document.getElementById(id);
+  let current = S.weeks().at(-1);
+  const armed = new Map(); // confirmations en deux clics
+
+  function confirmClick(btn, key, label, action) {
+    if (armed.get(key)) { armed.delete(key); action(); return; }
+    armed.set(key, true);
+    const old = btn.textContent; btn.textContent = label;
+    setTimeout(() => { if (armed.get(key)) { armed.delete(key); btn.textContent = old; } }, 4000);
+  }
+  const changed = () => { S.save(); render(); };
+  const select = (options, value, label, onchange) => {
+    const s = h("select", { "aria-label": label, onchange: (e) => onchange(e.target.value) });
+    options.forEach((o) => s.add(new Option(o, o)));
+    s.value = value; return s;
+  };
+
+  function taskLine(t) {
+    const membres = S.membres();
+    return h("div", { class: `tline prio-${t.priorite}` },
+      h("div", {}, h("div", { style: "font-weight:600" }, t.tache),
+        h("div", { class: "small muted" }, `${t.lot}${S.enRetard(t) ? " · " : ""}`, S.enRetard(t) ? h("span", { class: "late" }, "en retard") : null)),
+      h("div", { class: "ctrl" },
+        select(membres, t.membre, "Responsable", (v) => { t.membre = v; changed(); }),
+        select(["À faire", "En cours", "Terminée"], t.statut, "Statut", (v) => { t.statut = v; changed(); }),
+        select(["Haute", "Normale", "Basse"], t.priorite, "Priorité", (v) => { t.priorite = v; changed(); }),
+        h("input", { type: "date", value: t.echeance || "", "aria-label": "Échéance", onchange: (e) => { t.echeance = e.target.value; changed(); } }),
+        h("button", { type: "button", class: "ghost danger", "aria-label": "Supprimer la tâche " + t.tache,
+          onclick: (e) => confirmClick(e.target, t.id, "Confirmer", () => { S.data.taches = S.data.taches.filter((x) => x !== t); changed(); }) }, "Supprimer")));
+  }
+
+  function fillWeekForm(s) {
+    const set = (id, v) => ($(id).value = v ?? "");
+    set("f-statut", s.statut); set("f-debut", s.date_debut);
+    set("f-tests-ok", s.tests_reussis); set("f-tests-total", s.tests_total);
+    set("f-ano-det", s.anomalies_detectees); set("f-ano-cor", s.anomalies_corrigees); set("f-ano-ouv", s.anomalies_ouvertes);
+    set("f-faits", s.faits_marquants); set("f-diff", s.difficultes); set("f-next", s.prochaines_etapes);
+  }
+
+  function render() {
+    const d = S.data, ws = S.weeks();
+    if (!ws.includes(current)) current = ws.at(-1);
+    const s = S.week(current), i = ws.indexOf(current);
+    $("sous-titre").textContent = s ? `${current} · ${S.weekRange(s)} · Chef d'équipe : ${d.chef || "—"}` : "Aucune semaine : créez-en une.";
+    $("week").replaceChildren(...[...ws].reverse().map((w) => new Option(w.replace("-S", " · semaine "), w)));
+    $("week").value = current || "";
+    $("prev").disabled = i <= 0; $("next").disabled = i < 0 || i >= ws.length - 1;
+
+    $("notice").className = "notice" + (S.modifie ? " dirty" : "");
+    $("notice-text").textContent = S.modifie
+      ? "Modifications enregistrées dans ce navigateur, pas encore partagées : exportez donnees.js puis commitez-le."
+      : "Tout est à jour avec suivi/donnees.js.";
+
+    // Objectifs
+    $("goals").replaceChildren(...(s && s.objectifs.length ? s.objectifs.map((g, k) => h("li", {},
+      h("button", { type: "button", class: "check" + (g.atteint ? " on" : ""), "aria-label": g.atteint ? "Marquer comme non atteint" : "Marquer comme atteint",
+        style: "padding:0", onclick: () => { g.atteint = !g.atteint; changed(); } }, g.atteint ? "✓" : ""),
+      h("span", { class: g.atteint ? "done" : "", style: "flex:1" }, g.texte),
+      h("button", { type: "button", class: "ghost danger", onclick: (e) => confirmClick(e.target, "g" + k + g.texte, "Confirmer", () => { s.objectifs.splice(k, 1); changed(); }) }, "Retirer"))) :
+      [h("li", { class: "muted" }, "Aucun objectif pour cette semaine. Saisissez celui donné par M. Jaidi ci-dessous.")]));
+
+    // Responsables : l'équipe d'abord, puis les autres valeurs déjà utilisées
+    const membres = S.membres();
+    const sel = $("t-membre"), keep = sel.value;
+    sel.replaceChildren(...membres.map((m) => new Option(m === d.chef ? `${m} (moi)` : m, m)));
+    sel.value = membres.includes(keep) ? keep : membres.find((m) => m !== d.chef) || membres[0];
+    if (!$("t-echeance").value && s && s.date_debut) $("t-echeance").value = S.addDays(s.date_debut, 4);
+
+    // Tâches, groupées par responsable
+    const tasks = S.tasksOf(current);
+    const groups = membres.map((m) => [m, tasks.filter((t) => t.membre === m)]).filter(([, l]) => l.length);
+    $("tasks").replaceChildren(...(groups.length ? groups.map(([m, l]) => h("div", { class: "panel", style: "display:grid; gap:8px" },
+      h("div", { class: "who" }, h("span", { class: "avatar" + (m === d.chef ? " lead" : "") }, S.initiales(m)),
+        h("div", {}, h("b", {}, m), h("span", { class: "small muted" }, `${l.filter((t) => t.statut === "Terminée").length}/${l.length} terminées`))),
+      ...l.map(taskLine))) : [h("div", { class: "panel muted" }, "Aucune tâche cette semaine : assignez-en une ci-dessus.")]));
+
+    if (s) fillWeekForm(s);
+  }
+
+  $("week").addEventListener("change", (e) => { current = e.target.value; $("t-echeance").value = ""; render(); });
+  $("prev").addEventListener("click", () => { const ws = S.weeks(); current = ws[Math.max(0, ws.indexOf(current) - 1)]; $("t-echeance").value = ""; render(); });
+  $("next").addEventListener("click", () => { const ws = S.weeks(); current = ws[Math.min(ws.length - 1, ws.indexOf(current) + 1)]; $("t-echeance").value = ""; render(); });
+
+  $("new-week").addEventListener("click", () => {
+    const last = S.week(S.weeks().at(-1));
+    const label = last ? S.nextWeekLabel(last.semaine) : "";
+    if (!label) return;
+    S.data.semaines.push({
+      semaine: label, date_debut: S.addDays(last.date_debut, 7), statut: "Dans les temps",
+      tests_reussis: last.tests_reussis, tests_total: last.tests_total,
+      anomalies_detectees: last.anomalies_detectees, anomalies_corrigees: last.anomalies_corrigees, anomalies_ouvertes: last.anomalies_ouvertes,
+      faits_marquants: "", difficultes: "", prochaines_etapes: "", objectifs: [],
+    });
+    current = label; $("t-echeance").value = ""; changed();
+  });
+
+  $("f-goal").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const s = S.week(current), text = $("goal-text").value.trim();
+    if (!s || !text) return;
+    s.objectifs.push({ texte: text, atteint: false });
+    $("goal-text").value = ""; changed();
+  });
+
+  $("f-task").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const t = { id: "t" + Date.now().toString(36), semaine: current, tache: $("t-tache").value.trim(), lot: $("t-lot").value,
+      membre: $("t-membre").value, priorite: $("t-prio").value, echeance: $("t-echeance").value, statut: $("t-statut").value };
+    if (!t.tache) return;
+    S.data.taches.push(t);
+    $("t-tache").value = "";
+    $("t-msg").textContent = `Tâche assignée à ${t.membre}.`;
+    changed();
+  });
+
+  $("f-week").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const s = S.week(current); if (!s) return;
+    const n = (id) => Number($(id).value);
+    if (n("f-tests-ok") > n("f-tests-total")) { $("f-msg").className = "status err"; $("f-msg").textContent = "Les tests réussis ne peuvent pas dépasser le total."; return; }
+    Object.assign(s, { statut: $("f-statut").value, date_debut: $("f-debut").value,
+      tests_reussis: n("f-tests-ok"), tests_total: n("f-tests-total"), anomalies_detectees: n("f-ano-det"),
+      anomalies_corrigees: n("f-ano-cor"), anomalies_ouvertes: n("f-ano-ouv"),
+      faits_marquants: $("f-faits").value.trim(), difficultes: $("f-diff").value.trim(), prochaines_etapes: $("f-next").value.trim() });
+    $("f-msg").className = "status"; $("f-msg").textContent = "Bilan enregistré.";
+    changed();
+  });
+
+  $("export").addEventListener("click", () => S.exporter());
+  $("reset").addEventListener("click", (e) => confirmClick(e.target, "reset", "Confirmer : tout annuler", () => {
+    S.reset(); current = S.weeks().at(-1); e.target.textContent = "Annuler mes modifications"; render();
+  }));
+  window.addEventListener("suivi:change", render);
+  render();
+})();
+</script>
+</body>
+</html>

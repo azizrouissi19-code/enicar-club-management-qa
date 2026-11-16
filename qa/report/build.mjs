@@ -67,7 +67,7 @@ a{color:var(--c2);text-decoration:none}
 <div class="kpi"><b>${EXIGENCES.length}</b><span>exigences</span></div><div class="kpi"><b>${CAS.length}</b><span>cas de test</span></div>
 <div class="kpi"><b>${t2.unit.total + t2.api.total}</b><span>tests Jest</span></div><div class="kpi"><b>${t2.e2e.total}</b><span>tests E2E (2 navigateurs)</span></div>
 <div class="kpi"><b>${ANOMALIES.length}</b><span>anomalies détectées</span></div></div></div>
-<div class="band"><div><b>Réalisé par :</b> Mohamed Aziz Rouissi · Mohamed Bouchahda · Mohamed Hosni Missaoui</div><div><b>Encadrement :</b> [Nom de l'encadrant]</div>
+<div class="band"><div><b>Réalisé par :</b> Mohamed Aziz Rouissi · Mohamed Bouchahda · Mohamed Hosni Missaoui</div><div><b>Encadrement :</b> M. Jaidi</div>
 <div><b>Outil de test :</b> Jest 30 (+ React Testing Library) · Playwright · k6 · JaCoCo · ESLint · PMD</div>
 <div><b>Gestion des tests et des exigences :</b> GitHub Issues, jalons et Pull Requests — <a style="color:#cfe0ff" href="${REPO}">${REPO.replace("https://", "")}</a></div>
 <div><b>Date :</b> 11 novembre 2026 · Année universitaire 2026 – 2027</div></div>
@@ -207,14 +207,14 @@ ${img("img/gh-board.png", "Tableau GitHub Projects de la campagne (cycle de vie 
 ${EXIGENCES.map((e) => { const v = verdict(e.id); return `<tr><td>${e.id} ${esc(e.titre)}</td><td>${e.crit}</td><td>${casOf(e.id).join(", ")}</td><td>${badge(v, v === "Satisfaite" ? "ok" : v.startsWith("Non") ? "ko" : "wa")}</td></tr>`; }).join("")}</table>
 <div class="note"><b>Couverture des exigences : ${EXIGENCES.filter((e) => casOf(e.id).length).length}/${EXIGENCES.length} (100 %)</b> — chaque exigence est vérifiée par au moins un cas de test.</div>
 <h2>5.3 Tableau de suivi hebdomadaire</h2>
-<p>Pour rendre compte de l'avancement chaque semaine, l'équipe tient un tableau de suivi dans le dépôt : <code>suivi/index.html</code>, qui s'ouvre dans un navigateur sans serveur ni connexion. Ses données sont dans <code>suivi/donnees.js</code>, versionné avec le projet.</p>
-<ul><li><b>Synthèse de la semaine :</b> statut (dans les temps, en retard, bloqué), avancement, tests réussis, anomalies ouvertes.</li>
-<li><b>Avancement du projet :</b> part des tâches planifiées terminées à la fin de chaque semaine, avec l'écart par rapport à la semaine précédente.</li>
-<li><b>Graphiques :</b> avancement cumulé et anomalies corrigées ou ouvertes, semaine par semaine.</li>
-<li><b>Compte rendu :</b> faits marquants, difficultés, prochaines étapes ; liste des tâches avec lot, responsable et statut.</li>
-<li><b>Mise à jour :</b> un formulaire « Saisir ou modifier une semaine » ; le bouton « Exporter donnees.js » produit le fichier à commiter pour partager la mise à jour avec l'équipe.</li></ul>
-<p>La semaine 46 contient les résultats réels de la campagne. La semaine 47 liste les tâches restantes : anomalies ouvertes, tests d'acceptation rejoués à la main et présentation.</p>
-${img("img/suivi-hebdo.png", "Tableau de suivi hebdomadaire (suivi/index.html), semaine 46", 92)}
+<p>Pour rendre compte chaque semaine de l'avancement à M. Jaidi, l'équipe tient un tableau de suivi dans le dépôt (dossier <code>suivi/</code>). Il s'ouvre dans un navigateur, sans serveur ni connexion, et comporte deux espaces qui partagent les mêmes données (<code>suivi/donnees.js</code>, versionné avec le projet).</p>
+<table><tr><th>Espace</th><th>Fichier</th><th>Utilisation</th></tr>
+<tr><td>Vue d'équipe</td><td><code>suivi/index.html</code></td><td>Consultée par les trois membres : objectifs de la semaine fixés par l'encadrant, statut, avancement, tests, anomalies, colonne « Qui fait quoi » par membre (priorité, échéance, tâches en retard signalées en rouge), graphiques et compte rendu ; navigation de semaine en semaine</td></tr>
+<tr><td>Espace chef d'équipe</td><td><code>suivi/chef.html</code></td><td>Utilisé par le chef d'équipe (Mohamed Aziz Rouissi) : saisir les objectifs donnés par M. Jaidi et les cocher une fois atteints, assigner les tâches aux membres (responsable, lot, priorité, échéance, statut), réassigner ou supprimer une tâche, créer la semaine suivante et rédiger le bilan</td></tr></table>
+<p><b>Circuit de mise à jour :</b> le chef d'équipe prépare la semaine dans son espace (la vue d'équipe ouverte dans un autre onglet se met à jour), clique sur « Exporter donnees.js », remplace le fichier du dépôt puis le commite et le pousse. Les deux autres membres récupèrent la mise à jour avec <code>git pull</code>. Le chef d'équipe est le seul à écrire dans ce fichier, ce qui évite les conflits de fusion.</p>
+<p>La semaine 46 contient les résultats réels de la campagne. La semaine 47 (à partir du 16 novembre) liste les tâches restantes, à assigner : anomalies ouvertes, tests d'acceptation rejoués à la main et présentation.</p>
+${img("img/suivi-hebdo.png", "Vue d'équipe (suivi/index.html), semaine 46", 92)}
+${img("img/suivi-chef.png", "Espace chef d'équipe (suivi/chef.html) : objectifs de l'encadrant, attribution des tâches", 92)}
 
 <h1>6. Plan de test (objectif 4)</h1>
 <p>Ce plan suit la structure de la norme IEEE 829 / ISO/IEC/IEEE 29119-3.</p>
@@ -476,7 +476,7 @@ node qa/report/build.mjs                      # génère ce rapport`)}
 <tr><td><code>qa/perf/</code></td><td>Scénario k6 et résumés</td></tr>
 <tr><td><code>qa/referentiel.mjs</code>, <code>qa/github/</code></td><td>Référentiel (exigences, cas, anomalies) et publication GitHub</td></tr>
 <tr><td><code>qa/results/</code></td><td>Résultats bruts des deux itérations, couvertures, captures, rapports HTML</td></tr>
-<tr><td><code>suivi/</code></td><td>Tableau de suivi hebdomadaire (<code>index.html</code>) et ses données (<code>donnees.js</code>)</td></tr></table>
+<tr><td><code>suivi/</code></td><td>Tableau de suivi hebdomadaire : vue d'équipe (<code>index.html</code>), espace chef d'équipe (<code>chef.html</code>), données (<code>donnees.js</code>)</td></tr></table>
 </body></html>`;
 
 writeFileSync(new URL("./Rapport_Atelier_Test_Logiciel.html", import.meta.url), html);
