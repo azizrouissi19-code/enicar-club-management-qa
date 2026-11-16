@@ -145,3 +145,12 @@ button.danger { color: var(--bad); }
 .tline .ctrl { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
 .tline .ctrl select, .tline .ctrl input { padding: 4px 8px; font-size: 13px; }
 @media (max-width: 640px) { .tline { grid-template-columns: 1fr; } .tline .ctrl { justify-content: flex-start; } }
+
+/* Planning de l'équipe */
+.plan { width: 100%; border-collapse: collapse; font-size: 14px; }
+.plan th { text-align: left; font-size: 12.5px; color: var(--muted); font-weight: 600; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.plan td { padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.plan td.wk { font-family: var(--display); font-weight: 600; vertical-align: top; white-space: nowrap; border-right: 1px solid var(--line); }
+.plan tr.now td { background: color-mix(in srgb, var(--accent-soft) 55%, transparent); }
+.who-mini { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.avatar.sm { width: 26px; height: 26px; font-size: 11px; }

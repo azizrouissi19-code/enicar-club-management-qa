@@ -69,11 +69,7 @@
     <form id="f-week" class="form">
       <label>Statut<select id="f-statut"><option>Dans les temps</option><option>En retard</option><option>Bloqué</option></select></label>
       <label>Début de semaine<input id="f-debut" type="date" required></label>
-      <label>Tests réussis<input id="f-tests-ok" type="number" min="0" required></label>
-      <label>Tests au total<input id="f-tests-total" type="number" min="0" required></label>
-      <label>Anomalies détectées (cumul)<input id="f-ano-det" type="number" min="0" required></label>
-      <label>Anomalies corrigées (cumul)<input id="f-ano-cor" type="number" min="0" required></label>
-      <label>Anomalies ouvertes<input id="f-ano-ouv" type="number" min="0" required></label>
+      <label class="wide">Phase du projet<input id="f-phase" placeholder="Ex. : Plan de test et rapport d'évaluation"></label>
       <label class="wide">Faits marquants<textarea id="f-faits"></textarea></label>
       <label class="wide">Difficultés<textarea id="f-diff"></textarea></label>
       <label class="wide">Prochaines étapes<textarea id="f-next"></textarea></label>
@@ -128,9 +124,7 @@
 
   function fillWeekForm(s) {
     const set = (id, v) => ($(id).value = v ?? "");
-    set("f-statut", s.statut); set("f-debut", s.date_debut);
-    set("f-tests-ok", s.tests_reussis); set("f-tests-total", s.tests_total);
-    set("f-ano-det", s.anomalies_detectees); set("f-ano-cor", s.anomalies_corrigees); set("f-ano-ouv", s.anomalies_ouvertes);
+    set("f-statut", s.statut); set("f-debut", s.date_debut); set("f-phase", s.phase);
     set("f-faits", s.faits_marquants); set("f-diff", s.difficultes); set("f-next", s.prochaines_etapes);
   }
 
@@ -183,9 +177,7 @@
     const label = last ? S.nextWeekLabel(last.semaine) : "";
     if (!label) return;
     S.data.semaines.push({
-      semaine: label, date_debut: S.addDays(last.date_debut, 7), statut: "Dans les temps",
-      tests_reussis: last.tests_reussis, tests_total: last.tests_total,
-      anomalies_detectees: last.anomalies_detectees, anomalies_corrigees: last.anomalies_corrigees, anomalies_ouvertes: last.anomalies_ouvertes,
+      semaine: label, date_debut: S.addDays(last.date_debut, 7), statut: "Dans les temps", phase: "",
       faits_marquants: "", difficultes: "", prochaines_etapes: "", objectifs: [],
     });
     current = label; $("t-echeance").value = ""; changed();
@@ -213,11 +205,7 @@
   $("f-week").addEventListener("submit", (e) => {
     e.preventDefault();
     const s = S.week(current); if (!s) return;
-    const n = (id) => Number($(id).value);
-    if (n("f-tests-ok") > n("f-tests-total")) { $("f-msg").className = "status err"; $("f-msg").textContent = "Les tests réussis ne peuvent pas dépasser le total."; return; }
-    Object.assign(s, { statut: $("f-statut").value, date_debut: $("f-debut").value,
-      tests_reussis: n("f-tests-ok"), tests_total: n("f-tests-total"), anomalies_detectees: n("f-ano-det"),
-      anomalies_corrigees: n("f-ano-cor"), anomalies_ouvertes: n("f-ano-ouv"),
+    Object.assign(s, { statut: $("f-statut").value, date_debut: $("f-debut").value, phase: $("f-phase").value.trim(),
       faits_marquants: $("f-faits").value.trim(), difficultes: $("f-diff").value.trim(), prochaines_etapes: $("f-next").value.trim() });
     $("f-msg").className = "status"; $("f-msg").textContent = "Bilan enregistré.";
     changed();

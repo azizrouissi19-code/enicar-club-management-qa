@@ -49,15 +49,15 @@
       <div class="small muted" id="k-ta-sub"></div>
     </div>
     <div class="panel">
-      <div class="label">Tests réussis</div>
-      <div class="kpi"><div class="big" id="k-te">—</div></div>
-      <div class="bar"><i id="k-te-bar" style="width:0; background: var(--ok)"></i></div>
-      <div class="small muted" id="k-te-sub"></div>
+      <div class="label">Objectifs de l'encadrant atteints</div>
+      <div class="kpi"><div class="big" id="k-ob">—</div></div>
+      <div class="bar"><i id="k-ob-bar" style="width:0; background: var(--gold)"></i></div>
+      <div class="small muted" id="k-ob-sub"></div>
     </div>
     <div class="panel">
-      <div class="label">Anomalies ouvertes</div>
-      <div class="kpi"><div class="big" id="k-an">—</div></div>
-      <div class="small muted" id="k-an-sub"></div>
+      <div class="label">Prochaine échéance</div>
+      <div class="kpi"><div class="big" id="k-ec">—</div></div>
+      <div class="small muted" id="k-ec-sub"></div>
     </div>
   </section>
 
@@ -69,8 +69,20 @@
   <section class="two">
     <div class="panel"><h2>Avancement cumulé</h2><div class="chart" id="c-av"></div>
       <div class="small muted">Part des tâches planifiées terminées à la fin de chaque semaine.</div></div>
-    <div class="panel"><h2>Anomalies corrigées et ouvertes</h2><div class="chart" id="c-an"></div>
-      <div class="legend"><span><i style="background: var(--ok)"></i>Corrigées</span><span><i style="background: var(--warn)"></i>Ouvertes</span></div></div>
+    <div class="panel"><h2>Tâches par membre (toutes les semaines)</h2><div class="chart" id="c-an"></div>
+      <div class="legend"><span><i style="background: var(--ok)"></i>Terminées</span><span><i style="background: var(--warn)"></i>En cours</span><span><i style="background: var(--grid)"></i>À faire</span></div></div>
+  </section>
+
+  <section>
+    <h2>Planning de l'équipe</h2>
+    <div class="panel" style="padding:0">
+      <div style="overflow-x:auto">
+        <table class="plan">
+          <thead><tr><th>Semaine</th><th>Tâche</th><th>Responsable</th><th>Échéance</th><th>Statut</th></tr></thead>
+          <tbody id="planning"></tbody>
+        </table>
+      </div>
+    </div>
   </section>
 
   <section>
@@ -139,27 +151,31 @@
     box.prepend(s);
   }
 
+  // Charge de chaque membre : barres empilées terminées / en cours / à faire, toutes semaines confondues
   function chartAnomalies() {
     const box = $("c-an"); box.replaceChildren();
-    const rows = [...S.data.semaines].sort((a, b) => (a.semaine < b.semaine ? -1 : 1));
-    const W = Math.max(300, box.clientWidth || 520), H = 230, m = { t: 24, r: 14, b: 30, l: 38 };
-    const max = Math.max(1, ...rows.flatMap((r) => [+r.anomalies_corrigees || 0, +r.anomalies_ouvertes || 0]));
-    const top = Math.ceil(max / 4) * 4;
-    const s = svg("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Anomalies corrigées et ouvertes par semaine" });
-    grid(s, W, H, m, top, String);
-    const step = (W - m.l - m.r) / Math.max(rows.length, 1), bw = Math.min(42, step * 0.3);
-    const y = (v) => H - m.b - ((H - m.t - m.b) * v) / top;
+    const membres = S.membres().filter((m) => S.data.taches.some((t) => t.membre === m));
+    const parts = [["Terminée", "Terminées", "var(--ok)"], ["En cours", "En cours", "var(--warn)"], ["À faire", "À faire", "var(--grid)"]];
+    const W = Math.max(300, box.clientWidth || 520), row = 34, m = { t: 8, r: 34, b: 8, l: 150 };
+    const H = m.t + m.b + row * Math.max(membres.length, 1);
+    const max = Math.max(1, ...membres.map((n) => S.data.taches.filter((t) => t.membre === n).length));
+    const x = (v) => ((W - m.l - m.r) * v) / max;
+    const s = svg("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Nombre de tâches par membre, selon leur statut" });
     const t = tip(box);
-    rows.forEach((r, i) => {
-      const cx = m.l + step * (i + 0.5);
-      s.append(svg("text", { x: cx, y: H - 9, "text-anchor": "middle" }, r.semaine.replace(/^\d{4}-/, "")));
-      [["anomalies_corrigees", "Corrigées", "var(--ok)", -1], ["anomalies_ouvertes", "Ouvertes", "var(--warn)", 1]].forEach(([k, label, color, side]) => {
-        const v = +r[k] || 0, x = side < 0 ? cx - bw - 2 : cx + 2;
-        const rect = svg("rect", { x, y: y(v), width: bw, height: Math.max(0, y(0) - y(v)), rx: 3, fill: color, opacity: r.semaine === current ? 1 : 0.55 });
-        rect.addEventListener("pointermove", (e) => showTip(box, t, e, `${r.semaine} · ${label} : ${v}`));
-        rect.addEventListener("pointerleave", () => (t.hidden = true));
-        s.append(rect, svg("text", { x: x + bw / 2, y: y(v) - 5, "text-anchor": "middle" }, String(v)));
+    membres.forEach((n, i) => {
+      const y = m.t + i * row, mine = S.data.taches.filter((tk) => tk.membre === n);
+      s.append(svg("text", { x: m.l - 10, y: y + row / 2 + 4, "text-anchor": "end" }, n.replace(/^Mohamed /, "M. ")));
+      let acc = 0;
+      parts.forEach(([st, label, color]) => {
+        const v = mine.filter((tk) => tk.statut === st).length;
+        if (!v) return;
+        const r = svg("rect", { x: m.l + x(acc), y: y + 7, width: x(v), height: row - 14, fill: color, rx: 3 });
+        r.addEventListener("pointermove", (e) => showTip(box, t, e, `${n} · ${label} : ${v}`));
+        r.addEventListener("pointerleave", () => (t.hidden = true));
+        s.append(r);
+        acc += v;
       });
+      s.append(svg("text", { x: m.l + x(acc) + 6, y: y + row / 2 + 4 }, String(mine.length)));
     });
     box.prepend(s);
   }
@@ -188,6 +204,7 @@
     const late = tasks.filter((t) => S.enRetard(t)).length;
     $("etat").replaceChildren(...(s ? [
       h("span", { class: "chip " + S.tone(s.statut) }, s.statut),
+      s.phase ? h("span", { class: "chip" }, s.phase) : null,
       h("span", { class: "meta" }, S.weekRange(s)),
       late ? h("span", { class: "chip bad" }, `${late} tâche${late > 1 ? "s" : ""} en retard`) : null,
     ].filter(Boolean) : [h("span", { class: "meta" }, "Aucune semaine saisie : ouvrez l'espace chef d'équipe.")]));
@@ -209,11 +226,26 @@
     $("k-ta").textContent = tasks.length ? `${done} / ${tasks.length}` : "—";
     $("k-ta-bar").style.width = tasks.length ? (done / tasks.length) * 100 + "%" : "0";
     $("k-ta-sub").textContent = tasks.length ? `${tasks.filter((t) => t.statut === "En cours").length} en cours · ${tasks.filter((t) => t.statut === "À faire").length} à faire` : "Aucune tâche";
-    $("k-te").textContent = s ? `${fr.format(s.tests_reussis)} / ${fr.format(s.tests_total)}` : "—";
-    $("k-te-bar").style.width = s && s.tests_total ? (s.tests_reussis / s.tests_total) * 100 + "%" : "0";
-    $("k-te-sub").textContent = s && s.tests_total ? `${Math.round((s.tests_reussis / s.tests_total) * 100)} % de réussite` : "";
-    $("k-an").textContent = s ? fr.format(s.anomalies_ouvertes) : "—";
-    $("k-an-sub").textContent = s ? `${s.anomalies_corrigees} corrigées sur ${s.anomalies_detectees} détectées` : "";
+    const obj = s ? s.objectifs : [], reached = obj.filter((g) => g.atteint).length;
+    $("k-ob").textContent = obj.length ? `${reached} / ${obj.length}` : "—";
+    $("k-ob-bar").style.width = obj.length ? (reached / obj.length) * 100 + "%" : "0";
+    $("k-ob-sub").textContent = obj.length ? (reached === obj.length ? "Tous atteints" : `${obj.length - reached} en cours`) : "Aucun objectif saisi";
+    const next = S.data.taches.filter((tk) => tk.statut !== "Terminée" && tk.echeance).sort((a, b) => (a.echeance < b.echeance ? -1 : 1))[0];
+    $("k-ec").textContent = next ? S.fmtDate(next.echeance) : "—";
+    $("k-ec").className = "big" + (next && S.enRetard(next) ? " late" : "");
+    $("k-ec-sub").textContent = next ? `${next.tache} — ${next.membre}` : "Aucune échéance";
+
+    // Planning complet, semaine par semaine
+    const byWeek = [...new Set(d.taches.map((tk) => tk.semaine))].sort();
+    $("planning").replaceChildren(...byWeek.flatMap((w) => {
+      const list = d.taches.filter((tk) => tk.semaine === w).sort((a, b) => (a.echeance || "9") < (b.echeance || "9") ? -1 : 1);
+      return list.map((tk, k) => h("tr", { class: w === current ? "now" : "" },
+        k === 0 ? h("td", { rowspan: list.length, class: "wk" }, w.replace(/^\d{4}-/, ""), h("div", { class: "small muted" }, (S.week(w) || {}).phase || (d.phases || {})[w] || "")) : null,
+        h("td", {}, tk.tache),
+        h("td", {}, h("span", { class: "who-mini" }, h("span", { class: "avatar sm" + (tk.membre === d.chef ? " lead" : "") }, S.initiales(tk.membre)), tk.membre)),
+        h("td", { class: S.enRetard(tk) ? "late" : "" }, tk.echeance ? S.fmtDate(tk.echeance) : "—"),
+        h("td", {}, h("span", { class: "chip " + S.tone(tk.statut) }, tk.statut))));
+    }));
 
     // Qui fait quoi : une colonne par membre ayant des tâches (le chef en premier)
     const order = S.membres().filter((m) => tasks.some((t) => t.membre === m) || d.equipe.includes(m));

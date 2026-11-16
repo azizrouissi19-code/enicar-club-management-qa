@@ -12,202 +12,232 @@ window.SUIVI = {
     {
       "semaine": "2026-S46",
       "date_debut": "2026-11-09",
+      "phase": "Analyse et conception",
       "statut": "Dans les temps",
-      "tests_reussis": 136,
-      "tests_total": 138,
-      "anomalies_detectees": 18,
-      "anomalies_corrigees": 15,
-      "anomalies_ouvertes": 3,
-      "faits_marquants": "Campagne de test complète sur la version du Drive (v1.0.0) puis livraison de la v1.0.1 : 15 anomalies corrigées et re-testées, dont les 2 critiques (API sans authentification, hash du mot de passe exposé). Rapport d'atelier de 30 pages, référentiel GitHub (70 issues) et tableau de suivi publiés.",
-      "difficultes": "Dépôt GitHub de l'équipe incomplet (backend absent) : version complète récupérée depuis le Drive. Une régression introduite par un correctif (ANO-18) a été détectée par la non-régression puis corrigée.",
-      "prochaines_etapes": "Rejouer à la main les fiches d'acceptation, traiter les anomalies ouvertes (ANO-12, ANO-16, ANO-17), ajouter le nom de l'encadrant au rapport et préparer la présentation.",
-      "objectifs": []
+      "objectifs": [],
+      "faits_marquants": "Exigences fonctionnelles et non fonctionnelles rédigées (20). Diagramme de cas d'utilisation, diagramme de classes, modèle de données et architecture réalisés.",
+      "difficultes": "Le dépôt GitHub de l'équipe était incomplet (backend absent) : la version complète du projet a été récupérée depuis le Drive et versionnée.",
+      "prochaines_etapes": "Plan de test et rapport d'évaluation (description du projet, architecture, conception)."
     },
     {
       "semaine": "2026-S47",
       "date_debut": "2026-11-16",
+      "phase": "Plan de test et rapport d'évaluation",
       "statut": "Dans les temps",
-      "tests_reussis": 136,
-      "tests_total": 138,
-      "anomalies_detectees": 18,
-      "anomalies_corrigees": 15,
-      "anomalies_ouvertes": 3,
+      "objectifs": [
+        {
+          "texte": "Rapport : description du projet, architecture et conception",
+          "atteint": false
+        },
+        {
+          "texte": "Plan de test complet : niveaux, types (fonctionnels et non fonctionnels), techniques et outils",
+          "atteint": false
+        },
+        {
+          "texte": "Répartition des tâches de l'équipe visible dans le tableau de suivi",
+          "atteint": false
+        }
+      ],
       "faits_marquants": "",
       "difficultes": "",
-      "prochaines_etapes": "",
-      "objectifs": []
+      "prochaines_etapes": ""
     }
   ],
   "taches": [
     {
-      "semaine": "2026-S46",
-      "tache": "Récupérer le projet complet (Drive) et installer l'environnement (Docker, MySQL)",
-      "lot": "Infrastructure",
-      "membre": "Équipe",
-      "statut": "Terminée",
       "id": "t01",
-      "priorite": "Normale",
-      "echeance": ""
-    },
-    {
       "semaine": "2026-S46",
-      "tache": "Rédiger les 20 exigences fonctionnelles et non fonctionnelles",
+      "tache": "Cadrage du projet et rédaction des exigences (EF / ENF)",
       "lot": "Analyse",
-      "membre": "Équipe",
+      "membre": "Mohamed Aziz Rouissi",
       "statut": "Terminée",
+      "priorite": "Haute",
+      "echeance": "2026-11-11"
+    },
+    {
       "id": "t02",
+      "semaine": "2026-S46",
+      "tache": "Diagramme de cas d'utilisation et parcours des trois profils",
+      "lot": "Conception",
+      "membre": "Mohamed Hosni Missaoui",
+      "statut": "Terminée",
       "priorite": "Normale",
-      "echeance": ""
+      "echeance": "2026-11-12"
     },
     {
-      "semaine": "2026-S46",
-      "tache": "Plan de test et matrice de traçabilité",
-      "lot": "Tests",
-      "membre": "Équipe",
-      "statut": "Terminée",
       "id": "t03",
+      "semaine": "2026-S46",
+      "tache": "Diagramme de classes et modèle de données",
+      "lot": "Conception",
+      "membre": "Mohamed Bouchahda",
+      "statut": "Terminée",
       "priorite": "Normale",
-      "echeance": ""
+      "echeance": "2026-11-13"
     },
     {
-      "semaine": "2026-S46",
-      "tache": "Tests unitaires et de composants Jest (71)",
-      "lot": "Tests",
-      "membre": "Équipe",
-      "statut": "Terminée",
       "id": "t04",
+      "semaine": "2026-S46",
+      "tache": "Architecture technique et diagramme de déploiement",
+      "lot": "Conception",
+      "membre": "Mohamed Aziz Rouissi",
+      "statut": "Terminée",
       "priorite": "Normale",
-      "echeance": ""
+      "echeance": "2026-11-14"
     },
     {
-      "semaine": "2026-S46",
-      "tache": "Tests d'intégration de l'API avec Jest (45)",
-      "lot": "Tests",
-      "membre": "Équipe",
-      "statut": "Terminée",
       "id": "t05",
-      "priorite": "Normale",
-      "echeance": ""
+      "semaine": "2026-S47",
+      "tache": "Plan de test : stratégie, niveaux, types, critères d'entrée et de sortie",
+      "lot": "Tests",
+      "membre": "Mohamed Aziz Rouissi",
+      "statut": "En cours",
+      "priorite": "Haute",
+      "echeance": "2026-11-19"
     },
     {
-      "semaine": "2026-S46",
-      "tache": "Tests E2E Playwright sur Edge et Firefox (22)",
-      "lot": "Tests",
-      "membre": "Équipe",
-      "statut": "Terminée",
       "id": "t06",
+      "semaine": "2026-S47",
+      "tache": "Diagrammes de séquence : connexion et réservation",
+      "lot": "Conception",
+      "membre": "Mohamed Bouchahda",
+      "statut": "En cours",
       "priorite": "Normale",
-      "echeance": ""
+      "echeance": "2026-11-18"
     },
     {
-      "semaine": "2026-S46",
-      "tache": "Charge k6, couverture JaCoCo, analyse statique",
-      "lot": "Tests",
-      "membre": "Équipe",
-      "statut": "Terminée",
       "id": "t07",
+      "semaine": "2026-S47",
+      "tache": "Diagramme d'états de la réservation et matrice de traçabilité",
+      "lot": "Tests",
+      "membre": "Mohamed Hosni Missaoui",
+      "statut": "En cours",
       "priorite": "Normale",
-      "echeance": ""
+      "echeance": "2026-11-19"
     },
     {
-      "semaine": "2026-S46",
-      "tache": "Correctifs backend : authentification, rôles, validations",
-      "lot": "Backend",
-      "membre": "Équipe",
-      "statut": "Terminée",
       "id": "t08",
+      "semaine": "2026-S47",
+      "tache": "Conception des cas de test de l'API (fonctionnels et non fonctionnels, Postman)",
+      "lot": "Tests",
+      "membre": "Mohamed Bouchahda",
+      "statut": "À faire",
       "priorite": "Normale",
-      "echeance": ""
+      "echeance": "2026-11-20"
     },
     {
-      "semaine": "2026-S46",
-      "tache": "Correctifs frontend : tableau de bord, droits, mobile",
-      "lot": "Frontend",
-      "membre": "Équipe",
-      "statut": "Terminée",
       "id": "t09",
+      "semaine": "2026-S47",
+      "tache": "Conception des cas de test de l'interface (Jest, Playwright)",
+      "lot": "Tests",
+      "membre": "Mohamed Hosni Missaoui",
+      "statut": "À faire",
       "priorite": "Normale",
-      "echeance": ""
+      "echeance": "2026-11-20"
     },
     {
-      "semaine": "2026-S46",
-      "tache": "Tests d'acceptation TA-01 à TA-03",
-      "lot": "Tests",
-      "membre": "Équipe",
-      "statut": "Terminée",
       "id": "t10",
-      "priorite": "Normale",
-      "echeance": ""
+      "semaine": "2026-S47",
+      "tache": "Rapport d'évaluation : description, architecture, conception, plan de test",
+      "lot": "Rapport",
+      "membre": "Mohamed Aziz Rouissi",
+      "statut": "En cours",
+      "priorite": "Haute",
+      "echeance": "2026-11-21"
     },
     {
-      "semaine": "2026-S46",
-      "tache": "Référentiel GitHub : issues, jalons, tableau Projects",
-      "lot": "Gestion",
-      "membre": "Équipe",
-      "statut": "Terminée",
       "id": "t11",
-      "priorite": "Normale",
-      "echeance": ""
-    },
-    {
-      "semaine": "2026-S46",
-      "tache": "Rapport d'atelier (PDF, 30 pages)",
-      "lot": "Rapport",
-      "membre": "Équipe",
-      "statut": "Terminée",
-      "id": "t12",
-      "priorite": "Normale",
-      "echeance": ""
-    },
-    {
-      "semaine": "2026-S47",
-      "tache": "Rejouer à la main les fiches d'acceptation",
+      "semaine": "2026-S48",
+      "tache": "Tests unitaires et de composants (Jest)",
       "lot": "Tests",
-      "membre": "À attribuer",
+      "membre": "Mohamed Hosni Missaoui",
       "statut": "À faire",
+      "priorite": "Normale",
+      "echeance": "2026-11-27"
+    },
+    {
+      "id": "t12",
+      "semaine": "2026-S48",
+      "tache": "Tests d'intégration de l'API (Postman, Jest)",
+      "lot": "Tests",
+      "membre": "Mohamed Bouchahda",
+      "statut": "À faire",
+      "priorite": "Normale",
+      "echeance": "2026-11-27"
+    },
+    {
       "id": "t13",
-      "priorite": "Normale",
-      "echeance": ""
-    },
-    {
-      "semaine": "2026-S47",
-      "tache": "ANO-12 : rendre fonctionnels les paramètres et notifications",
-      "lot": "Frontend",
-      "membre": "À attribuer",
-      "statut": "À faire",
-      "id": "t14",
-      "priorite": "Normale",
-      "echeance": ""
-    },
-    {
-      "semaine": "2026-S47",
-      "tache": "ANO-16 : remplacer les jetons en mémoire par des JWT signés",
-      "lot": "Backend",
-      "membre": "À attribuer",
-      "statut": "À faire",
-      "id": "t15",
-      "priorite": "Normale",
-      "echeance": ""
-    },
-    {
-      "semaine": "2026-S47",
-      "tache": "ANO-17 : passer à MySQL 8 ou MariaDB 10.6+",
+      "semaine": "2026-S48",
+      "tache": "Environnement de test (Docker, données) et suivi des anomalies sur GitHub",
       "lot": "Infrastructure",
-      "membre": "À attribuer",
+      "membre": "Mohamed Aziz Rouissi",
       "statut": "À faire",
-      "id": "t16",
       "priorite": "Normale",
-      "echeance": ""
+      "echeance": "2026-11-25"
     },
     {
-      "semaine": "2026-S47",
-      "tache": "Ajouter l'encadrant au rapport et préparer la présentation",
-      "lot": "Rapport",
-      "membre": "À attribuer",
+      "id": "t14",
+      "semaine": "2026-S49",
+      "tache": "Tests système E2E (Playwright, Edge et Firefox)",
+      "lot": "Tests",
+      "membre": "Mohamed Hosni Missaoui",
       "statut": "À faire",
-      "id": "t17",
       "priorite": "Normale",
-      "echeance": ""
+      "echeance": "2026-12-04"
+    },
+    {
+      "id": "t15",
+      "semaine": "2026-S49",
+      "tache": "Tests non fonctionnels : performance, sécurité, robustesse",
+      "lot": "Tests",
+      "membre": "Mohamed Bouchahda",
+      "statut": "À faire",
+      "priorite": "Normale",
+      "echeance": "2026-12-04"
+    },
+    {
+      "id": "t16",
+      "semaine": "2026-S49",
+      "tache": "Tests d'acceptation avec les trois profils",
+      "lot": "Tests",
+      "membre": "Mohamed Aziz Rouissi",
+      "statut": "À faire",
+      "priorite": "Normale",
+      "echeance": "2026-12-05"
+    },
+    {
+      "id": "t17",
+      "semaine": "2026-S50",
+      "tache": "Correctifs backend et re-test",
+      "lot": "Backend",
+      "membre": "Mohamed Bouchahda",
+      "statut": "À faire",
+      "priorite": "Normale",
+      "echeance": "2026-12-10"
+    },
+    {
+      "id": "t18",
+      "semaine": "2026-S50",
+      "tache": "Correctifs frontend et non-régression",
+      "lot": "Frontend",
+      "membre": "Mohamed Hosni Missaoui",
+      "statut": "À faire",
+      "priorite": "Normale",
+      "echeance": "2026-12-10"
+    },
+    {
+      "id": "t19",
+      "semaine": "2026-S50",
+      "tache": "Bilan, verdict de recette et rapport final",
+      "lot": "Rapport",
+      "membre": "Mohamed Aziz Rouissi",
+      "statut": "À faire",
+      "priorite": "Haute",
+      "echeance": "2026-12-12"
     }
-  ]
+  ],
+  "phases": {
+    "2026-S48": "Tests unitaires et d'intégration",
+    "2026-S49": "Tests système, non fonctionnels et acceptation",
+    "2026-S50": "Correctifs, non-régression et rapport final"
+  }
 };

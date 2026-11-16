@@ -1,0 +1,266 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Rapport conception et plan de test</title>
+<style>
+@page{size:A4;margin:16mm 15mm 16mm 15mm}
+:root{--c:#13233f;--c2:#0e7c86;--soft:#e9f3f4;--line:#cfd8e3}
+*{box-sizing:border-box}body{font-family:"Segoe UI",Calibri,Arial,sans-serif;font-size:10pt;line-height:1.5;color:#1b1b1b;background:#fff;margin:0}
+h1{color:var(--c);font-family:Bahnschrift,"Segoe UI",sans-serif;font-size:19pt;border-bottom:3px solid var(--c2);padding-bottom:4px;margin:0 0 10px;page-break-before:always}
+h2{color:var(--c2);font-family:Bahnschrift,"Segoe UI",sans-serif;font-size:13pt;margin:16px 0 6px;page-break-after:avoid}
+h3{color:var(--c);font-size:10.8pt;margin:12px 0 4px;page-break-after:avoid}
+p{margin:4px 0 7px;text-align:justify}ul,ol{margin:3px 0 8px;padding-left:20px}li{margin:2px 0}
+table{width:100%;border-collapse:collapse;margin:6px 0 11px;font-size:8.7pt}tr{page-break-inside:avoid}
+th{background:var(--c);color:#fff;text-align:left;padding:4px 6px;font-weight:600}td{border:1px solid var(--line);padding:3px 6px;vertical-align:top}
+tr:nth-child(even) td{background:#f6f8fb}
+pre{font-family:Consolas,monospace;font-size:8pt;background:#f3f5f8;border-left:3px solid var(--c2);padding:7px 9px;white-space:pre-wrap;margin:5px 0 9px;page-break-inside:avoid}
+code{font-family:Consolas,monospace;font-size:8.6pt;background:#eef1f5;padding:0 3px}
+figure{margin:8px auto 12px;page-break-inside:avoid;text-align:center}figure img{max-width:100%}
+figcaption{font-size:8.4pt;color:#444;margin-top:4px}
+.note{background:var(--soft);border-left:4px solid var(--c2);padding:6px 10px;margin:8px 0}
+.cover{height:262mm;display:flex;flex-direction:column;justify-content:space-between}
+.cover .top{color:var(--c2);font-weight:700;letter-spacing:1.5px;font-size:10pt}
+.cover .t{font-family:Bahnschrift,"Segoe UI",sans-serif;font-size:30pt;color:var(--c);font-weight:700;line-height:1.12;margin-top:46px}
+.cover .s{font-size:13.5pt;margin-top:12px;color:#333}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}.pills span{border:1.5px solid var(--c2);color:var(--c2);border-radius:999px;padding:3px 12px;font-weight:600;font-size:10pt}
+.band{background:var(--c);color:#fff;padding:14px 18px;border-radius:6px}.band div{margin:3px 0}
+.toc div{display:flex;justify-content:space-between;border-bottom:1px dotted #aaa;padding:3px 0}.toc .l2{padding-left:18px;font-size:9.3pt;color:#333}
+.badge{display:inline-block;padding:0 7px;border-radius:9px;font-size:8pt;font-weight:600;background:#e6ecf3;color:#36495e}
+.b-f{background:#dff1e5;color:#17633a}.b-nf{background:#fbeed8;color:#7a4e00}
+</style></head><body>
+
+<section class="cover">
+<div>
+<div class="top">ÉCOLE NATIONALE D'INGÉNIEURS DE CARTHAGE · ATELIER TEST LOGICIEL</div>
+<div class="t">Plateforme de gestion des clubs de l'ENICarthage</div>
+<div class="s">Rapport d'évaluation — description du projet, architecture, conception et plan de test</div>
+<div class="pills"><span>10 exigences fonctionnelles</span><span>10 exigences non fonctionnelles</span><span>33 cas de test planifiés</span><span>9 diagrammes</span></div>
+</div>
+<div class="band">
+<div><b>Réalisé par :</b> Mohamed Aziz Rouissi · Mohamed Bouchahda · Mohamed Hosni Missaoui</div>
+<div><b>Chef d'équipe :</b> Mohamed Aziz Rouissi</div>
+<div><b>Encadrement :</b> M. Jaidi</div>
+<div><b>Outils de test :</b> Jest, Postman, Playwright, k6, JaCoCo · gestion des tests sur GitHub</div>
+<div><b>Date :</b> 16 novembre 2026 · Année universitaire 2026 – 2027</div>
+</div>
+</section>
+
+<section class="toc"><h1 style="page-break-before:always">Sommaire</h1>
+<div>1. Introduction</div>
+<div>2. Présentation du projet</div>
+<div>3. Analyse des besoins</div>
+<div>4. Architecture</div>
+<div class="l2">4.1 Architecture générale · 4.2 Technologies · 4.3 Backend · 4.4 Frontend · 4.5 API REST · 4.6 Sécurité · 4.7 Déploiement</div>
+<div>5. Conception</div>
+<div class="l2">5.1 Cas d'utilisation · 5.2 Diagramme de classes · 5.3 Modèle de données · 5.4 Diagrammes de séquence · 5.5 Diagramme d'états</div>
+<div>6. Plan de test</div>
+<div class="l2">6.1 Objet et périmètre · 6.2 Stratégie · 6.3 Niveaux · 6.4 Types · 6.5 Techniques · 6.6 Cas de test · 6.7 Traçabilité · 6.8 Outils · 6.9 Environnement · 6.10 Critères · 6.11 Anomalies</div>
+<div>7. Organisation de l'équipe et planning</div>
+<div>8. Conclusion et prochaines étapes</div>
+</section>
+
+<h1>1. Introduction</h1>
+<p>Ce rapport présente notre projet pour l'atelier de test logiciel : une plateforme web de gestion des clubs de l'ENICarthage. Il décrit le projet, ses besoins, son architecture et sa conception, puis le plan de test qui guidera la campagne de test des prochaines semaines.</p>
+<table><tr><th>Objectif de l'atelier</th><th>Traitement dans ce rapport</th><th>Chap.</th></tr>
+<tr><td>1. Choisir un projet</td><td>Plateforme de gestion des clubs (Spring Boot, React, MySQL)</td><td>2</td></tr>
+<tr><td>2. Présenter les besoins fonctionnels et non fonctionnels</td><td>10 exigences fonctionnelles et 10 non fonctionnelles, avec leur criticité</td><td>3</td></tr>
+<tr><td>3. Utiliser un outil de gestion de test</td><td>GitHub : exigences, cas de test et anomalies sous forme d'issues liées ; tableau de suivi hebdomadaire</td><td>6.11, 7</td></tr>
+<tr><td>4. Élaborer un plan de test</td><td>Plan IEEE 829 : niveaux, types (fonctionnels et non fonctionnels), techniques, outils, critères</td><td>6</td></tr>
+<tr><td>5. Exécuter le plan de test</td><td>Planifié pour les semaines 48 à 50 (chapitre 7)</td><td>7</td></tr></table>
+
+<h1>2. Présentation du projet</h1>
+<h2>2.1 Contexte et problématique</h2>
+<p>La vie associative de l'ENICarthage repose sur de nombreux clubs. Leur gestion (création des clubs, organisation des événements, réservation des salles et du matériel, validation par l'administration) se fait aujourd'hui par des échanges dispersés, sans vue d'ensemble ni traçabilité. Une même salle peut être demandée deux fois pour la même date, et l'administration n'a pas de tableau de bord commun.</p>
+<h2>2.2 Objectifs de la plateforme</h2>
+<ul><li>Centraliser les clubs, leurs membres et leurs événements dans une seule application web.</li>
+<li>Permettre la réservation des salles et des équipements, avec validation par l'administration et sans double réservation.</li>
+<li>Donner à chaque profil uniquement les actions qui le concernent.</li>
+<li>Offrir à l'administration un tableau de bord de l'activité.</li></ul>
+<h2>2.3 Profils d'utilisateurs</h2>
+<table><tr><th>Profil</th><th>Rôle technique</th><th>Ce qu'il peut faire</th></tr>
+<tr><td>Visiteur</td><td>—</td><td>S'inscrire (adresse institutionnelle @enicar.tn) et se connecter</td></tr>
+<tr><td>Membre de club</td><td><code>CLUB_MEMBER</code></td><td>Consulter les clubs et les événements, réserver une salle ou un équipement, suivre ses réservations, consulter son profil</td></tr>
+<tr><td>Président de club</td><td><code>CLUB_PRESIDENT</code></td><td>Tout ce que fait un membre, plus créer et supprimer les événements de son club</td></tr>
+<tr><td>Administration</td><td><code>ADMINISTRATOR</code></td><td>Créer les clubs et le compte de leur président, gérer les salles et les équipements, approuver ou rejeter les réservations</td></tr></table>
+<h2>2.4 Fonctionnalités par module</h2>
+<table><tr><th>Module</th><th>Fonctionnalités</th></tr>
+<tr><td>Authentification</td><td>Inscription, connexion, déconnexion, session conservée dans le navigateur</td></tr>
+<tr><td>Tableau de bord</td><td>Nombre de clubs, d'événements, de salles et de membres ; événements récents ; clubs actifs</td></tr>
+<tr><td>Clubs</td><td>Liste ; création d'un club avec le compte de son président ; suppression</td></tr>
+<tr><td>Événements</td><td>Liste ; création pour son club (salle, date, nombre de participants) ; suppression</td></tr>
+<tr><td>Salles et équipements</td><td>Liste avec capacité et type ; ajout par l'administration</td></tr>
+<tr><td>Réservations</td><td>Demande d'un membre ; approbation ou rejet par l'administration</td></tr>
+<tr><td>Compte</td><td>Profil, paramètres, notifications</td></tr></table>
+
+<h1>3. Analyse des besoins</h1>
+<p>Chaque exigence a un identifiant unique, repris dans les cas de test pour assurer la traçabilité. La criticité (critique, majeure, mineure) oriente l'effort de test.</p>
+<h2>3.1 Exigences fonctionnelles</h2>
+<table><tr><th>Réf.</th><th>Exigence</th><th>Description</th><th>Criticité</th></tr>
+<tr><td>EF-01</td><td>Authentification</td><td>Connexion par e-mail et mot de passe ; le jeton et le profil sont conservés pendant la session ; déconnexion. En cas d'échec, un message explicite reste affiché.</td><td>Critique</td></tr><tr><td>EF-02</td><td>Inscription d'un étudiant</td><td>Un étudiant s'inscrit avec un nom, une adresse institutionnelle @enicar.tn unique et un mot de passe d'au moins 6 caractères ; il reçoit le rôle CLUB_MEMBER (le rôle envoyé par le client est ignoré).</td><td>Majeure</td></tr><tr><td>EF-03</td><td>Rôles et contrôle d'accès</td><td>Trois rôles : ADMINISTRATOR, CLUB_PRESIDENT, CLUB_MEMBER. Toute page exige une session. Clubs, salles, équipements et validation des réservations sont réservés à l'administrateur ; la création d'événements au président (pour son club) et à l'administrateur.</td><td>Critique</td></tr><tr><td>EF-04</td><td>Tableau de bord</td><td>Statistiques (clubs, événements, salles, membres) et listes récentes calculées à partir des données réelles de la base.</td><td>Majeure</td></tr><tr><td>EF-05</td><td>Gestion des clubs</td><td>Consultation par tous. Création par l'administrateur avec création du compte du président (e-mail unique, nom de club obligatoire). Suppression par l'administrateur.</td><td>Critique</td></tr><tr><td>EF-06</td><td>Gestion des événements</td><td>Le président crée un événement pour son club : titre, salle existante, date future, participants entre 0 et la capacité de la salle. Statut initial PENDING.</td><td>Critique</td></tr><tr><td>EF-07</td><td>Gestion des salles</td><td>L'administrateur ajoute une salle : nom, capacité strictement positive, type AMPHI / SALLE / LABO.</td><td>Majeure</td></tr><tr><td>EF-08</td><td>Gestion des équipements</td><td>L'administrateur ajoute un équipement (nom, type) ; statut initial AVAILABLE.</td><td>Mineure</td></tr><tr><td>EF-09</td><td>Réservation de ressources</td><td>Un membre réserve une ressource existante (salle ou équipement) à une date. Pas de double réservation d'une ressource à la même date. L'administrateur approuve ou rejette (PENDING → APPROVED / REJECTED).</td><td>Critique</td></tr><tr><td>EF-10</td><td>Profil, paramètres et notifications</td><td>Consultation du profil ; paramètres et notifications fonctionnels (pas de données fixes).</td><td>Mineure</td></tr></table>
+<h2>3.2 Exigences non fonctionnelles</h2>
+<table><tr><th>Réf.</th><th>Exigence</th><th>Catégorie</th><th>Description (mesurable)</th><th>Criticité</th></tr>
+<tr><td>ENF-01</td><td>Sécurité des identifiants</td><td>Sécurité</td><td>Mots de passe hachés (BCrypt). Le hash n'est jamais renvoyé par l'API ni stocké dans le navigateur.</td><td>Critique</td></tr><tr><td>ENF-02</td><td>Sécurité et robustesse de l'API</td><td>Sécurité</td><td>Jeton vérifié à chaque requête ; non authentifié → 401 ; non autorisé → 403 ; entrée invalide → 4xx, jamais 500.</td><td>Critique</td></tr><tr><td>ENF-03</td><td>Performance</td><td>Performance</td><td>95 % des requêtes en moins de 500 ms avec 50 utilisateurs simultanés.</td><td>Majeure</td></tr><tr><td>ENF-04</td><td>Utilisabilité et affichage mobile</td><td>Utilisabilité</td><td>Messages d'erreur visibles ; utilisable sur smartphone 360 px (zone de contenu ≥ 80 % de la largeur, sans défilement horizontal).</td><td>Majeure</td></tr><tr><td>ENF-05</td><td>Compatibilité navigateurs</td><td>Compatibilité</td><td>Fonctionnement identique sous Edge (Chromium) et Firefox.</td><td>Mineure</td></tr><tr><td>ENF-06</td><td>Maintenabilité</td><td>Maintenabilité</td><td>0 erreur ESLint ; analyse PMD ; couverture des tests ≥ 70 % des instructions (frontend et backend).</td><td>Mineure</td></tr><tr><td>ENF-07</td><td>Sécurité des dépendances</td><td>Sécurité</td><td>Aucune vulnérabilité connue de sévérité haute ou critique dans les dépendances de production.</td><td>Majeure</td></tr><tr><td>ENF-08</td><td>Persistance des données</td><td>Fiabilité</td><td>Les données sont conservées après un redémarrage du backend.</td><td>Majeure</td></tr><tr><td>ENF-09</td><td>Configuration sécurisée</td><td>Sécurité</td><td>Secrets hors du code source ; CORS limité au frontend ; pas de journalisation SQL en production.</td><td>Majeure</td></tr><tr><td>ENF-10</td><td>Portabilité de la base de données</td><td>Portabilité</td><td>Fonctionne avec MySQL 8 et avec MariaDB (XAMPP), sans modification du code.</td><td>Mineure</td></tr></table>
+<h2>3.3 Règles de gestion</h2>
+<table><tr><th>Règle</th><th>Exigence</th></tr>
+<tr><td>Seules les adresses se terminant par @enicar.tn peuvent s'inscrire ; mot de passe d'au moins 6 caractères</td><td>EF-02</td></tr>
+<tr><td>Un nouvel inscrit reçoit toujours le rôle CLUB_MEMBER, quel que soit le rôle envoyé</td><td>EF-02</td></tr>
+<tr><td>L'e-mail du président d'un nouveau club ne doit pas déjà exister</td><td>EF-05</td></tr>
+<tr><td>Un événement a lieu dans une salle existante, à une date future, avec 0 à N participants (N = capacité de la salle)</td><td>EF-06</td></tr>
+<tr><td>La capacité d'une salle est strictement positive</td><td>EF-07</td></tr>
+<tr><td>Une ressource ne peut être réservée qu'une fois par date (hors réservations rejetées)</td><td>EF-09</td></tr>
+<tr><td>Toute réservation commence à PENDING ; seule l'administration la passe à APPROVED ou REJECTED</td><td>EF-09</td></tr></table>
+
+<h1>4. Architecture</h1>
+<h2>4.1 Architecture générale</h2>
+<p>La plateforme suit une architecture en trois couches. Le navigateur exécute une application React (SPA) qui appelle une API REST Spring Boot. L'API applique la sécurité et les règles métier, puis lit et écrit les données dans MySQL par Spring Data JPA.</p>
+<figure style="width:50%"><img src="conception/architecture.svg"><figcaption>Figure 1 – Architecture générale en trois couches</figcaption></figure>
+<h2>4.2 Technologies</h2>
+<table><tr><th>Couche</th><th>Technologies</th><th>Rôle</th></tr>
+<tr><td>Présentation</td><td>React 19, Vite 8, React Router 7, Axios, Tailwind CSS</td><td>Pages, navigation, appels à l'API, affichage responsive</td></tr>
+<tr><td>Métier</td><td>Java 17, Spring Boot 4, Spring Web MVC, Spring Security, Lombok</td><td>API REST, authentification, contrôle d'accès, règles métier</td></tr>
+<tr><td>Données</td><td>Spring Data JPA, Hibernate 7, MySQL 8 (ou XAMPP)</td><td>Persistance, schéma généré par Hibernate</td></tr>
+<tr><td>Outillage</td><td>Maven, npm, Docker, Git / GitHub</td><td>Construction, dépendances, base de données de test, versionnement</td></tr></table>
+<h2>4.3 Architecture du backend</h2>
+<pre>backend/src/main/java/com/example/backend/
+├── BackendApplication.java        démarrage de Spring Boot
+├── DataLoader.java                données initiales (admin, président, club IEEE, salle, équipements)
+├── security/   SecurityConfig, TokenService, TokenAuthenticationFilter   authentification et règles d'accès
+├── controller/ AuthController, ClubController, EventController,          points d'entrée REST
+│               RoomController, EquipmentController, ReservationController
+├── repository/ UserRepository, ClubRepository, EventRepository, …       accès aux données (Spring Data JPA)
+├── model/      User, Club, Event, Room, Equipment, Reservation          entités JPA
+├── dto/        ClubCreationRequest                                      données reçues à la création d'un club
+└── web/        ApiError, ApiExceptionHandler                            erreurs renvoyées au client (400, 404, 409)</pre>
+<p>Chaque requête traverse le filtre de jetons, puis les règles d'accès de <code>SecurityConfig</code>, avant d'atteindre le contrôleur. Les contrôleurs vérifient les règles métier et renvoient des erreurs explicites (400, 404, 409) plutôt qu'une erreur serveur.</p>
+<h2>4.4 Architecture du frontend</h2>
+<pre>frontend/src/
+├── main.jsx, App.jsx        démarrage et routes (React Router)
+├── api/        axios.js (client HTTP, jeton), errors.js (messages d'erreur)
+├── context/    AuthContext.jsx, useAuth.js     session de l'utilisateur
+├── components/ Layout, Sidebar, ProtectedRoute, ErrorAlert
+└── pages/      Login, Register, Dashboard, Clubs, Events, Rooms, Equipment,
+                Reservations, Profile, Settings, Notifications</pre>
+<p><code>ProtectedRoute</code> redirige vers la page de connexion toute personne non connectée. Les pages affichent ou masquent les actions selon le rôle de l'utilisateur ; l'API applique de nouveau ces règles côté serveur.</p>
+<h2>4.5 API REST</h2>
+<table><tr><th>Méthode</th><th>Chemin</th><th>Description</th><th>Accès</th></tr>
+<tr><td><code>POST</code></td><td><code>/api/auth/register</code></td><td>Inscription d'un étudiant (rôle CLUB_MEMBER)</td><td>Public</td></tr><tr><td><code>POST</code></td><td><code>/api/auth/login</code></td><td>Connexion : renvoie un jeton et le profil</td><td>Public</td></tr><tr><td><code>GET</code></td><td><code>/api/clubs</code></td><td>Liste des clubs</td><td>Public</td></tr><tr><td><code>POST</code></td><td><code>/api/clubs</code></td><td>Création d'un club et du compte de son président</td><td>ADMINISTRATOR</td></tr><tr><td><code>DELETE</code></td><td><code>/api/clubs/{id}</code></td><td>Suppression d'un club</td><td>ADMINISTRATOR</td></tr><tr><td><code>GET</code></td><td><code>/api/events</code></td><td>Liste des événements</td><td>Public</td></tr><tr><td><code>POST</code></td><td><code>/api/events</code></td><td>Création d'un événement (statut PENDING)</td><td>CLUB_PRESIDENT, ADMINISTRATOR</td></tr><tr><td><code>DELETE</code></td><td><code>/api/events/{id}</code></td><td>Suppression d'un événement</td><td>CLUB_PRESIDENT, ADMINISTRATOR</td></tr><tr><td><code>GET</code></td><td><code>/api/rooms</code></td><td>Liste des salles</td><td>Public</td></tr><tr><td><code>POST · DELETE</code></td><td><code>/api/rooms</code></td><td>Ajout et suppression d'une salle</td><td>ADMINISTRATOR</td></tr><tr><td><code>GET</code></td><td><code>/api/equipment</code></td><td>Liste des équipements</td><td>Public</td></tr><tr><td><code>POST · DELETE</code></td><td><code>/api/equipment</code></td><td>Ajout et suppression d'un équipement</td><td>ADMINISTRATOR</td></tr><tr><td><code>GET</code></td><td><code>/api/reservations</code></td><td>Liste des réservations</td><td>Utilisateur connecté</td></tr><tr><td><code>POST</code></td><td><code>/api/reservations</code></td><td>Demande de réservation d'une salle ou d'un équipement</td><td>Utilisateur connecté</td></tr><tr><td><code>PUT</code></td><td><code>/api/reservations/{id}/status</code></td><td>Approbation ou rejet d'une réservation</td><td>ADMINISTRATOR</td></tr></table>
+<h2>4.6 Sécurité</h2>
+<ul><li><b>Mots de passe :</b> hachés avec BCrypt ; le hash n'est jamais renvoyé par l'API.</li>
+<li><b>Authentification :</b> à la connexion, le serveur délivre un jeton aléatoire de 256 bits ; le client l'envoie dans l'en-tête <code>Authorization: Bearer</code>, et le filtre le vérifie à chaque requête.</li>
+<li><b>Autorisation :</b> règles par rôle dans <code>SecurityConfig</code> ; une requête sans jeton reçoit 401, une requête d'un rôle non autorisé reçoit 403.</li>
+<li><b>CORS :</b> seule l'origine du frontend est autorisée (configurable).</li>
+<li><b>Configuration :</b> identifiants de la base lus dans des variables d'environnement.</li></ul>
+<h2>4.7 Déploiement</h2>
+<figure style="width:85%"><img src="conception/deploiement.svg"><figcaption>Figure 2 – Diagramme de déploiement (environnement de développement et de test)</figcaption></figure>
+
+<h1>5. Conception</h1>
+<h2>5.1 Diagramme de cas d'utilisation</h2>
+<figure style="width:72%"><img src="conception/casUtilisation.svg"><figcaption>Figure 3 – Diagramme de cas d'utilisation</figcaption></figure>
+<h3>Description textuelle : « Réserver une salle ou un équipement »</h3>
+<table><tr><th style="width:24%">Élément</th><th>Description</th></tr>
+<tr><td>Acteur principal</td><td>Membre de club (le président hérite de ce cas)</td></tr>
+<tr><td>Préconditions</td><td>Le membre est connecté ; la ressource existe</td></tr>
+<tr><td>Scénario nominal</td><td>1. Le membre ouvre « Réservations » et clique sur « Nouvelle réservation ». 2. Il choisit le type (salle ou équipement), la ressource et la date. 3. Le système vérifie que la ressource existe et qu'elle est libre à cette date. 4. Le système enregistre la réservation avec le statut PENDING et l'affiche.</td></tr>
+<tr><td>Scénarios alternatifs</td><td>3a. Ressource déjà réservée à cette date : message « Ressource déjà réservée », rien n'est enregistré. 3b. Ressource inexistante : message d'erreur.</td></tr>
+<tr><td>Postcondition</td><td>Une réservation PENDING attend la décision de l'administration</td></tr>
+<tr><td>Exigences</td><td>EF-09, EF-03</td></tr></table>
+<h2>5.2 Diagramme de classes</h2>
+<figure style="width:92%"><img src="conception/classes.svg"><figcaption>Figure 4 – Diagramme de classes du domaine</figcaption></figure>
+<p>Les associations sont portées par des identifiants : un club référence son président (<code>presidentId</code>) et ses membres (<code>members</code>) ; un événement référence son club et sa salle ; une réservation référence son club et la ressource réservée (<code>resourceType</code> + <code>resourceId</code>).</p>
+<h2>5.3 Modèle de données</h2>
+<figure style="width:80%"><img src="conception/donnees.svg"><figcaption>Figure 5 – Modèle physique des données (MySQL)</figcaption></figure>
+<h2>5.4 Diagrammes de séquence</h2>
+<figure style="width:100%"><img src="conception/sequenceConnexion.svg"><figcaption>Figure 6 – Diagramme de séquence : connexion</figcaption></figure>
+<figure style="width:100%"><img src="conception/sequenceReservation.svg"><figcaption>Figure 7 – Diagramme de séquence : réservation par un membre et approbation par l'administration</figcaption></figure>
+<h2>5.5 Diagramme d'états : réservation</h2>
+<figure style="width:80%"><img src="conception/etatsReservation.svg"><figcaption>Figure 8 – Cycle de vie d'une réservation</figcaption></figure>
+
+<h1>6. Plan de test</h1>
+<p>Ce plan suit la structure de la norme IEEE 829 / ISO/IEC/IEEE 29119-3. Il couvre les quatre niveaux de test et les types de test fonctionnels et non fonctionnels.</p>
+<h2>6.1 Objet et périmètre</h2>
+<table><tr><th>Dans le périmètre</th><th>Hors périmètre</th></tr><tr><td>Authentification, inscription, rôles · clubs · événements · salles · équipements · réservations · tableau de bord · profil, paramètres, notifications · sécurité de l'API · performance · robustesse · affichage mobile · compatibilité · maintenabilité · dépendances · persistance · portabilité de la base</td><td>Déploiement en production ; envoi d'e-mails (non prévu) ; accessibilité avancée (lecteurs d'écran)</td></tr></table>
+<h2>6.2 Stratégie : approche basée sur les risques</h2>
+<table><tr><th>Risque produit</th><th>Probabilité</th><th>Impact</th><th>Priorité</th><th>Tests prévus</th></tr>
+<tr><td>Action d'administration par un utilisateur non autorisé</td><td>Élevée</td><td>Critique</td><td>P1</td><td>TI-03, TU-02, TU-04, TNF-06</td></tr>
+<tr><td>Fuite des mots de passe</td><td>Moyenne</td><td>Critique</td><td>P1</td><td>TI-01, TU-01, TNF-06</td></tr>
+<tr><td>Double réservation d'une salle</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>TI-06, TS-05, TA-03</td></tr>
+<tr><td>Événement dépassant la capacité d'une salle</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>TI-05, TA-02</td></tr>
+<tr><td>Erreur serveur sur une saisie invalide</td><td>Moyenne</td><td>Moyen</td><td>P2</td><td>TI-01 à TI-07, TNF-06</td></tr>
+<tr><td>Lenteur en période d'inscription</td><td>Faible</td><td>Majeur</td><td>P2</td><td>TNF-01, TNF-06</td></tr>
+<tr><td>Mauvais affichage sur smartphone</td><td>Moyenne</td><td>Moyen</td><td>P2</td><td>TS-07</td></tr>
+<tr><td>Dépendances vulnérables</td><td>Élevée</td><td>Majeur</td><td>P2</td><td>TNF-02</td></tr>
+<tr><td>Perte de données au redémarrage</td><td>Faible</td><td>Critique</td><td>P2</td><td>TNF-05</td></tr></table>
+<h2>6.3 Niveaux de test (cycle en V)</h2>
+<figure style="width:62%"><img src="conception/cycleV.svg"><figcaption>Figure 9 – Correspondance entre phases de développement et niveaux de test</figcaption></figure>
+<table><tr><th>Niveau</th><th>Objectif</th><th>Cas</th><th>Outil</th></tr>
+<tr><td>Unitaire / composant</td><td>Vérifier chaque composant isolément (API simulée)</td><td>TU-01 … TU-06</td><td>Jest + React Testing Library</td></tr>
+<tr><td>Intégration</td><td>Vérifier l'API avec la sécurité et la base de données réelles</td><td>TI-01 … TI-07, TNF-06</td><td>Postman, Jest</td></tr>
+<tr><td>Système</td><td>Vérifier l'application complète dans un navigateur</td><td>TS-01 … TS-08, TNF-01</td><td>Playwright, k6</td></tr>
+<tr><td>Acceptation</td><td>Valider le besoin du point de vue de chaque profil</td><td>TA-01 … TA-03</td><td>Navigateur, fiches de test</td></tr></table>
+<h2>6.4 Types de test</h2>
+<h3>Tests fonctionnels — ce que fait l'application</h3>
+<table><tr><th>Cas</th><th>Objet</th><th>Niveau</th><th>Exigences</th></tr>
+<tr><td>TU-01</td><td>Contexte d'authentification</td><td>Unitaire</td><td>EF-01, EF-02, ENF-01</td></tr><tr><td>TU-02</td><td>Routes protégées</td><td>Unitaire</td><td>EF-03</td></tr><tr><td>TU-03</td><td>Validation des formulaires</td><td>Unitaire</td><td>EF-05, EF-06, EF-07, EF-09, ENF-04</td></tr><tr><td>TU-04</td><td>Interface selon le rôle</td><td>Unitaire</td><td>EF-03, EF-05, EF-06, EF-09</td></tr><tr><td>TU-05</td><td>Tableau de bord et menus</td><td>Unitaire</td><td>EF-04, EF-10</td></tr><tr><td>TU-06</td><td>Connexion, inscription, routage, pages de compte</td><td>Unitaire</td><td>EF-01, EF-02, EF-10</td></tr><tr><td>TI-01</td><td>API — connexion</td><td>Intégration</td><td>EF-01, ENF-01, ENF-02</td></tr><tr><td>TI-02</td><td>API — inscription</td><td>Intégration</td><td>EF-02, ENF-02</td></tr><tr><td>TI-04</td><td>API — clubs</td><td>Intégration</td><td>EF-05, ENF-02</td></tr><tr><td>TI-05</td><td>API — événements</td><td>Intégration</td><td>EF-06</td></tr><tr><td>TI-06</td><td>API — réservations</td><td>Intégration</td><td>EF-09, ENF-02</td></tr><tr><td>TI-07</td><td>API — salles et équipements</td><td>Intégration</td><td>EF-07, EF-08</td></tr><tr><td>TS-01</td><td>Authentification de bout en bout</td><td>Système</td><td>EF-01, EF-03, ENF-04</td></tr><tr><td>TS-02</td><td>Inscription puis reconnexion</td><td>Système</td><td>EF-02</td></tr><tr><td>TS-03</td><td>Création d'un club et de son président</td><td>Système</td><td>EF-05</td></tr><tr><td>TS-04</td><td>Création d'un événement par le président</td><td>Système</td><td>EF-06</td></tr><tr><td>TS-05</td><td>Réservation par un membre, validation par l'administrateur</td><td>Système</td><td>EF-09</td></tr><tr><td>TS-06</td><td>Tableau de bord cohérent avec la base</td><td>Système</td><td>EF-04</td></tr><tr><td>TA-01</td><td>Parcours administrateur</td><td>Acceptation</td><td>EF-05, EF-07, EF-09</td></tr><tr><td>TA-02</td><td>Parcours président de club</td><td>Acceptation</td><td>EF-04, EF-06</td></tr><tr><td>TA-03</td><td>Parcours membre de club</td><td>Acceptation</td><td>EF-02, EF-03, EF-09</td></tr></table>
+<h3>Tests non fonctionnels — comment elle se comporte</h3>
+<table><tr><th>Cas</th><th>Objet</th><th>Caractéristique</th><th>Exigences</th></tr>
+<tr><td>TI-03</td><td>API — contrôle d'accès</td><td>Sécurité</td><td>EF-03, ENF-02</td></tr><tr><td>TS-07</td><td>Affichage smartphone 360 × 800</td><td>Non fonctionnel (utilisabilité)</td><td>ENF-04</td></tr><tr><td>TS-08</td><td>Compatibilité Edge / Firefox</td><td>Non fonctionnel (compatibilité)</td><td>ENF-05</td></tr><tr><td>TNF-01</td><td>Test de charge (50 utilisateurs)</td><td>Non fonctionnel (performance)</td><td>ENF-03</td></tr><tr><td>TNF-02</td><td>Audit des dépendances</td><td>Non fonctionnel (sécurité)</td><td>ENF-07</td></tr><tr><td>TNF-05</td><td>Persistance après redémarrage</td><td>Non fonctionnel (fiabilité)</td><td>ENF-08</td></tr><tr><td>TNF-06</td><td>Postman — performance, sécurité et robustesse de l'API</td><td>Non fonctionnel (performance, sécurité, robustesse)</td><td>ENF-01, ENF-02, ENF-03, ENF-09</td></tr></table>
+<h3>Autres types</h3>
+<table><tr><th>Type</th><th>Cas</th><th>Description</th></tr>
+<tr><td>Statique</td><td>TNF-03</td><td>Revue de code et analyse statique (ESLint, PMD/CPD), sans exécuter le code</td></tr>
+<tr><td>Structurel (boîte blanche)</td><td>TNF-04</td><td>Couverture des instructions et des branches (objectif ≥ 70 %)</td></tr>
+<tr><td>Lié aux changements</td><td>TR-01, TR-02</td><td>Re-test de confirmation après chaque correctif, puis non-régression complète</td></tr>
+<tr><td>Maintenance</td><td>TM-01</td><td>Portage vers MariaDB (XAMPP) sans modification du code</td></tr></table>
+<h2>6.5 Techniques de test</h2>
+<table><tr><th>Famille</th><th>Technique</th><th>Application prévue</th></tr>
+<tr><td rowspan="3">Statique</td><td>Revue des exigences</td><td>Reformuler chaque besoin en critère mesurable (ex. ENF-03 : p95 &lt; 500 ms à 50 utilisateurs)</td></tr>
+<tr><td>Revue de code</td><td>Contrôleurs, sécurité et configuration relus avant toute exécution</td></tr>
+<tr><td>Analyse outillée</td><td>ESLint, PMD/CPD, npm audit</td></tr>
+<tr><td rowspan="5">Boîte noire</td><td>Partitions d'équivalence</td><td>Identifiants valides ou invalides, adresses @enicar.tn ou non</td></tr>
+<tr><td>Valeurs limites</td><td>Mot de passe de 5 / 6 caractères ; 40 / 41 participants pour une salle de 40 places ; capacité 0 et −10</td></tr>
+<tr><td>Table de décision</td><td>Routes protégées (6 règles) ; rôle × action (sans jeton, jeton falsifié, membre, administrateur)</td></tr>
+<tr><td>Transitions d'états</td><td>Réservation PENDING → APPROVED / REJECTED (§ 5.5)</td></tr>
+<tr><td>Cas d'utilisation</td><td>Scénarios système et d'acceptation construits à partir des cas d'utilisation (§ 5.1)</td></tr>
+<tr><td>Boîte blanche</td><td>Couverture</td><td>Instructions et branches (Jest, JaCoCo)</td></tr>
+<tr><td>Expérience</td><td>Tests exploratoires</td><td>Appels directs à l'API, redémarrage du serveur, affichage sur smartphone</td></tr></table>
+<h2>6.6 Catalogue des cas de test</h2>
+<table><tr><th>Cas</th><th>Titre</th><th>Niveau</th><th>Type</th><th>Technique</th><th>Mode</th><th>Outil</th></tr>
+<tr><td>TU-01</td><td>Contexte d'authentification</td><td>Unitaire</td><td><span class="badge b-f">Fonctionnel / sécurité</span></td><td>Partitions d'équivalence</td><td>automatisé</td><td>Jest + RTL</td></tr><tr><td>TU-02</td><td>Routes protégées</td><td>Unitaire</td><td><span class="badge b-f">Fonctionnel</span></td><td>Table de décision (6 règles)</td><td>automatisé</td><td>Jest + RTL</td></tr><tr><td>TU-03</td><td>Validation des formulaires</td><td>Unitaire</td><td><span class="badge b-f">Fonctionnel</span></td><td>Partitions, valeurs limites</td><td>automatisé</td><td>Jest + RTL</td></tr><tr><td>TU-04</td><td>Interface selon le rôle</td><td>Unitaire</td><td><span class="badge b-f">Fonctionnel / sécurité</span></td><td>Table de décision rôle × action, transition d'états</td><td>automatisé</td><td>Jest + RTL</td></tr><tr><td>TU-05</td><td>Tableau de bord et menus</td><td>Unitaire</td><td><span class="badge b-f">Fonctionnel</span></td><td>Partitions</td><td>automatisé</td><td>Jest + RTL</td></tr><tr><td>TU-06</td><td>Connexion, inscription, routage, pages de compte</td><td>Unitaire</td><td><span class="badge b-f">Fonctionnel</span></td><td>Valeurs limites (mot de passe 5/6)</td><td>automatisé</td><td>Jest + RTL</td></tr><tr><td>TI-01</td><td>API — connexion</td><td>Intégration</td><td><span class="badge b-f">Fonctionnel / sécurité</span></td><td>Partitions, robustesse</td><td>automatisé</td><td>Jest (HTTP réel)</td></tr><tr><td>TI-02</td><td>API — inscription</td><td>Intégration</td><td><span class="badge b-f">Fonctionnel</span></td><td>Partitions, valeurs limites</td><td>automatisé</td><td>Jest (HTTP réel)</td></tr><tr><td>TI-03</td><td>API — contrôle d'accès</td><td>Intégration</td><td><span class="badge b-nf">Sécurité</span></td><td>Table de décision (sans jeton / falsifié / membre / admin)</td><td>automatisé</td><td>Jest (HTTP réel)</td></tr><tr><td>TI-04</td><td>API — clubs</td><td>Intégration</td><td><span class="badge b-f">Fonctionnel</span></td><td>Partitions</td><td>automatisé</td><td>Jest (HTTP réel)</td></tr><tr><td>TI-05</td><td>API — événements</td><td>Intégration</td><td><span class="badge b-f">Fonctionnel</span></td><td>Valeurs limites (capacité 40/41), partitions</td><td>automatisé</td><td>Jest (HTTP réel)</td></tr><tr><td>TI-06</td><td>API — réservations</td><td>Intégration</td><td><span class="badge b-f">Fonctionnel</span></td><td>Transitions d'états, partitions</td><td>automatisé</td><td>Jest (HTTP réel)</td></tr><tr><td>TI-07</td><td>API — salles et équipements</td><td>Intégration</td><td><span class="badge b-f">Fonctionnel</span></td><td>Valeurs limites (capacité 0, −10)</td><td>automatisé</td><td>Jest (HTTP réel)</td></tr><tr><td>TS-01</td><td>Authentification de bout en bout</td><td>Système</td><td><span class="badge b-f">Fonctionnel</span></td><td>Cas d'utilisation</td><td>automatisé</td><td>Playwright</td></tr><tr><td>TS-02</td><td>Inscription puis reconnexion</td><td>Système</td><td><span class="badge b-f">Fonctionnel</span></td><td>Cas d'utilisation</td><td>automatisé</td><td>Playwright</td></tr><tr><td>TS-03</td><td>Création d'un club et de son président</td><td>Système</td><td><span class="badge b-f">Fonctionnel</span></td><td>Cas d'utilisation multi-acteurs</td><td>automatisé</td><td>Playwright</td></tr><tr><td>TS-04</td><td>Création d'un événement par le président</td><td>Système</td><td><span class="badge b-f">Fonctionnel</span></td><td>Cas d'utilisation</td><td>automatisé</td><td>Playwright</td></tr><tr><td>TS-05</td><td>Réservation par un membre, validation par l'administrateur</td><td>Système</td><td><span class="badge b-f">Fonctionnel</span></td><td>Cas d'utilisation multi-acteurs</td><td>automatisé</td><td>Playwright</td></tr><tr><td>TS-06</td><td>Tableau de bord cohérent avec la base</td><td>Système</td><td><span class="badge b-f">Fonctionnel</span></td><td>Comparaison API / interface</td><td>automatisé</td><td>Playwright</td></tr><tr><td>TS-07</td><td>Affichage smartphone 360 × 800</td><td>Système</td><td><span class="badge b-nf">Non fonctionnel (utilisabilité)</span></td><td>Mesure de mise en page</td><td>automatisé</td><td>Playwright</td></tr><tr><td>TS-08</td><td>Compatibilité Edge / Firefox</td><td>Système</td><td><span class="badge b-nf">Non fonctionnel (compatibilité)</span></td><td>Suite E2E sur 2 navigateurs</td><td>automatisé</td><td>Playwright</td></tr><tr><td>TA-01</td><td>Parcours administrateur</td><td>Acceptation</td><td><span class="badge b-f">Fonctionnel</span></td><td>Scénario métier</td><td>manuel</td><td>Navigateur + fiche</td></tr><tr><td>TA-02</td><td>Parcours président de club</td><td>Acceptation</td><td><span class="badge b-f">Fonctionnel</span></td><td>Scénario métier</td><td>manuel</td><td>Navigateur + fiche</td></tr><tr><td>TA-03</td><td>Parcours membre de club</td><td>Acceptation</td><td><span class="badge b-f">Fonctionnel</span></td><td>Scénario métier, test exploratoire</td><td>manuel</td><td>Navigateur + fiche</td></tr><tr><td>TNF-01</td><td>Test de charge (50 utilisateurs)</td><td>Système</td><td><span class="badge b-nf">Non fonctionnel (performance)</span></td><td>Charge</td><td>automatisé</td><td>k6</td></tr><tr><td>TNF-02</td><td>Audit des dépendances</td><td>Système</td><td><span class="badge b-nf">Non fonctionnel (sécurité)</span></td><td>Analyse de composition</td><td>automatisé</td><td>npm audit</td></tr><tr><td>TNF-03</td><td>Analyse statique et revue de code</td><td>Unitaire</td><td><span class="badge ">Statique</span></td><td>Revue de code, ESLint, PMD/CPD</td><td>manuel</td><td>ESLint, PMD, revue</td></tr><tr><td>TNF-04</td><td>Couverture de code</td><td>Unitaire / intégration</td><td><span class="badge ">Structurel (boîte blanche)</span></td><td>Couverture instructions / branches</td><td>automatisé</td><td>Jest --coverage, JaCoCo</td></tr><tr><td>TNF-05</td><td>Persistance après redémarrage</td><td>Système</td><td><span class="badge b-nf">Non fonctionnel (fiabilité)</span></td><td>Test exploratoire</td><td>manuel</td><td>Navigateur, API</td></tr><tr><td>TR-01</td><td>Re-test de confirmation</td><td>Tous</td><td><span class="badge ">Lié aux changements</span></td><td>Ré-exécution des cas en échec</td><td>automatisé</td><td>Jest, Playwright</td></tr><tr><td>TR-02</td><td>Non-régression</td><td>Tous</td><td><span class="badge ">Lié aux changements</span></td><td>Ré-exécution de toute la suite</td><td>automatisé</td><td>Jest, Playwright, k6</td></tr><tr><td>TNF-06</td><td>Postman — performance, sécurité et robustesse de l'API</td><td>Intégration</td><td><span class="badge b-nf">Non fonctionnel (performance, sécurité, robustesse)</span></td><td>Mesure du temps de réponse, table de décision des accès, entrées invalides</td><td>automatisé</td><td>Postman (Collection Runner, onglet Performance), Newman</td></tr><tr><td>TM-01</td><td>Portage vers MariaDB (XAMPP)</td><td>Système</td><td><span class="badge ">Maintenance</span></td><td>Changement d'environnement</td><td>automatisé</td><td>Docker MariaDB, Jest</td></tr></table>
+<h2>6.7 Matrice de traçabilité exigences → cas de test</h2>
+<table><tr><th>Exigence</th><th>Criticité</th><th>Cas de test qui la vérifieront</th></tr>
+<tr><td>EF-01 Authentification</td><td>Critique</td><td>TU-01, TU-06, TI-01, TS-01, TR-01, TR-02</td></tr><tr><td>EF-02 Inscription d'un étudiant</td><td>Majeure</td><td>TU-01, TU-06, TI-02, TS-02, TA-03, TR-01</td></tr><tr><td>EF-03 Rôles et contrôle d'accès</td><td>Critique</td><td>TU-02, TU-04, TI-03, TS-01, TA-03, TR-01, TR-02</td></tr><tr><td>EF-04 Tableau de bord</td><td>Majeure</td><td>TU-05, TS-06, TA-02, TR-01</td></tr><tr><td>EF-05 Gestion des clubs</td><td>Critique</td><td>TU-03, TU-04, TI-04, TS-03, TA-01, TR-01, TR-02</td></tr><tr><td>EF-06 Gestion des événements</td><td>Critique</td><td>TU-03, TU-04, TI-05, TS-04, TA-02, TR-01, TR-02</td></tr><tr><td>EF-07 Gestion des salles</td><td>Majeure</td><td>TU-03, TI-07, TA-01, TR-01</td></tr><tr><td>EF-08 Gestion des équipements</td><td>Mineure</td><td>TI-07</td></tr><tr><td>EF-09 Réservation de ressources</td><td>Critique</td><td>TU-03, TU-04, TI-06, TS-05, TA-01, TA-03, TR-01, TR-02</td></tr><tr><td>EF-10 Profil, paramètres et notifications</td><td>Mineure</td><td>TU-05, TU-06</td></tr><tr><td>ENF-01 Sécurité des identifiants</td><td>Critique</td><td>TU-01, TI-01, TR-01, TNF-06</td></tr><tr><td>ENF-02 Sécurité et robustesse de l'API</td><td>Critique</td><td>TI-01, TI-02, TI-03, TI-04, TI-06, TR-01, TNF-06</td></tr><tr><td>ENF-03 Performance</td><td>Majeure</td><td>TNF-01, TR-02, TNF-06</td></tr><tr><td>ENF-04 Utilisabilité et affichage mobile</td><td>Majeure</td><td>TU-03, TS-01, TS-07, TR-01</td></tr><tr><td>ENF-05 Compatibilité navigateurs</td><td>Mineure</td><td>TS-08</td></tr><tr><td>ENF-06 Maintenabilité</td><td>Mineure</td><td>TNF-03, TNF-04</td></tr><tr><td>ENF-07 Sécurité des dépendances</td><td>Majeure</td><td>TNF-02, TR-01</td></tr><tr><td>ENF-08 Persistance des données</td><td>Majeure</td><td>TNF-05, TM-01</td></tr><tr><td>ENF-09 Configuration sécurisée</td><td>Majeure</td><td>TNF-03, TNF-06</td></tr><tr><td>ENF-10 Portabilité de la base de données</td><td>Mineure</td><td>TM-01</td></tr></table>
+<div class="note">Chaque exigence est couverte par au moins un cas de test : 20/20.</div>
+<h2>6.8 Outils de test</h2>
+<table><tr><th>Outil</th><th>Utilisation prévue</th><th>Niveau</th><th>Type</th></tr>
+<tr><td><b>Jest 30 + React Testing Library</b></td><td>Tests unitaires et de composants du frontend (API simulée) ; tests d'intégration de l'API par requêtes HTTP</td><td>Unitaire, intégration</td><td>Fonctionnel, sécurité</td></tr><tr><td><b>Postman</b></td><td>Logiciel de test d'API : collection en deux parties, A — fonctionnels, B — non fonctionnels (performance, sécurité, robustesse) ; Collection Runner et onglet Performance</td><td>Intégration</td><td>Fonctionnel et non fonctionnel</td></tr><tr><td><b>Playwright (+ UI Mode)</b></td><td>Tests système dans un vrai navigateur (Edge, Firefox), interface graphique avec chronologie et captures ; aide aux tests d'acceptation</td><td>Système, acceptation</td><td>Fonctionnel, utilisabilité, compatibilité</td></tr><tr><td><b>k6</b></td><td>Test de charge de l'API (50 utilisateurs virtuels)</td><td>Système</td><td>Non fonctionnel (performance)</td></tr><tr><td><b>JaCoCo · couverture Jest</b></td><td>Couverture des instructions et des branches</td><td>Unitaire, intégration</td><td>Structurel</td></tr><tr><td><b>ESLint · PMD/CPD · npm audit</b></td><td>Analyse statique du code et audit des dépendances</td><td>—</td><td>Statique, maintenabilité, sécurité</td></tr><tr><td><b>GitHub (issues, jalons, Pull Requests, Projects)</b></td><td>Gestion des exigences, des cas de test, des anomalies et des campagnes</td><td>—</td><td>Gestion des tests</td></tr></table>
+<p><b>Postman</b> est le logiciel de test retenu pour l'API. Sa collection sera organisée en deux parties : <b>A — tests fonctionnels</b> (un dossier par cas TI-01 à TI-07) et <b>B — tests non fonctionnels</b> (NF-01 performance : temps de réponse &lt; 500 ms ; NF-02 sécurité : accès, jetons, injection SQL, CORS ; NF-03 robustesse : entrées invalides sans erreur 500). Chaque requête porte ses vérifications (<code>pm.test</code>) :</p>
+<pre>pm.test("Code HTTP 200", () =&gt; pm.response.to.have.status(200));
+pm.test("Temps de réponse &lt; 500 ms", () =&gt; pm.expect(pm.response.responseTime).to.be.below(500));
+pm.test("Le hash du mot de passe n'est pas renvoyé", () =&gt; pm.expect(pm.response.json().user).to.not.have.property("password"));</pre>
+<h2>6.9 Environnement et données de test</h2>
+<ul><li><b>Unitaires :</b> jsdom, API simulée avec les données initiales du projet.</li>
+<li><b>Intégration et système :</b> backend réel sur MySQL 8 (Docker) ; chaque test crée ses propres données pour pouvoir être rejoué.</li>
+<li><b>Acceptation :</b> base réinitialisée ; comptes admin@enicar.tn et ahmed@enicar.tn.</li>
+<li><b>Navigateurs :</b> Microsoft Edge et Firefox, en 1440 × 900 et en 360 × 800 (smartphone).</li></ul>
+<h2>6.10 Critères d'entrée, de sortie et de suspension</h2>
+<table><tr><th>Critère</th><th>Définition</th></tr>
+<tr><td>Entrée</td><td>Application compilée et démarrée ; base de test accessible ; exigences et cas de test publiés sur GitHub</td></tr>
+<tr><td>Sortie</td><td>100 % des cas exécutés ; aucune anomalie critique ou majeure ouverte ; 100 % des exigences couvertes ; couverture des instructions ≥ 70 % ; p95 &lt; 500 ms</td></tr>
+<tr><td>Suspension</td><td>Environnement indisponible ou anomalie bloquante empêchant plus de 30 % des tests</td></tr>
+<tr><td>Reprise</td><td>Correctif livré ; re-test de confirmation puis non-régression complète</td></tr></table>
+<h2>6.11 Gestion des anomalies et des tests</h2>
+<p><b>Cycle de vie d'une anomalie :</b> Détectée → Confirmée → Corrigée → Re-testée → Fermée. <b>Gravité :</b> critique (sécurité, perte de données), majeure (fonction dégradée), mineure (gêne). Sur GitHub, chaque exigence, chaque cas de test et chaque anomalie est une issue ; une anomalie est liée à l'exigence concernée et au test qui l'a détectée, et la Pull Request qui la corrige la ferme. Les jalons représentent les campagnes de test.</p>
+
+<h1>7. Organisation de l'équipe et planning</h1>
+<h2>7.1 Rôles</h2>
+<table><tr><th>Membre</th><th>Rôle</th><th>Domaine principal</th></tr>
+<tr><td>Mohamed Aziz Rouissi</td><td>Chef d'équipe</td><td>Exigences, architecture, plan de test, coordination, rapport</td></tr>
+<tr><td>Mohamed Bouchahda</td><td>Membre</td><td>Backend et API : diagramme de classes, séquences, tests d'API (Postman), tests non fonctionnels</td></tr>
+<tr><td>Mohamed Hosni Missaoui</td><td>Membre</td><td>Frontend : cas d'utilisation, diagramme d'états, tests unitaires (Jest), tests système (Playwright)</td></tr></table>
+<h2>7.2 Répartition des tâches et planning</h2>
+<table><tr><th>Semaine</th><th>Phase</th><th>Tâche</th><th>Responsable</th><th>Échéance</th><th>Statut</th></tr>
+<tr><td rowspan="4"><b>S46</b><br><span style="font-size:8pt;color:#555">à partir du 9 nov. 2026</span></td><td rowspan="4">Analyse et conception</td><td>Cadrage du projet et rédaction des exigences (EF / ENF)</td><td>Mohamed Aziz Rouissi</td><td>11 nov. 2026</td><td>Terminée</td></tr><tr><td>Diagramme de cas d'utilisation et parcours des trois profils</td><td>Mohamed Hosni Missaoui</td><td>12 nov. 2026</td><td>Terminée</td></tr><tr><td>Diagramme de classes et modèle de données</td><td>Mohamed Bouchahda</td><td>13 nov. 2026</td><td>Terminée</td></tr><tr><td>Architecture technique et diagramme de déploiement</td><td>Mohamed Aziz Rouissi</td><td>14 nov. 2026</td><td>Terminée</td></tr><tr><td rowspan="6"><b>S47</b><br><span style="font-size:8pt;color:#555">à partir du 16 nov. 2026</span></td><td rowspan="6">Plan de test et rapport d'évaluation</td><td>Diagrammes de séquence : connexion et réservation</td><td>Mohamed Bouchahda</td><td>18 nov. 2026</td><td>En cours</td></tr><tr><td>Plan de test : stratégie, niveaux, types, critères d'entrée et de sortie</td><td>Mohamed Aziz Rouissi</td><td>19 nov. 2026</td><td>En cours</td></tr><tr><td>Diagramme d'états de la réservation et matrice de traçabilité</td><td>Mohamed Hosni Missaoui</td><td>19 nov. 2026</td><td>En cours</td></tr><tr><td>Conception des cas de test de l'API (fonctionnels et non fonctionnels, Postman)</td><td>Mohamed Bouchahda</td><td>20 nov. 2026</td><td>À faire</td></tr><tr><td>Conception des cas de test de l'interface (Jest, Playwright)</td><td>Mohamed Hosni Missaoui</td><td>20 nov. 2026</td><td>À faire</td></tr><tr><td>Rapport d'évaluation : description, architecture, conception, plan de test</td><td>Mohamed Aziz Rouissi</td><td>21 nov. 2026</td><td>En cours</td></tr><tr><td rowspan="3"><b>S48</b><br><span style="font-size:8pt;color:#555"></span></td><td rowspan="3">Tests unitaires et d'intégration</td><td>Environnement de test (Docker, données) et suivi des anomalies sur GitHub</td><td>Mohamed Aziz Rouissi</td><td>25 nov. 2026</td><td>À faire</td></tr><tr><td>Tests unitaires et de composants (Jest)</td><td>Mohamed Hosni Missaoui</td><td>27 nov. 2026</td><td>À faire</td></tr><tr><td>Tests d'intégration de l'API (Postman, Jest)</td><td>Mohamed Bouchahda</td><td>27 nov. 2026</td><td>À faire</td></tr><tr><td rowspan="3"><b>S49</b><br><span style="font-size:8pt;color:#555"></span></td><td rowspan="3">Tests système, non fonctionnels et acceptation</td><td>Tests système E2E (Playwright, Edge et Firefox)</td><td>Mohamed Hosni Missaoui</td><td>4 déc. 2026</td><td>À faire</td></tr><tr><td>Tests non fonctionnels : performance, sécurité, robustesse</td><td>Mohamed Bouchahda</td><td>4 déc. 2026</td><td>À faire</td></tr><tr><td>Tests d'acceptation avec les trois profils</td><td>Mohamed Aziz Rouissi</td><td>5 déc. 2026</td><td>À faire</td></tr><tr><td rowspan="3"><b>S50</b><br><span style="font-size:8pt;color:#555"></span></td><td rowspan="3">Correctifs, non-régression et rapport final</td><td>Correctifs backend et re-test</td><td>Mohamed Bouchahda</td><td>10 déc. 2026</td><td>À faire</td></tr><tr><td>Correctifs frontend et non-régression</td><td>Mohamed Hosni Missaoui</td><td>10 déc. 2026</td><td>À faire</td></tr><tr><td>Bilan, verdict de recette et rapport final</td><td>Mohamed Aziz Rouissi</td><td>12 déc. 2026</td><td>À faire</td></tr></table>
+<h2>7.3 Suivi hebdomadaire</h2>
+<p>L'avancement est suivi chaque semaine dans un tableau de bord tenu dans le dépôt (<code>suivi/index.html</code>). Il affiche les objectifs fixés par l'encadrant, les tâches de chaque membre (priorité, échéance, statut) et le planning complet. Le chef d'équipe met à jour la semaine depuis son espace (<code>suivi/chef.html</code>).</p>
+<figure style="width:96%"><img src="img/suivi-planning.png"><figcaption>Figure 10 – Tableau de suivi hebdomadaire : objectifs de l'encadrant et tâches de chaque membre (semaine 47)</figcaption></figure>
+
+<h1>8. Conclusion et prochaines étapes</h1>
+<p>Ce rapport décrit la plateforme de gestion des clubs de l'ENICarthage : ses profils et ses fonctionnalités, ses 20 exigences, son architecture en trois couches et sa conception (cas d'utilisation, classes, données, séquences, états). Il fixe le plan de test qui guidera la suite : 33 cas de test répartis sur les quatre niveaux, tests fonctionnels et non fonctionnels, techniques de conception des tests, outils (Jest, Postman, Playwright, k6) et critères de sortie.</p>
+<p><b>Prochaines étapes :</b> semaine 48, tests unitaires (Jest) et tests d'intégration de l'API (Postman) ; semaine 49, tests système (Playwright), tests non fonctionnels et tests d'acceptation ; semaine 50, correctifs, non-régression et rapport final avec le verdict de recette.</p>
+</body></html>
