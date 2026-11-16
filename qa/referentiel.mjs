@@ -59,6 +59,7 @@ export const CAS = [
   { id: "TNF-05", titre: "Persistance après redémarrage", niveau: "Système", type: "Non fonctionnel (fiabilité)", tech: "Test exploratoire", mode: "manuel", outil: "Navigateur, API", fichier: "qa/acceptance/TA-fiches.md", ex: ["ENF-08"] },
   { id: "TR-01", titre: "Re-test de confirmation", niveau: "Tous", type: "Lié aux changements", tech: "Ré-exécution des cas en échec", mode: "auto", outil: "Jest, Playwright", fichier: "qa/results/*-iteration2*", ex: ["EF-01", "EF-02", "EF-03", "EF-04", "EF-05", "EF-06", "EF-07", "EF-09", "ENF-01", "ENF-02", "ENF-04", "ENF-07"] },
   { id: "TR-02", titre: "Non-régression", niveau: "Tous", type: "Lié aux changements", tech: "Ré-exécution de toute la suite", mode: "auto", outil: "Jest, Playwright, k6", fichier: "qa/results/*-iteration2*", ex: ["EF-01", "EF-03", "EF-05", "EF-06", "EF-09", "ENF-03"] },
+  { id: "TNF-06", titre: "Postman — performance, sécurité et robustesse de l'API", niveau: "Intégration", type: "Non fonctionnel (performance, sécurité, robustesse)", tech: "Mesure du temps de réponse, table de décision des accès, entrées invalides", mode: "auto", outil: "Postman (Collection Runner, onglet Performance), Newman", fichier: "qa/postman/ENICarthage-Clubs-API.postman_collection.json", ex: ["ENF-01", "ENF-02", "ENF-03", "ENF-09"] },
   { id: "TM-01", titre: "Portage vers MariaDB (XAMPP)", niveau: "Système", type: "Maintenance", tech: "Changement d'environnement", mode: "auto", outil: "Docker MariaDB, Jest", fichier: "qa/results/maintenance/", ex: ["ENF-10", "ENF-08"] },
 ];
 
@@ -81,6 +82,7 @@ export const ANOMALIES = [
   { id: "ANO-16", grav: "Mineure", titre: "Sessions perdues à chaque redémarrage du backend", desc: "Effet de bord du correctif ANO-01 : les jetons sont conservés en mémoire ; après un redémarrage du serveur, tous les utilisateurs sont déconnectés (401 puis retour à la page de connexion).", repro: "Se connecter, redémarrer le backend, recharger une page protégée → retour à /login.", par: ["TNF-05"], ex: ["ENF-08", "EF-01"] },
   { id: "ANO-17", grav: "Mineure", titre: "MariaDB 10.4 (XAMPP) non prise en charge par Hibernate 7", desc: "L'application fonctionne (45/45 tests d'API) mais Hibernate signale que la version détectée (5.5.5-10.4) n'est plus supportée (minimum MySQL 8.0) ; MariaDB 10.4 est en fin de vie depuis 2024.", repro: "Démarrer le backend avec DB_URL vers MariaDB 10.4 : avertissement HHH000511.", par: ["TM-01"], ex: ["ENF-10"] },
   { id: "ANO-18", grav: "Majeure", titre: "Régression : « Aucun club associé » pour un président (condition de course)", desc: "Introduite par le correctif d'ANO-10 : si le président clique sur « + Nouvel Événement » avant la fin du chargement des clubs, la page conclut qu'il n'a pas de club. Détectée par la non-régression E2E (échec intermittent sous Edge).", repro: "Se connecter en président, ouvrir Événements et cliquer immédiatement sur « + Nouvel Événement ».", par: ["TR-02", "TS-04"], ex: ["EF-06"] },
+  { id: "ANO-19", grav: "Majeure", titre: "Texte trop long : erreur serveur 500 au lieu d'un refus", desc: "Un nom de plus de 255 caractères (limite de la colonne MySQL) provoque une DataIntegrityViolationException non interceptée : l'API répond 500 au lieu de 400. Touche toutes les entités (salles, clubs, événements…). Détectée par les tests non fonctionnels de robustesse dans Postman.", repro: "POST /api/rooms avec un nom de 300 caractères (jeton administrateur) → 500 (attendu 400).", par: ["TNF-06"], ex: ["ENF-02"] },
 ];
 
 // Statut des anomalies après l'itération 2 (build v1.0.1)
@@ -89,4 +91,5 @@ export const STATUT = Object.fromEntries([
   ["ANO-12", "Ouverte — fonctionnalité à développer"],
   ["ANO-16", "Ouverte — détectée en itération 2"],
   ["ANO-17", "Ouverte — détectée en itération 2"],
+  ["ANO-19", "Corrigée et re-testée (v1.0.2)"],
 ]);

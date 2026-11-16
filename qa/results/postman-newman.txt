@@ -1,191 +1,262 @@
-npm warn deprecated har-validator@5.1.5: this library is no longer supported
-npm warn deprecated uuid@3.4.0: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
-npm warn deprecated uuid@8.3.2: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
-npm warn deprecated @faker-js/faker@5.5.3: Please update to a newer version.
-(node:16808) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(node:20784) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
 (Use `node --trace-deprecation ...` to show where the warning was created)
 newman
 
-ENICarthage Clubs — Tests d'API (TI-01 à TI-07)
+ENICarthage Clubs — Tests fonctionnels et non fonctionnels de l'API
 
 □ 00 — Préparation des données
 └ Connexion administrateur
-  POST http://localhost:9090/api/auth/login [200 OK, 574B, 495ms]
+  POST http://localhost:9090/api/auth/login [200 OK, 574B, 540ms]
   √  Code HTTP 200
 
 └ Connexion président (Club IEEE)
-  POST http://localhost:9090/api/auth/login [200 OK, 571B, 119ms]
+  POST http://localhost:9090/api/auth/login [200 OK, 571B, 181ms]
   √  Code HTTP 200
 
 └ Inscription d'un membre de test
-  POST http://localhost:9090/api/auth/register [200 OK, 584B, 238ms]
+  POST http://localhost:9090/api/auth/register [200 OK, 584B, 195ms]
   √  Code HTTP 200
 
-□ TI-01 — Connexion
+□ A — Tests fonctionnels / TI-01 — Connexion
 └ Identifiants valides → 200, jeton, rôle
-  POST http://localhost:9090/api/auth/login [200 OK, 574B, 125ms]
+  POST http://localhost:9090/api/auth/login [200 OK, 574B, 95ms]
   √  Code HTTP 200
   √  Un jeton est renvoyé
   √  Rôle ADMINISTRATOR
-  √  Le hash du mot de passe n'est pas renvoyé (ANO-02)
 
 └ Mot de passe erroné → 401
-  POST http://localhost:9090/api/auth/login [401 Unauthorized, 452B, 106ms]
+  POST http://localhost:9090/api/auth/login [401 Unauthorized, 452B, 174ms]
   √  Code HTTP 401
 
 └ E-mail inconnu → 401
-  POST http://localhost:9090/api/auth/login [401 Unauthorized, 452B, 10ms]
+  POST http://localhost:9090/api/auth/login [401 Unauthorized, 452B, 18ms]
   √  Code HTTP 401
 
-└ Corps vide → 400/401, jamais 500
-  POST http://localhost:9090/api/auth/login [401 Unauthorized, 452B, 19ms]
-  √  Code 400 ou 401
-  √  Jamais d'erreur serveur (5xx)
-
-└ JSON mal formé → 400
-  POST http://localhost:9090/api/auth/login [400 Bad Request, 622B, 45ms]
-  √  Code HTTP 400
-  √  Jamais d'erreur serveur (5xx)
-
-□ TI-02 — Inscription
+□ A — Tests fonctionnels / TI-02 — Inscription
 └ Inscription valide → 200, rôle CLUB_MEMBER
-  POST http://localhost:9090/api/auth/register [200 OK, 583B, 111ms]
+  POST http://localhost:9090/api/auth/register [200 OK, 583B, 161ms]
   √  Code HTTP 200
   √  Rôle CLUB_MEMBER
 
 └ E-mail déjà utilisé → 400
-  POST http://localhost:9090/api/auth/register [400 Bad Request, 423B, 17ms]
+  POST http://localhost:9090/api/auth/register [400 Bad Request, 423B, 26ms]
   √  Code HTTP 400
 
-└ Rôle envoyé par le client ignoré
-  POST http://localhost:9090/api/auth/register [200 OK, 576B, 127ms]
-  √  Code HTTP 200
-  √  Le rôle reste CLUB_MEMBER
-
 └ Adresse non institutionnelle (@gmail.com) → 400
-  POST http://localhost:9090/api/auth/register [400 Bad Request, 566B, 23ms]
+  POST http://localhost:9090/api/auth/register [400 Bad Request, 566B, 57ms]
   √  Code HTTP 400
 
 └ Mot de passe de 5 caractères (limite − 1) → 400
-  POST http://localhost:9090/api/auth/register [400 Bad Request, 563B, 17ms]
+  POST http://localhost:9090/api/auth/register [400 Bad Request, 563B, 11ms]
   √  Code HTTP 400
 
 └ Mot de passe de 6 caractères (limite) → 200
-  POST http://localhost:9090/api/auth/register [200 OK, 566B, 140ms]
+  POST http://localhost:9090/api/auth/register [200 OK, 566B, 183ms]
   √  Code HTTP 200
 
-□ TI-03 — Contrôle d'accès
-└ Consultation des clubs sans jeton → 200
-  GET http://localhost:9090/api/clubs [200 OK, 1.21kB, 53ms]
-  √  Code HTTP 200
-
-└ Création d'une salle sans jeton → 401
-  POST http://localhost:9090/api/rooms [401 Unauthorized, 392B, 13ms]
-  √  Code HTTP 401
-
-└ Jeton falsifié → 401
-  POST http://localhost:9090/api/rooms [401 Unauthorized, 392B, 8ms]
-  √  Code HTTP 401
-
-└ Membre qui crée une salle → 403
-  POST http://localhost:9090/api/rooms [403 Forbidden, 545B, 52ms]
-  √  Code HTTP 403
-
-└ Membre qui approuve une réservation → 403
-  PUT http://localhost:9090/api/reservations/1/status [403 Forbidden, 561B, 40ms]
-  √  Code HTTP 403
-
-□ TI-07 — Salles et équipements
+□ A — Tests fonctionnels / TI-07 — Salles et équipements
 └ Ajout d'une salle de 40 places → 200
-  POST http://localhost:9090/api/rooms [200 OK, 490B, 107ms]
+  POST http://localhost:9090/api/rooms [200 OK, 490B, 124ms]
   √  Code HTTP 200
   √  Capacité enregistrée : 40
 
 └ Capacité 0 → 400
-  POST http://localhost:9090/api/rooms [400 Bad Request, 560B, 30ms]
+  POST http://localhost:9090/api/rooms [400 Bad Request, 560B, 41ms]
   √  Code HTTP 400
 
 └ Capacité −10 → 400
-  POST http://localhost:9090/api/rooms [400 Bad Request, 560B, 37ms]
+  POST http://localhost:9090/api/rooms [400 Bad Request, 560B, 49ms]
   √  Code HTTP 400
 
 └ Ajout d'un équipement → 200, statut AVAILABLE
-  POST http://localhost:9090/api/equipment [200 OK, 488B, 63ms]
+  POST http://localhost:9090/api/equipment [200 OK, 488B, 52ms]
   √  Code HTTP 200
   √  Statut AVAILABLE
 
-□ TI-04 — Clubs
+□ A — Tests fonctionnels / TI-04 — Clubs
 └ Création d'un club et de son président → 200
-  POST http://localhost:9090/api/clubs [200 OK, 527B, 210ms]
+  POST http://localhost:9090/api/clubs [200 OK, 528B, 220ms]
   √  Code HTTP 200
   √  Le club a un président
 
 └ Le président créé peut se connecter
-  POST http://localhost:9090/api/auth/login [200 OK, 589B, 89ms]
+  POST http://localhost:9090/api/auth/login [200 OK, 589B, 163ms]
   √  Code HTTP 200
   √  Rôle CLUB_PRESIDENT
 
-└ Président déjà inscrit → 409 (ANO-06)
-  POST http://localhost:9090/api/clubs [409 Conflict, 587B, 18ms]
+└ Président déjà inscrit → 409
+  POST http://localhost:9090/api/clubs [409 Conflict, 587B, 40ms]
   √  Code HTTP 409
-  √  Jamais d'erreur serveur (5xx)
 
 └ Nom de club vide → 400
-  POST http://localhost:9090/api/clubs [400 Bad Request, 565B, 28ms]
+  POST http://localhost:9090/api/clubs [400 Bad Request, 565B, 31ms]
   √  Code HTTP 400
 
-□ TI-05 — Événements
+□ A — Tests fonctionnels / TI-05 — Événements
 └ Événement valide (40 participants = capacité) → 200, PENDING
   POST http://localhost:9090/api/events [200 OK, 553B, 139ms]
   √  Code HTTP 200
   √  Statut initial PENDING
 
 └ 41 participants (capacité + 1) → 400
-  POST http://localhost:9090/api/events [400 Bad Request, 562B, 39ms]
+  POST http://localhost:9090/api/events [400 Bad Request, 562B, 49ms]
   √  Code HTTP 400
 
 └ Participants négatifs → 400
-  POST http://localhost:9090/api/events [400 Bad Request, 562B, 32ms]
+  POST http://localhost:9090/api/events [400 Bad Request, 562B, 82ms]
   √  Code HTTP 400
 
 └ Salle inexistante → 400
-  POST http://localhost:9090/api/events [400 Bad Request, 546B, 50ms]
+  POST http://localhost:9090/api/events [400 Bad Request, 546B, 100ms]
   √  Code HTTP 400
 
 └ Date passée → 400
-  POST http://localhost:9090/api/events [400 Bad Request, 548B, 51ms]
+  POST http://localhost:9090/api/events [400 Bad Request, 548B, 76ms]
   √  Code HTTP 400
 
-└ Un membre crée un événement → 403
-  POST http://localhost:9090/api/events [403 Forbidden, 546B, 34ms]
-  √  Code HTTP 403
-
-□ TI-06 — Réservations
+□ A — Tests fonctionnels / TI-06 — Réservations
 └ Un membre réserve la salle → 200, PENDING
-  POST http://localhost:9090/api/reservations [200 OK, 512B, 170ms]
+  POST http://localhost:9090/api/reservations [200 OK, 512B, 118ms]
   √  Code HTTP 200
-  √  Statut forcé à PENDING (le client ne peut pas s'auto-approuver)
+  √  Statut PENDING
 
 └ Même salle, même date → 409
-  POST http://localhost:9090/api/reservations [409 Conflict, 582B, 42ms]
+  POST http://localhost:9090/api/reservations [409 Conflict, 582B, 34ms]
   √  Code HTTP 409
 
 └ Ressource inexistante → 400
-  POST http://localhost:9090/api/reservations [400 Bad Request, 539B, 58ms]
+  POST http://localhost:9090/api/reservations [400 Bad Request, 539B, 40ms]
   √  Code HTTP 400
 
 └ L'administrateur approuve → 200, APPROVED
-  PUT http://localhost:9090/api/reservations/12/status [200 OK, 513B, 96ms]
+  PUT http://localhost:9090/api/reservations/19/status [200 OK, 513B, 84ms]
   √  Code HTTP 200
   √  Statut APPROVED
 
 └ Statut inconnu (FOO) → 400
-  PUT http://localhost:9090/api/reservations/12/status [400 Bad Request, 549B, 23ms]
+  PUT http://localhost:9090/api/reservations/19/status [400 Bad Request, 549B, 40ms]
   √  Code HTTP 400
 
-└ Réservation inexistante → 404, jamais 500
-  PUT http://localhost:9090/api/reservations/999999/status [404 Not Found, 590B, 54ms]
+□ B — Tests non fonctionnels / NF-01 — Performance (temps de réponse)
+└ Liste des clubs < 500 ms
+  GET http://localhost:9090/api/clubs [200 OK, 1.79kB, 45ms]
+  √  Code HTTP 200
+  √  Temps de réponse < 500 ms
+  √  Réponse au format JSON
+
+└ Liste des événements < 500 ms
+  GET http://localhost:9090/api/events [200 OK, 3.36kB, 37ms]
+  √  Code HTTP 200
+  √  Temps de réponse < 500 ms
+  √  Réponse au format JSON
+
+└ Liste des salles < 500 ms
+  GET http://localhost:9090/api/rooms [200 OK, 2.22kB, 32ms]
+  √  Code HTTP 200
+  √  Temps de réponse < 500 ms
+  √  Réponse au format JSON
+
+└ Liste des équipements < 500 ms
+  GET http://localhost:9090/api/equipment [200 OK, 865B, 25ms]
+  √  Code HTTP 200
+  √  Temps de réponse < 500 ms
+  √  Réponse au format JSON
+
+└ Liste des réservations (membre connecté) < 500 ms
+  GET http://localhost:9090/api/reservations [200 OK, 2.31kB, 41ms]
+  √  Code HTTP 200
+  √  Temps de réponse < 500 ms
+  √  Réponse au format JSON
+
+└ Connexion < 1 000 ms
+  POST http://localhost:9090/api/auth/login [200 OK, 571B, 74ms]
+  √  Code HTTP 200
+  √  Temps de réponse < 1000 ms
+
+□ B — Tests non fonctionnels / NF-02 — Sécurité
+└ Création d'une salle sans jeton → 401
+  POST http://localhost:9090/api/rooms [401 Unauthorized, 392B, 4ms]
+  √  Code HTTP 401
+
+└ Jeton falsifié → 401
+  POST http://localhost:9090/api/rooms [401 Unauthorized, 392B, 4ms]
+  √  Code HTTP 401
+
+└ Membre qui crée une salle → 403
+  POST http://localhost:9090/api/rooms [403 Forbidden, 545B, 30ms]
+  √  Code HTTP 403
+
+└ Membre qui approuve une réservation → 403
+  PUT http://localhost:9090/api/reservations/19/status [403 Forbidden, 562B, 28ms]
+  √  Code HTTP 403
+
+└ Membre qui crée un événement → 403
+  POST http://localhost:9090/api/events [403 Forbidden, 546B, 26ms]
+  √  Code HTTP 403
+
+└ Réservations sans jeton → 401
+  GET http://localhost:9090/api/reservations [401 Unauthorized, 392B, 3ms]
+  √  Code HTTP 401
+
+└ Le hash du mot de passe n'est jamais renvoyé
+  POST http://localhost:9090/api/auth/login [200 OK, 574B, 97ms]
+  √  Code HTTP 200
+  √  Aucun champ password dans la réponse
+  √  Aucun hash BCrypt dans la réponse
+
+└ Rôle forcé à l'inscription ignoré (pas d'auto-promotion)
+  POST http://localhost:9090/api/auth/register [200 OK, 576B, 91ms]
+  √  Code HTTP 200
+  √  Le rôle reste CLUB_MEMBER
+
+└ Injection SQL dans la connexion → 401
+  POST http://localhost:9090/api/auth/login [401 Unauthorized, 452B, 13ms]
+  √  Code HTTP 401
+
+└ Réservation auto-approuvée par le client → reste PENDING
+  POST http://localhost:9090/api/reservations [200 OK, 512B, 50ms]
+  √  Code HTTP 200
+  √  Le statut est forcé à PENDING
+
+└ CORS : site non autorisé → refusé
+  GET http://localhost:9090/api/clubs [403 Forbidden, 418B, 12ms]
+  √  Code HTTP 403
+  √  Aucune autorisation CORS accordée
+
+└ CORS : frontend autorisé (localhost:5173)
+  GET http://localhost:9090/api/clubs [200 OK, 1.84kB, 56ms]
+  √  Code HTTP 200
+  √  Origine autorisée
+
+□ B — Tests non fonctionnels / NF-03 — Robustesse
+└ JSON mal formé → 400
+  POST http://localhost:9090/api/auth/login [400 Bad Request, 622B, 10ms]
+  √  Code HTTP 400
+  √  Jamais d'erreur serveur (5xx)
+
+└ Corps vide → 400/401
+  POST http://localhost:9090/api/auth/login [401 Unauthorized, 452B, 9ms]
+  √  Code 400 ou 401
+  √  Jamais d'erreur serveur (5xx)
+
+└ Capacité au format texte → 400
+  POST http://localhost:9090/api/rooms [400 Bad Request, 645B, 27ms]
+  √  Code HTTP 400
+  √  Jamais d'erreur serveur (5xx)
+
+└ Nom de salle de 300 caractères → 400
+  POST http://localhost:9090/api/rooms [400 Bad Request, 552B, 55ms]
+  √  Code HTTP 400
+  √  Jamais d'erreur serveur (5xx)
+
+└ Réservation inexistante → 404
+  PUT http://localhost:9090/api/reservations/999999/status [404 Not Found, 590B, 43ms]
   √  Code HTTP 404
+  √  Jamais d'erreur serveur (5xx)
+
+└ Méthode non prévue (PATCH /clubs) → 405
+  PATCH http://localhost:9090/api/clubs [405 Method Not Allowed, 604B, 22ms]
+  √  Code HTTP 405
   √  Jamais d'erreur serveur (5xx)
 
 ┌─────────────────────────┬───────────────────┬──────────────────┐
@@ -193,17 +264,17 @@ ENICarthage Clubs — Tests d'API (TI-01 à TI-07)
 ├─────────────────────────┼───────────────────┼──────────────────┤
 │              iterations │                 1 │                0 │
 ├─────────────────────────┼───────────────────┼──────────────────┤
-│                requests │                39 │                0 │
+│                requests │                53 │                0 │
 ├─────────────────────────┼───────────────────┼──────────────────┤
-│            test-scripts │                39 │                0 │
+│            test-scripts │                53 │                0 │
 ├─────────────────────────┼───────────────────┼──────────────────┤
-│      prerequest-scripts │                15 │                0 │
+│      prerequest-scripts │                17 │                0 │
 ├─────────────────────────┼───────────────────┼──────────────────┤
-│              assertions │                55 │                0 │
+│              assertions │                86 │                0 │
 ├─────────────────────────┴───────────────────┴──────────────────┤
-│ total run duration: 6.3s                                       │
+│ total run duration: 8.1s                                       │
 ├────────────────────────────────────────────────────────────────┤
-│ total data received: 5.44kB (approx)                           │
+│ total data received: 15.45kB (approx)                          │
 ├────────────────────────────────────────────────────────────────┤
-│ average response time: 80ms [min: 8ms, max: 495ms, s.d.: 87ms] │
+│ average response time: 74ms [min: 3ms, max: 540ms, s.d.: 85ms] │
 └────────────────────────────────────────────────────────────────┘

@@ -411,21 +411,44 @@ ${pair("../results/regression/ANO18-avant.png", "ANO-18 reproduite (code avant c
 ${img("img/gh-anomalies.png", "Issues « anomalie » liées à la Pull Request de correction", 92)}
 ${img("img/gh-pr.png", "Pull Request #71 : correctifs et résultats de l'itération 2", 92)}
 
-<h2>7.10 Exécution dans des logiciels de test : Postman et Playwright UI Mode</h2>
-<p>En plus de l'exécution en ligne de commande (Jest, Playwright, k6), les tests ont été rejoués dans deux logiciels de test à interface graphique, qui rendent chaque test et son résultat visibles.</p>
-<h3>Postman — tests d'intégration de l'API</h3>
-<p>Les cas TI-01 à TI-07 ont été repris dans une collection Postman (<code>qa/postman/ENICarthage-Clubs-API.postman_collection.json</code>) : 8 dossiers (préparation des données, puis un dossier par cas de test), 39 requêtes et 55 vérifications écrites avec <code>pm.test</code>. Les requêtes s'enchaînent : la connexion enregistre les jetons de l'administrateur, du président et d'un membre dans les variables de la collection, la création d'une salle enregistre son identifiant, réutilisé par les événements et les réservations.</p>
-${code(`// Exemple : vérifications de la requête « Identifiants valides → 200, jeton, rôle » (TI-01)
+<h2>7.10 Exécution dans des logiciels de test : tests fonctionnels et non fonctionnels</h2>
+<p>En plus de l'exécution en ligne de commande, les tests ont été rejoués dans deux logiciels de test à interface graphique, qui rendent chaque test, son type et son résultat visibles : <b>Postman</b> pour l'API et <b>Playwright UI Mode</b> pour l'application complète dans le navigateur.</p>
+
+<h3>Vue d'ensemble : tests fonctionnels et non fonctionnels</h3>
+<table><tr><th>Type</th><th>Ce qui est vérifié</th><th>Cas de test</th><th>Logiciel / outil</th></tr>
+<tr><td rowspan="4"><b>Fonctionnel</b><br>(ce que fait l'application)</td><td>Règles métier de l'API : connexion, inscription, clubs, événements, réservations, salles</td><td>TI-01, 02, 04 à 07</td><td><b>Postman</b> (dossier A), Jest</td></tr>
+<tr><td>Composants de l'interface et droits par rôle</td><td>TU-01 à TU-06</td><td>Jest + React Testing Library</td></tr>
+<tr><td>Parcours complets dans le navigateur</td><td>TS-01 à TS-06</td><td><b>Playwright UI Mode</b></td></tr>
+<tr><td>Parcours métier de chaque profil</td><td>TA-01 à TA-03</td><td>Navigateur + fiches</td></tr>
+<tr><td rowspan="6"><b>Non fonctionnel</b><br>(comment elle se comporte)</td><td>Performance : temps de réponse et charge</td><td>TNF-06 (NF-01), TNF-01</td><td><b>Postman</b> (dossier B, onglet Performance), k6</td></tr>
+<tr><td>Sécurité : accès, jetons, injection SQL, CORS, mot de passe</td><td>TNF-06 (NF-02), TI-03</td><td><b>Postman</b> (dossier B), Jest</td></tr>
+<tr><td>Robustesse : entrées invalides, jamais d'erreur 500</td><td>TNF-06 (NF-03)</td><td><b>Postman</b> (dossier B)</td></tr>
+<tr><td>Utilisabilité et compatibilité : smartphone, Edge et Firefox</td><td>TS-07, TS-08</td><td><b>Playwright UI Mode</b></td></tr>
+<tr><td>Maintenabilité et dépendances</td><td>TNF-02 à TNF-04</td><td>ESLint, PMD, JaCoCo, npm audit</td></tr>
+<tr><td>Fiabilité et portabilité</td><td>TNF-05, TM-01</td><td>Redémarrage, MariaDB</td></tr></table>
+
+<h3>Postman — collection en deux parties</h3>
+<p>La collection <code>qa/postman/ENICarthage-Clubs-API.postman_collection.json</code> contient 53 requêtes et 86 vérifications écrites avec <code>pm.test</code>, rangées en deux dossiers principaux :</p>
+<table><tr><th>Dossier</th><th>Sous-dossiers</th><th>Requêtes</th><th>Exemples de vérifications</th></tr>
+<tr><td>00 — Préparation</td><td>Connexions et compte membre (jetons enregistrés dans les variables)</td><td>3</td><td>Code 200</td></tr>
+<tr><td><b>A — Tests fonctionnels</b></td><td>TI-01 Connexion · TI-02 Inscription · TI-07 Salles · TI-04 Clubs · TI-05 Événements · TI-06 Réservations</td><td>26</td><td>Rôle CLUB_MEMBER ; 41 participants pour 40 places → 400 ; double réservation → 409 ; PENDING → APPROVED</td></tr>
+<tr><td><b>B — Tests non fonctionnels</b></td><td>NF-01 Performance · NF-02 Sécurité · NF-03 Robustesse</td><td>24</td><td>Temps de réponse &lt; 500 ms ; jeton falsifié → 401 ; injection SQL → 401 ; site non autorisé refusé (CORS) ; texte de 300 caractères → 400</td></tr></table>
+${code(`// NF-01 Performance : chaque consultation est mesurée
 pm.test("Code HTTP 200", () => pm.response.to.have.status(200));
-pm.test("Un jeton est renvoyé", () => pm.expect(pm.response.json().token).to.be.a("string").and.not.empty);
-pm.test("Rôle ADMINISTRATOR", () => pm.expect(pm.response.json().user.role).to.eql("ADMINISTRATOR"));
-pm.test("Le hash du mot de passe n'est pas renvoyé (ANO-02)", () => pm.expect(pm.response.json().user).to.not.have.property("password"));`)}
-<table><tr><th>Exécution de la collection (v1.0.1)</th><th>Total</th><th>Échecs</th></tr>
-<tr><td>Requêtes</td><td>39</td><td>${badge("0", "ok")}</td></tr>
-<tr><td>Vérifications (<code>pm.test</code>)</td><td>55</td><td>${badge("0", "ok")}</td></tr></table>
-<p>Dans Postman : Import de la collection, puis « Run collection » ; le Collection Runner affiche chaque requête et chaque vérification en vert ou en rouge. La même collection s'exécute en ligne de commande avec Newman (<code>npx newman run …</code>), ce qui permet de l'intégrer à une chaîne d'intégration continue.</p>
+pm.test("Temps de réponse < 500 ms", () => pm.expect(pm.response.responseTime).to.be.below(500));
+pm.test("Réponse au format JSON", () => pm.expect(pm.response.headers.get("Content-Type")).to.include("application/json"));
+
+// NF-02 Sécurité : un site non autorisé n'obtient aucune autorisation CORS
+pm.test("Code HTTP 403", () => pm.response.to.have.status(403));
+pm.test("Aucune autorisation CORS accordée", () => pm.expect(pm.response.headers.has("Access-Control-Allow-Origin")).to.be.false);`)}
+<table><tr><th>Exécution de la collection</th><th>Requêtes</th><th>Vérifications</th><th>Échecs</th></tr>
+<tr><td>v1.0.1 (premier passage)</td><td>53</td><td>86</td><td>${badge("2", "ko")} : texte de 300 caractères → erreur 500 (ANO-19)</td></tr>
+<tr><td>v1.0.2 (après correctif)</td><td>53</td><td>86</td><td>${badge("0", "ok")} — temps de réponse moyen 74 ms</td></tr></table>
+<div class="warn"><b>Anomalie trouvée par les tests non fonctionnels (ANO-19) :</b> un nom de salle de 300 caractères dépasse la colonne MySQL (255 caractères). L'exception <code>DataIntegrityViolationException</code> n'était pas interceptée, et l'API répondait par une erreur 500. Correctif (v1.0.2) : un gestionnaire global (<code>ApiExceptionHandler</code>) transforme toute donnée refusée par la base en réponse 400 explicite, pour toutes les entités. Re-test : 86/86 dans Postman ; non-régression : 45/45 tests d'API Jest.</div>
+<p><b>Test de charge dans Postman :</b> le dossier NF-01 se lance aussi depuis l'onglet « Performance » du Collection Runner (plusieurs utilisateurs virtuels simultanés). Postman y trace le temps de réponse moyen et le taux d'erreur au fil du test, en complément du test de charge k6 à 50 utilisateurs (§ 7.7).</p>
+
 <h3>Playwright UI Mode — tests système</h3>
-<p>Playwright fournit une interface graphique (<code>npx playwright test --ui</code>) : l'arborescence des scénarios, leur exécution d'un clic, et pour chaque test une chronologie avec des vignettes, la liste des actions, l'instantané de la page avant et après chaque action, la console, les requêtes réseau et la ligne de code correspondante.</p>
+<p>Playwright fournit une interface graphique (<code>npx playwright test --ui</code>) : l'arborescence des scénarios, leur exécution d'un clic, et pour chaque test une chronologie avec des vignettes, la liste des actions, l'instantané de la page avant et après chaque action, la console, les requêtes réseau et la ligne de code correspondante. Les scénarios TS-01 à TS-06 sont fonctionnels ; TS-07 (affichage sur smartphone) est non fonctionnel.</p>
 ${img("img/pw-ui-resultats.png", "Playwright UI Mode : les 11 scénarios système réussis (11/11) sous Edge, avec leur durée", 92)}
 ${img("img/pw-ui-detail.png", "Playwright UI Mode : scénario TS-05, action « Approuver » de l'administrateur, chronologie, instantané et code source", 100)}
 
@@ -440,7 +463,7 @@ ${ANOMALIES.map((a) => `<tr><td>${a.id} ${issue(a.id)}</td><td>${badge(a.grav, g
 <tr><td>Tests E2E Playwright (Edge + Firefox)</td><td>${t1.e2e.passed}/${t1.e2e.total}</td><td>${t2.e2e.passed}/${t2.e2e.total}</td></tr>
 <tr><td>Étapes d'acceptation conformes</td><td>— (planifiées en itération 2)</td><td>${TA.filter((s) => s.obtenu === "Conforme").length}/${TA.length}</td></tr>
 <tr><td>Cas de test exécutés</td><td>${CAS.length - 8}/${CAS.length} (les cas TA, TNF-05, TR, TM appartiennent à l'itération 2)</td><td>${CAS.length}/${CAS.length}</td></tr>
-<tr><td>Anomalies</td><td>${it1.length} détectées (${nb("Critique")} critiques, ${nb("Majeure")} majeures, ${nb("Mineure")} mineures)</td><td>+3 détectées (ANO-16, 17, 18) ; ${anoCorr} corrigées et re-testées ; 3 ouvertes (mineures)</td></tr>
+<tr><td>Anomalies</td><td>${it1.length} détectées (${nb("Critique")} critiques, ${nb("Majeure")} majeures, ${nb("Mineure")} mineures)</td><td>+3 détectées en itération 2 (ANO-16, 17, 18) et +1 par les tests non fonctionnels de Postman (ANO-19) ; ${anoCorr} corrigées et re-testées ; 3 ouvertes (mineures)</td></tr>
 <tr><td>Efficacité des techniques statiques</td><td colspan="2">${statiques.length} anomalies sur ${ANOMALIES.length} trouvées sans exécuter le code (${statiques.join(", ")} : revue de code, ESLint, npm audit), dont les 2 critiques</td></tr>
 <tr><td>Couverture des instructions (front / back)</td><td>80 % / 98 %</td><td>79 % / 75 %</td></tr>
 <tr><td>p95 sous 50 utilisateurs</td><td>359 ms</td><td>357 ms</td></tr></table>
