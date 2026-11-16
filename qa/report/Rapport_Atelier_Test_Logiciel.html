@@ -45,7 +45,7 @@ a{color:var(--c2);text-decoration:none}
 <div><span>5. Outil de gestion des tests et des exigences : GitHub (objectif 3)</span></div><div><span>6. Plan de test (objectif 4)</span></div>
 <div><span>7. Exécution du plan de test (objectif 5)</span></div>
 <div class="l2"><span>7.1 Tests statiques · 7.2 Unitaires (Jest) · 7.3 Intégration (API) · 7.4 Structurels (couverture)</span></div>
-<div class="l2"><span>7.5 Système (E2E) · 7.6 Acceptation · 7.7 Non fonctionnels · 7.8 Changements et maintenance · 7.9 Suivi sur GitHub</span></div>
+<div class="l2"><span>7.5 Système (E2E) · 7.6 Acceptation · 7.7 Non fonctionnels · 7.8 Changements et maintenance · 7.9 Suivi sur GitHub · 7.10 Logiciels de test</span></div>
 <div><span>8. Bilan : anomalies, métriques et verdict de recette</span></div><div><span>9. Conclusion</span></div><div><span>10. Annexe : rejouer les tests</span></div>
 </section>
 
@@ -90,7 +90,8 @@ a{color:var(--c2);text-decoration:none}
 <tr><td>Node.js / npm</td><td>24 · 11</td><td>Frontend, Jest, Playwright</td></tr>
 <tr><td>Docker Desktop</td><td>29</td><td>MySQL 8.4, MariaDB 10.4 (maintenance), k6</td></tr>
 <tr><td><b>Jest</b> + React Testing Library + user-event</td><td>30 · 16</td><td><b>Outil principal</b> : tests unitaires/composants (jsdom) et tests d'intégration de l'API (HTTP réel)</td></tr>
-<tr><td>Playwright</td><td>1.x</td><td>Tests système E2E sur Microsoft Edge et Firefox ; aide à l'exécution des tests d'acceptation</td></tr>
+<tr><td>Playwright (+ UI Mode)</td><td>1.x</td><td>Tests système E2E sur Microsoft Edge et Firefox ; interface graphique « UI Mode » pour exécuter et inspecter les tests ; aide à l'exécution des tests d'acceptation</td></tr>
+<tr><td><b>Postman</b></td><td>12.8.1</td><td>Logiciel de test d'API : collection des cas TI-01 à TI-07 exécutée avec le Collection Runner (et Newman en ligne de commande)</td></tr>
 <tr><td>k6 (grafana/k6)</td><td>Docker</td><td>Test de charge (50 utilisateurs virtuels)</td></tr>
 <tr><td>JaCoCo</td><td>0.8.13</td><td>Couverture du backend (agent attaché au serveur pendant les tests)</td></tr>
 <tr><td>ESLint · PMD/CPD · npm audit</td><td>9 · 7.7 · npm</td><td>Analyse statique JavaScript et Java, audit des dépendances</td></tr>
@@ -376,6 +377,24 @@ jwt.secret=94a08da1fe…   spring.datasource.password=   spring.jpa.show-sql=tru
 <figure style="width:92%"><img src="img/gh-anomalies.png"><figcaption>Figure 26 – Issues « anomalie » liées à la Pull Request de correction</figcaption></figure>
 <figure style="width:92%"><img src="img/gh-pr.png"><figcaption>Figure 27 – Pull Request #71 : correctifs et résultats de l'itération 2</figcaption></figure>
 
+<h2>7.10 Exécution dans des logiciels de test : Postman et Playwright UI Mode</h2>
+<p>En plus de l'exécution en ligne de commande (Jest, Playwright, k6), les tests ont été rejoués dans deux logiciels de test à interface graphique, qui rendent chaque test et son résultat visibles.</p>
+<h3>Postman — tests d'intégration de l'API</h3>
+<p>Les cas TI-01 à TI-07 ont été repris dans une collection Postman (<code>qa/postman/ENICarthage-Clubs-API.postman_collection.json</code>) : 8 dossiers (préparation des données, puis un dossier par cas de test), 39 requêtes et 55 vérifications écrites avec <code>pm.test</code>. Les requêtes s'enchaînent : la connexion enregistre les jetons de l'administrateur, du président et d'un membre dans les variables de la collection, la création d'une salle enregistre son identifiant, réutilisé par les événements et les réservations.</p>
+<pre>// Exemple : vérifications de la requête « Identifiants valides → 200, jeton, rôle » (TI-01)
+pm.test("Code HTTP 200", () =&gt; pm.response.to.have.status(200));
+pm.test("Un jeton est renvoyé", () =&gt; pm.expect(pm.response.json().token).to.be.a("string").and.not.empty);
+pm.test("Rôle ADMINISTRATOR", () =&gt; pm.expect(pm.response.json().user.role).to.eql("ADMINISTRATOR"));
+pm.test("Le hash du mot de passe n'est pas renvoyé (ANO-02)", () =&gt; pm.expect(pm.response.json().user).to.not.have.property("password"));</pre>
+<table><tr><th>Exécution de la collection (v1.0.1)</th><th>Total</th><th>Échecs</th></tr>
+<tr><td>Requêtes</td><td>39</td><td><span class="b ok">0</span></td></tr>
+<tr><td>Vérifications (<code>pm.test</code>)</td><td>55</td><td><span class="b ok">0</span></td></tr></table>
+<p>Dans Postman : Import de la collection, puis « Run collection » ; le Collection Runner affiche chaque requête et chaque vérification en vert ou en rouge. La même collection s'exécute en ligne de commande avec Newman (<code>npx newman run …</code>), ce qui permet de l'intégrer à une chaîne d'intégration continue.</p>
+<h3>Playwright UI Mode — tests système</h3>
+<p>Playwright fournit une interface graphique (<code>npx playwright test --ui</code>) : l'arborescence des scénarios, leur exécution d'un clic, et pour chaque test une chronologie avec des vignettes, la liste des actions, l'instantané de la page avant et après chaque action, la console, les requêtes réseau et la ligne de code correspondante.</p>
+<figure style="width:92%"><img src="img/pw-ui-resultats.png"><figcaption>Figure 28 – Playwright UI Mode : les 11 scénarios système réussis (11/11) sous Edge, avec leur durée</figcaption></figure>
+<figure style="width:100%"><img src="img/pw-ui-detail.png"><figcaption>Figure 29 – Playwright UI Mode : scénario TS-05, action « Approuver » de l'administrateur, chronologie, instantané et code source</figcaption></figure>
+
 <h1>8. Bilan : anomalies, métriques et verdict de recette</h1>
 <h2>8.1 Anomalies détectées</h2>
 <table><tr><th>Réf.</th><th>Gravité</th><th>Description</th><th>Détectée par</th><th>Exigence</th><th>Statut</th></tr>
@@ -442,5 +461,6 @@ node qa/report/build.mjs                      # génère ce rapport</pre>
 <tr><td><code>qa/perf/</code></td><td>Scénario k6 et résumés</td></tr>
 <tr><td><code>qa/referentiel.mjs</code>, <code>qa/github/</code></td><td>Référentiel (exigences, cas, anomalies) et publication GitHub</td></tr>
 <tr><td><code>qa/results/</code></td><td>Résultats bruts des deux itérations, couvertures, captures, rapports HTML</td></tr>
+<tr><td><code>qa/postman/</code></td><td>Collection Postman des tests d'API et mode d'emploi</td></tr>
 <tr><td><code>suivi/</code></td><td>Tableau de suivi hebdomadaire : vue d'équipe (<code>index.html</code>), espace chef d'équipe (<code>chef.html</code>), données (<code>donnees.js</code>)</td></tr></table>
 </body></html>
