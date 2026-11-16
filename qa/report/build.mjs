@@ -147,6 +147,33 @@ ${pair("../results/screenshots/TS01-1-login.png", "Page de connexion", "../resul
 <tr><td>Couverture JaCoCo d'une application lancée hors Maven</td><td>Agent JaCoCo en mode <code>tcpserver</code> ; vidage avec <code>jacococli dump</code> après chaque campagne</td></tr>
 <tr><td>Le jeton GitHub n'avait pas le droit <code>project</code> (tableau impossible à créer)</td><td>Droit ajouté avec <code>gh auth refresh -h github.com -s project</code> ; tableau créé par l'API GraphQL (<code>qa/github/project.mjs</code>)</td></tr></table>
 
+<h2>3.4 Lancer le projet</h2>
+<p>Le projet (version v1.0.1) se trouve dans le dépôt <code>enicar-club-management-qa</code>. Trois éléments doivent tourner en même temps, chacun dans son terminal :</p>
+<table><tr><th>Étape</th><th>Commande</th><th>Résultat</th></tr>
+<tr><td>1. Base de données MySQL</td><td><code>docker start enicar-mysql</code> (ou MySQL dans le panneau XAMPP, pas les deux : même port 3306)</td><td>MySQL sur le port 3306 ; la base <code>enicar_clubs</code> est créée automatiquement</td></tr>
+<tr><td>2. Backend Spring Boot</td><td><code>cd backend</code> puis <code>.\\mvnw.cmd spring-boot:run</code></td><td>Ligne « Started BackendApplication » ; API sur http://localhost:9090/api</td></tr>
+<tr><td>3. Frontend React</td><td><code>cd frontend</code>, <code>npm install</code> (la première fois), puis <code>npm run dev</code></td><td>Application sur http://localhost:5173</td></tr></table>
+<table><tr><th>Compte</th><th>E-mail</th><th>Mot de passe</th></tr>
+<tr><td>Administration</td><td>admin@enicar.tn</td><td>admin123</td></tr>
+<tr><td>Président (Club IEEE)</td><td>ahmed@enicar.tn</td><td>123456</td></tr>
+<tr><td>Membre</td><td>à créer avec « S'inscrire » (adresse @enicar.tn)</td><td>6 caractères minimum</td></tr></table>
+<table><tr><th>Problème</th><th>Cause et solution</th></tr>
+<tr><td><code>Port 9090 already in use</code></td><td>Un backend tourne déjà : le fermer ou utiliser celui-ci</td></tr>
+<tr><td><code>Communications link failure</code> au démarrage</td><td>La base de données n'est pas lancée (étape 1)</td></tr>
+<tr><td>Page blanche ou « Erreur de connexion au serveur »</td><td>Le backend n'est pas lancé (étape 2)</td></tr></table>
+
+<h2>3.5 Installer Jest</h2>
+<p>Jest ne se télécharge pas depuis un site : c'est un paquet npm, déclaré comme dépendance de développement dans <code>frontend/package.json</code> avec les bibliothèques qui l'accompagnent (<code>jest-environment-jsdom</code>, <code>babel-jest</code>, <code>@babel/preset-env</code>, <code>@babel/preset-react</code>, <code>@testing-library/react</code>, <code>@testing-library/user-event</code>, <code>@testing-library/jest-dom</code>). Une seule commande, dans le dossier <code>frontend</code>, télécharge le tout dans <code>node_modules/</code> :</p>
+${code(`cd frontend
+npm install               # installe Jest 30.5.2 et ses dépendances
+npx jest --version        # vérification : 30.5.2
+npm run test:unit         # tests unitaires et de composants + couverture
+npm run test:api          # tests d'intégration de l'API (backend lancé)
+
+# Dans un nouveau projet, la même installation se fait avec :
+npm install --save-dev jest jest-environment-jsdom babel-jest @babel/preset-env @babel/preset-react     @testing-library/react @testing-library/user-event @testing-library/jest-dom`)}
+<p>Deux fichiers complètent l'installation : <code>babel.config.cjs</code> (Jest comprend ainsi le JSX et les modules ES du projet Vite) et <code>jest.config.cjs</code>, qui déclare deux projets : « unit » (environnement jsdom, API simulée) et « api » (environnement Node, requêtes HTTP réelles).</p>
+
 <h1>4. Besoins fonctionnels et non fonctionnels (objectif 2)</h1>
 <p>Chaque exigence possède un identifiant unique, repris dans une issue GitHub (libellé <code>exigence</code>) pour la traçabilité. La criticité oriente l'effort de test (approche basée sur les risques).</p>
 <h2>4.1 Exigences fonctionnelles</h2>
@@ -179,6 +206,15 @@ ${img("img/gh-board.png", "Tableau GitHub Projects de la campagne (cycle de vie 
 <table><tr><th>Exigence</th><th>Criticité</th><th>Cas de test qui la vérifient</th><th>Verdict (v1.0.1)</th></tr>
 ${EXIGENCES.map((e) => { const v = verdict(e.id); return `<tr><td>${e.id} ${esc(e.titre)}</td><td>${e.crit}</td><td>${casOf(e.id).join(", ")}</td><td>${badge(v, v === "Satisfaite" ? "ok" : v.startsWith("Non") ? "ko" : "wa")}</td></tr>`; }).join("")}</table>
 <div class="note"><b>Couverture des exigences : ${EXIGENCES.filter((e) => casOf(e.id).length).length}/${EXIGENCES.length} (100 %)</b> — chaque exigence est vérifiée par au moins un cas de test.</div>
+<h2>5.3 Tableau de suivi hebdomadaire</h2>
+<p>Pour rendre compte de l'avancement chaque semaine, l'équipe tient un tableau de suivi dans le dépôt : <code>suivi/index.html</code>, qui s'ouvre dans un navigateur sans serveur ni connexion. Ses données sont dans <code>suivi/donnees.js</code>, versionné avec le projet.</p>
+<ul><li><b>Synthèse de la semaine :</b> statut (dans les temps, en retard, bloqué), avancement, tests réussis, anomalies ouvertes.</li>
+<li><b>Avancement du projet :</b> part des tâches planifiées terminées à la fin de chaque semaine, avec l'écart par rapport à la semaine précédente.</li>
+<li><b>Graphiques :</b> avancement cumulé et anomalies corrigées ou ouvertes, semaine par semaine.</li>
+<li><b>Compte rendu :</b> faits marquants, difficultés, prochaines étapes ; liste des tâches avec lot, responsable et statut.</li>
+<li><b>Mise à jour :</b> un formulaire « Saisir ou modifier une semaine » ; le bouton « Exporter donnees.js » produit le fichier à commiter pour partager la mise à jour avec l'équipe.</li></ul>
+<p>La semaine 46 contient les résultats réels de la campagne. La semaine 47 liste les tâches restantes : anomalies ouvertes, tests d'acceptation rejoués à la main et présentation.</p>
+${img("img/suivi-hebdo.png", "Tableau de suivi hebdomadaire (suivi/index.html), semaine 46", 92)}
 
 <h1>6. Plan de test (objectif 4)</h1>
 <p>Ce plan suit la structure de la norme IEEE 829 / ISO/IEC/IEEE 29119-3.</p>
@@ -264,7 +300,8 @@ jwt.secret=94a08da1fe…   spring.datasource.password=   spring.jpa.show-sql=tru
 <tr><td>ESLint (frontend)</td><td>${badge("8 erreurs", "ko")} : 5 fonctions appelées dans <code>useEffect</code> avant leur déclaration, variables inutilisées, export mixte dans <code>AuthContext</code></td><td>${badge("0 erreur", "ok")}</td></tr>
 <tr><td>PMD 7.7 (backend)</td><td>2 alertes (classe utilitaire, <code>throws Exception</code>)</td><td>5 alertes : 7 alertes introduites par les correctifs (<code>toLowerCase</code> sans <code>Locale</code>, exception d'origine perdue…) ont été corrigées ; restent 2 complexités acceptées et 3 faux positifs liés au framework</td></tr>
 <tr><td>CPD</td><td>0 duplication</td><td>0 duplication</td></tr>
-<tr><td>npm audit (production)</td><td>${badge("5 hautes", "ko")} : axios, react-router(-dom), follow-redirects, form-data</td><td>${badge("0", "ok")} après <code>npm audit fix</code></td></tr></table>
+<tr><td>npm audit (production)</td><td>${badge("5 hautes", "ko")} : axios, react-router(-dom), follow-redirects, form-data</td><td>${badge("0", "ok")} après <code>npm audit fix</code></td></tr>
+<tr><td>npm audit (outils de développement)</td><td>—</td><td>19 (3 faibles, 16 modérées) dans les outils de test et de build (Jest, Playwright, ESLint…), qui ne sont pas livrés au navigateur ; <code>npm audit fix --force</code> est écarté car il installerait des versions majeures incompatibles</td></tr></table>
 <div class="note">PMD ne trouve presque rien dans le backend (code généré par Lombok, peu de logique), alors que la revue de code trouve les deux anomalies critiques. Un outil d'analyse statique ne remplace pas la lecture du code par rapport aux exigences.</div>
 
 <h2>7.2 Tests unitaires et de composants (Jest + React Testing Library)</h2>
@@ -438,7 +475,8 @@ node qa/report/build.mjs                      # génère ce rapport`)}
 <tr><td><code>frontend/tests/acceptance/</code>, <code>qa/acceptance/</code></td><td>Fiches et script d'aide TA-01 … TA-03</td></tr>
 <tr><td><code>qa/perf/</code></td><td>Scénario k6 et résumés</td></tr>
 <tr><td><code>qa/referentiel.mjs</code>, <code>qa/github/</code></td><td>Référentiel (exigences, cas, anomalies) et publication GitHub</td></tr>
-<tr><td><code>qa/results/</code></td><td>Résultats bruts des deux itérations, couvertures, captures, rapports HTML</td></tr></table>
+<tr><td><code>qa/results/</code></td><td>Résultats bruts des deux itérations, couvertures, captures, rapports HTML</td></tr>
+<tr><td><code>suivi/</code></td><td>Tableau de suivi hebdomadaire (<code>index.html</code>) et ses données (<code>donnees.js</code>)</td></tr></table>
 </body></html>`;
 
 writeFileSync(new URL("./Rapport_Atelier_Test_Logiciel.html", import.meta.url), html);
