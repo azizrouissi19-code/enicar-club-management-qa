@@ -117,7 +117,7 @@ window.SUIVI = {
     {
       "id": "t08",
       "semaine": "2026-S47",
-      "tache": "Conception des tests d'API API-01 à API-03 et des tests TNF-01, TNF-02 (Postman)",
+      "tache": "Conception des tests non fonctionnels TNF-01 à TNF-05",
       "lot": "Tests",
       "membre": "Mohamed Bouchahda",
       "statut": "À faire",
@@ -127,7 +127,7 @@ window.SUIVI = {
     {
       "id": "t09",
       "semaine": "2026-S47",
-      "tache": "Conception des tests TF-01 à TF-03 et TNF-03 (Jest, Playwright)",
+      "tache": "Conception des tests fonctionnels TF-01 à TF-05",
       "lot": "Tests",
       "membre": "Mohamed Hosni Missaoui",
       "statut": "À faire",
@@ -137,7 +137,7 @@ window.SUIVI = {
     {
       "id": "t20",
       "semaine": "2026-S47",
-      "tache": "Conception des tests TF-04, TF-05, TNF-04, TNF-05 et API-04",
+      "tache": "Conception des tests d'API API-01 à API-04 (Postman)",
       "lot": "Tests",
       "membre": "Mohamed Aziz Rouissi",
       "statut": "À faire",
@@ -167,7 +167,7 @@ window.SUIVI = {
     {
       "id": "t12",
       "semaine": "2026-S48",
-      "tache": "Exécution des tests d'API API-01 à API-03 (Postman)",
+      "tache": "Exécution de TNF-01 (charge) et TNF-02 (sécurité)",
       "lot": "Tests",
       "membre": "Mohamed Bouchahda",
       "statut": "À faire",
@@ -177,7 +177,7 @@ window.SUIVI = {
     {
       "id": "t13",
       "semaine": "2026-S48",
-      "tache": "Environnement de test (Docker, données) et test d'API API-04 (Postman)",
+      "tache": "Environnement de test et exécution des tests d'API API-01 à API-04 (Postman)",
       "lot": "Infrastructure",
       "membre": "Mohamed Aziz Rouissi",
       "statut": "À faire",
@@ -187,7 +187,7 @@ window.SUIVI = {
     {
       "id": "t14",
       "semaine": "2026-S49",
-      "tache": "Exécution de TF-03 et TNF-03 (Playwright)",
+      "tache": "Exécution de TF-03, TF-04 et TF-05 (Playwright, navigateur)",
       "lot": "Tests",
       "membre": "Mohamed Hosni Missaoui",
       "statut": "À faire",
@@ -197,7 +197,7 @@ window.SUIVI = {
     {
       "id": "t15",
       "semaine": "2026-S49",
-      "tache": "Exécution de TNF-01 (charge) et TNF-02 (sécurité)",
+      "tache": "Exécution de TNF-03, TNF-04 et TNF-05 (smartphone, navigateurs, redémarrage)",
       "lot": "Tests",
       "membre": "Mohamed Bouchahda",
       "statut": "À faire",
@@ -207,8 +207,8 @@ window.SUIVI = {
     {
       "id": "t16",
       "semaine": "2026-S49",
-      "tache": "Exécution de TF-04, TF-05, TNF-04 et TNF-05",
-      "lot": "Tests",
+      "tache": "Suivi des anomalies sur GitHub et revue des résultats de l'équipe",
+      "lot": "Gestion",
       "membre": "Mohamed Aziz Rouissi",
       "statut": "À faire",
       "priorite": "Normale",
@@ -246,7 +246,7 @@ window.SUIVI = {
     }
   ],
   "phases": {
-    "2026-S48": "Tests unitaires et tests d'API",
+    "2026-S48": "Tests unitaires, tests d'API et premiers tests non fonctionnels",
     "2026-S49": "Tests système, non fonctionnels et acceptation",
     "2026-S50": "Correctifs, non-régression et rapport final"
   }

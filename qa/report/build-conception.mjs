@@ -282,7 +282,7 @@ pm.test("Le mot de passe n'est pas renvoyé", () => pm.expect(pm.response.json()
 <table><tr><th>Membre</th><th>Rôle</th><th>Fonctionnels</th><th>Non fonctionnels</th><th>API</th><th>Total</th></tr>
 ${SUIVI.equipe.map((m) => { const f = (fam) => PLAN.filter((t) => t.resp === m && t.famille === fam).map((t) => t.id).join(", ") || "—"; return `<tr><td><b>${m}</b></td><td>${m === SUIVI.chef ? "Chef d'équipe" : "Membre"}</td><td>${f("Fonctionnel")}</td><td>${f("Non fonctionnel")}</td><td>${f("API")}</td><td>${PLAN.filter((t) => t.resp === m).length}</td></tr>`; }).join("")}
 <tr><td colspan="5"><b>Total</b></td><td><b>${PLAN.length}</b></td></tr></table>
-<p>Chaque responsable écrit ses tests, les exécute, enregistre les résultats et signale les anomalies sur GitHub. Le chef d'équipe relit les tests, suit l'avancement dans le tableau de suivi et valide les critères de sortie.</p>
+<p>La répartition suit les familles de tests : un membre pour les tests fonctionnels, l'autre pour les tests non fonctionnels, et le chef d'équipe pour les tests d'API. Chaque responsable écrit ses tests, les exécute, enregistre les résultats et signale les anomalies sur GitHub. Le chef d'équipe relit les tests, suit l'avancement dans le tableau de suivi et valide les critères de sortie.</p>
 
 <h2>6.9 Matrice de traçabilité exigences → tests</h2>
 <table><tr><th>Exigence</th><th>Criticité</th><th>Tests qui la vérifieront</th></tr>
@@ -314,9 +314,9 @@ ${EXIGENCES.map((e) => { const l = PLAN.filter((t) => t.ex.includes(e.id)).map((
 <h1>7. Organisation de l'équipe et planning</h1>
 <h2>7.1 Rôles</h2>
 <table><tr><th>Membre</th><th>Rôle</th><th>Domaine principal</th></tr>
-<tr><td>${SUIVI.equipe[0]}</td><td>Chef d'équipe</td><td>Exigences, architecture, plan de test, coordination, rapport</td></tr>
-<tr><td>${SUIVI.equipe[1]}</td><td>Membre</td><td>Backend et API : diagramme de classes, séquences, tests d'API (Postman), tests non fonctionnels</td></tr>
-<tr><td>${SUIVI.equipe[2]}</td><td>Membre</td><td>Frontend : cas d'utilisation, diagramme d'états, tests unitaires (Jest), tests système (Playwright)</td></tr></table>
+<tr><td>${SUIVI.equipe[0]}</td><td>Chef d'équipe</td><td>Exigences, architecture, plan de test, coordination, rapport ; <b>tests d'API</b> (API-01 à API-04, Postman)</td></tr>
+<tr><td>${SUIVI.equipe[1]}</td><td>Membre</td><td>Backend : diagramme de classes, séquences ; <b>tests non fonctionnels</b> (TNF-01 à TNF-05 : performance, sécurité, utilisabilité, compatibilité, fiabilité)</td></tr>
+<tr><td>${SUIVI.equipe[2]}</td><td>Membre</td><td>Frontend : cas d'utilisation, diagramme d'états ; <b>tests fonctionnels</b> (TF-01 à TF-05, Jest et Playwright)</td></tr></table>
 <h2>7.2 Répartition des tâches et planning</h2>
 <table><tr><th>Semaine</th><th>Phase</th><th>Tâche</th><th>Responsable</th><th>Échéance</th><th>Statut</th></tr>
 ${weeks.map((w) => { const l = SUIVI.taches.filter((t) => t.semaine === w).sort((a, b) => (a.echeance < b.echeance ? -1 : 1)); return l.map((t, i) => `<tr>${i === 0 ? `<td rowspan="${l.length}"><b>${w.replace(/^\d{4}-/, "")}</b><br><span style="font-size:8pt;color:#555">${startOf(w) ? "à partir du " + fmt(startOf(w)) : ""}</span></td><td rowspan="${l.length}">${esc(phaseOf(w))}</td>` : ""}<td>${esc(t.tache)}</td><td>${esc(t.membre)}</td><td>${fmt(t.echeance)}</td><td>${t.statut}</td></tr>`).join(""); }).join("")}</table>
