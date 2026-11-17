@@ -30,3 +30,7 @@ target/
 qa/tools/
 qa/results/e2e-artifacts/
 qa/results/*.exec
+
+# Rapports Playwright du plan (générés localement)
+qa/results/plan-report/
+qa/results/plan-artifacts/
