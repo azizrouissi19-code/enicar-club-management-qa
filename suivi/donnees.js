@@ -117,7 +117,7 @@ window.SUIVI = {
     {
       "id": "t08",
       "semaine": "2026-S47",
-      "tache": "Conception des cas de test de l'API (fonctionnels et non fonctionnels, Postman)",
+      "tache": "Conception des tests d'API API-01 à API-03 et des tests TNF-01, TNF-02 (Postman)",
       "lot": "Tests",
       "membre": "Mohamed Bouchahda",
       "statut": "À faire",
@@ -127,9 +127,19 @@ window.SUIVI = {
     {
       "id": "t09",
       "semaine": "2026-S47",
-      "tache": "Conception des cas de test de l'interface (Jest, Playwright)",
+      "tache": "Conception des tests TF-01 à TF-03 et TNF-03 (Jest, Playwright)",
       "lot": "Tests",
       "membre": "Mohamed Hosni Missaoui",
+      "statut": "À faire",
+      "priorite": "Normale",
+      "echeance": "2026-11-20"
+    },
+    {
+      "id": "t20",
+      "semaine": "2026-S47",
+      "tache": "Conception des tests TF-04, TF-05, TNF-04, TNF-05 et API-04",
+      "lot": "Tests",
+      "membre": "Mohamed Aziz Rouissi",
       "statut": "À faire",
       "priorite": "Normale",
       "echeance": "2026-11-20"
@@ -147,7 +157,7 @@ window.SUIVI = {
     {
       "id": "t11",
       "semaine": "2026-S48",
-      "tache": "Tests unitaires et de composants (Jest)",
+      "tache": "Exécution de TF-01 et TF-02 (Jest)",
       "lot": "Tests",
       "membre": "Mohamed Hosni Missaoui",
       "statut": "À faire",
@@ -157,7 +167,7 @@ window.SUIVI = {
     {
       "id": "t12",
       "semaine": "2026-S48",
-      "tache": "Tests d'intégration de l'API (Postman, Jest)",
+      "tache": "Exécution des tests d'API API-01 à API-03 (Postman)",
       "lot": "Tests",
       "membre": "Mohamed Bouchahda",
       "statut": "À faire",
@@ -167,7 +177,7 @@ window.SUIVI = {
     {
       "id": "t13",
       "semaine": "2026-S48",
-      "tache": "Environnement de test (Docker, données) et suivi des anomalies sur GitHub",
+      "tache": "Environnement de test (Docker, données) et test d'API API-04 (Postman)",
       "lot": "Infrastructure",
       "membre": "Mohamed Aziz Rouissi",
       "statut": "À faire",
@@ -177,7 +187,7 @@ window.SUIVI = {
     {
       "id": "t14",
       "semaine": "2026-S49",
-      "tache": "Tests système E2E (Playwright, Edge et Firefox)",
+      "tache": "Exécution de TF-03 et TNF-03 (Playwright)",
       "lot": "Tests",
       "membre": "Mohamed Hosni Missaoui",
       "statut": "À faire",
@@ -187,7 +197,7 @@ window.SUIVI = {
     {
       "id": "t15",
       "semaine": "2026-S49",
-      "tache": "Tests non fonctionnels : performance, sécurité, robustesse",
+      "tache": "Exécution de TNF-01 (charge) et TNF-02 (sécurité)",
       "lot": "Tests",
       "membre": "Mohamed Bouchahda",
       "statut": "À faire",
@@ -197,7 +207,7 @@ window.SUIVI = {
     {
       "id": "t16",
       "semaine": "2026-S49",
-      "tache": "Tests d'acceptation avec les trois profils",
+      "tache": "Exécution de TF-04, TF-05, TNF-04 et TNF-05",
       "lot": "Tests",
       "membre": "Mohamed Aziz Rouissi",
       "statut": "À faire",
@@ -236,7 +246,7 @@ window.SUIVI = {
     }
   ],
   "phases": {
-    "2026-S48": "Tests unitaires et d'intégration",
+    "2026-S48": "Tests unitaires et tests d'API",
     "2026-S49": "Tests système, non fonctionnels et acceptation",
     "2026-S50": "Correctifs, non-régression et rapport final"
   }

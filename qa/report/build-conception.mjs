@@ -3,6 +3,7 @@
 // Usage : node qa/report/build-conception.mjs  →  qa/report/Rapport_Conception_Plan_de_Test.html
 import { writeFileSync, readFileSync } from "node:fs";
 import { EXIGENCES, CAS, RESPONSABLE } from "../referentiel.mjs";
+import { PLAN } from "../plan-evaluation.mjs";
 
 const window = {};
 new Function("window", readFileSync(new URL("../../suivi/donnees.js", import.meta.url), "utf8"))(window);
@@ -21,6 +22,9 @@ const phaseOf = (w) => (SUIVI.semaines.find((s) => s.semaine === w) || {}).phase
 const startOf = (w) => (SUIVI.semaines.find((s) => s.semaine === w) || {}).date_debut;
 const fonctionnels = CAS.filter((c) => /^Fonctionnel/.test(c.type));
 const nonFonctionnels = CAS.filter((c) => /Non fonctionnel|Sécurité/.test(c.type));
+
+const short = (n) => n.replace(/^Mohamed /, "M. ");
+const row = (t) => `<tr><td style="white-space:nowrap"><b>${t.id}</b></td><td>${esc(t.titre)}</td><td>${esc(t.attendu)}</td><td>${t.niveau}</td><td>${esc(t.tech)}</td><td>${t.ex.join(", ")}</td><td>${short(t.resp)}</td></tr>`;
 
 const API = [
   ["POST", "/api/auth/register", "Inscription d'un étudiant (rôle CLUB_MEMBER)", "Public"],
@@ -83,7 +87,7 @@ figcaption{font-size:8.4pt;color:#444;margin-top:4px}
 <div class="top">ÉCOLE NATIONALE D'INGÉNIEURS DE CARTHAGE · ATELIER TEST LOGICIEL</div>
 <div class="t">Plateforme de gestion des clubs de l'ENICarthage</div>
 <div class="s">Rapport d'évaluation — description du projet, architecture, conception et plan de test</div>
-<div class="pills"><span>${EF.length} exigences fonctionnelles</span><span>${ENF.length} exigences non fonctionnelles</span><span>${CAS.length} cas de test planifiés</span><span>9 diagrammes</span></div>
+<div class="pills"><span>${EF.length} exigences fonctionnelles</span><span>${ENF.length} exigences non fonctionnelles</span><span>${PLAN.length} tests planifiés : 5 fonctionnels, 5 non fonctionnels, 4 d'API</span><span>9 diagrammes</span></div>
 </div>
 <div class="band">
 <div><b>Réalisé par :</b> ${SUIVI.equipe.join(" · ")}</div>
@@ -103,7 +107,7 @@ figcaption{font-size:8.4pt;color:#444;margin-top:4px}
 <div>5. Conception</div>
 <div class="l2">5.1 Cas d'utilisation · 5.2 Diagramme de classes · 5.3 Modèle de données · 5.4 Diagrammes de séquence · 5.5 Diagramme d'états</div>
 <div>6. Plan de test</div>
-<div class="l2">6.1 Objet et périmètre · 6.2 Stratégie · 6.3 Niveaux · 6.4 Types · 6.5 Techniques · 6.6 Cas de test · 6.7 Traçabilité · 6.8 Outils · 6.9 Environnement · 6.10 Critères · 6.11 Anomalies</div>
+<div class="l2">6.1 Périmètre · 6.2 Stratégie · 6.3 Niveaux · 6.4 Tests fonctionnels · 6.5 Tests non fonctionnels · 6.6 Tests d'API · 6.7 Techniques · 6.8 Répartition · 6.9 Traçabilité · 6.10 Outils · 6.11 Environnement · 6.12 Critères · 6.13 Anomalies</div>
 <div>7. Organisation de l'équipe et planning</div>
 <div>8. Conclusion et prochaines étapes</div>
 </section>
@@ -114,7 +118,7 @@ figcaption{font-size:8.4pt;color:#444;margin-top:4px}
 <tr><td>1. Choisir un projet</td><td>Plateforme de gestion des clubs (Spring Boot, React, MySQL)</td><td>2</td></tr>
 <tr><td>2. Présenter les besoins fonctionnels et non fonctionnels</td><td>${EF.length} exigences fonctionnelles et ${ENF.length} non fonctionnelles, avec leur criticité</td><td>3</td></tr>
 <tr><td>3. Utiliser un outil de gestion de test</td><td>GitHub : exigences, cas de test et anomalies sous forme d'issues liées ; tableau de suivi hebdomadaire</td><td>6.11, 7</td></tr>
-<tr><td>4. Élaborer un plan de test</td><td>Plan IEEE 829 : niveaux, types (fonctionnels et non fonctionnels), techniques, outils, critères</td><td>6</td></tr>
+<tr><td>4. Élaborer un plan de test</td><td>Plan IEEE 829 : 5 tests fonctionnels, 5 non fonctionnels et 4 tests d'API, chacun avec son responsable ; niveaux, techniques, outils, critères</td><td>6</td></tr>
 <tr><td>5. Exécuter le plan de test</td><td>Planifié pour les semaines 48 à 50 (chapitre 7)</td><td>7</td></tr></table>
 
 <h1>2. Présentation du projet</h1>
@@ -229,79 +233,82 @@ ${img("conception/etatsReservation.svg", "Cycle de vie d'une réservation", 80)}
 <h2>6.1 Objet et périmètre</h2>
 <table><tr><th>Dans le périmètre</th><th>Hors périmètre</th></tr><tr><td>Authentification, inscription, rôles · clubs · événements · salles · équipements · réservations · tableau de bord · profil, paramètres, notifications · sécurité de l'API · performance · robustesse · affichage mobile · compatibilité · maintenabilité · dépendances · persistance · portabilité de la base</td><td>Déploiement en production ; envoi d'e-mails (non prévu) ; accessibilité avancée (lecteurs d'écran)</td></tr></table>
 <h2>6.2 Stratégie : approche basée sur les risques</h2>
+<p>Le plan retient 14 tests : <b>5 tests fonctionnels</b>, <b>5 tests non fonctionnels</b> et <b>4 tests d'API</b>. Ils sont choisis en priorité sur les risques les plus élevés, de sorte que toutes les exigences critiques soient couvertes.</p>
 <table><tr><th>Risque produit</th><th>Probabilité</th><th>Impact</th><th>Priorité</th><th>Tests prévus</th></tr>
-<tr><td>Action d'administration par un utilisateur non autorisé</td><td>Élevée</td><td>Critique</td><td>P1</td><td>TI-03, TU-02, TU-04, TNF-06</td></tr>
-<tr><td>Fuite des mots de passe</td><td>Moyenne</td><td>Critique</td><td>P1</td><td>TI-01, TU-01, TNF-06</td></tr>
-<tr><td>Double réservation d'une salle</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>TI-06, TS-05, TA-03</td></tr>
-<tr><td>Événement dépassant la capacité d'une salle</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>TI-05, TA-02</td></tr>
-<tr><td>Erreur serveur sur une saisie invalide</td><td>Moyenne</td><td>Moyen</td><td>P2</td><td>TI-01 à TI-07, TNF-06</td></tr>
-<tr><td>Lenteur en période d'inscription</td><td>Faible</td><td>Majeur</td><td>P2</td><td>TNF-01, TNF-06</td></tr>
-<tr><td>Mauvais affichage sur smartphone</td><td>Moyenne</td><td>Moyen</td><td>P2</td><td>TS-07</td></tr>
-<tr><td>Dépendances vulnérables</td><td>Élevée</td><td>Majeur</td><td>P2</td><td>TNF-02</td></tr>
+<tr><td>Action d'administration par un utilisateur non autorisé</td><td>Élevée</td><td>Critique</td><td>P1</td><td>API-02, TF-05</td></tr>
+<tr><td>Fuite des mots de passe</td><td>Moyenne</td><td>Critique</td><td>P1</td><td>TNF-02, API-01</td></tr>
+<tr><td>Double réservation d'une salle</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>API-03, TF-04</td></tr>
+<tr><td>Événement dépassant la capacité d'une salle</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>TF-03</td></tr>
+<tr><td>Création d'un club avec un président déjà inscrit</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>API-04</td></tr>
+<tr><td>Lenteur en période d'inscription</td><td>Faible</td><td>Majeur</td><td>P2</td><td>TNF-01</td></tr>
+<tr><td>Mauvais affichage sur smartphone</td><td>Moyenne</td><td>Moyen</td><td>P2</td><td>TNF-03</td></tr>
 <tr><td>Perte de données au redémarrage</td><td>Faible</td><td>Critique</td><td>P2</td><td>TNF-05</td></tr></table>
+
 <h2>6.3 Niveaux de test (cycle en V)</h2>
 ${img("conception/cycleV.svg", "Correspondance entre phases de développement et niveaux de test", 62)}
-<table><tr><th>Niveau</th><th>Objectif</th><th>Cas</th><th>Outil</th></tr>
-<tr><td>Unitaire / composant</td><td>Vérifier chaque composant isolément (API simulée)</td><td>TU-01 … TU-06</td><td>Jest + React Testing Library</td></tr>
-<tr><td>Intégration</td><td>Vérifier l'API avec la sécurité et la base de données réelles</td><td>TI-01 … TI-07, TNF-06</td><td>Postman, Jest</td></tr>
-<tr><td>Système</td><td>Vérifier l'application complète dans un navigateur</td><td>TS-01 … TS-08, TNF-01</td><td>Playwright, k6</td></tr>
-<tr><td>Acceptation</td><td>Valider le besoin du point de vue de chaque profil</td><td>TA-01 … TA-03</td><td>Navigateur, fiches de test</td></tr></table>
-<h2>6.4 Types de test</h2>
-<h3>Tests fonctionnels — ce que fait l'application</h3>
-<table><tr><th>Cas</th><th>Objet</th><th>Niveau</th><th>Exigences</th><th>Responsable</th></tr>
-${fonctionnels.map((c) => `<tr><td>${c.id}</td><td>${esc(c.titre)}</td><td>${c.niveau}</td><td>${c.ex.join(", ")}</td><td>${RESPONSABLE[c.id]}</td></tr>`).join("")}</table>
-<h3>Tests non fonctionnels — comment elle se comporte</h3>
-<table><tr><th>Cas</th><th>Objet</th><th>Caractéristique</th><th>Exigences</th><th>Responsable</th></tr>
-${nonFonctionnels.map((c) => `<tr><td>${c.id}</td><td>${esc(c.titre)}</td><td>${esc(c.type.replace(/^Non fonctionnel \\(|\\)$/g, ""))}</td><td>${c.ex.join(", ")}</td><td>${RESPONSABLE[c.id]}</td></tr>`).join("")}</table>
-<h3>Autres types</h3>
-<table><tr><th>Type</th><th>Cas</th><th>Description</th><th>Responsable</th></tr>
-<tr><td>Statique</td><td>TNF-03</td><td>Revue de code et analyse statique (ESLint, PMD/CPD), sans exécuter le code</td><td>${RESPONSABLE["TNF-03"]}</td></tr>
-<tr><td>Structurel (boîte blanche)</td><td>TNF-04</td><td>Couverture des instructions et des branches (objectif ≥ 70 %)</td><td>${RESPONSABLE["TNF-04"]}</td></tr>
-<tr><td>Lié aux changements</td><td>TR-01, TR-02</td><td>Re-test de confirmation après chaque correctif, puis non-régression complète</td><td>${RESPONSABLE["TR-01"]}</td></tr>
-<tr><td>Maintenance</td><td>TM-01</td><td>Portage vers MariaDB (XAMPP) sans modification du code</td><td>${RESPONSABLE["TM-01"]}</td></tr></table>
-<h2>6.5 Techniques de test</h2>
-<table><tr><th>Famille</th><th>Technique</th><th>Application prévue</th></tr>
-<tr><td rowspan="3">Statique</td><td>Revue des exigences</td><td>Reformuler chaque besoin en critère mesurable (ex. ENF-03 : p95 &lt; 500 ms à 50 utilisateurs)</td></tr>
-<tr><td>Revue de code</td><td>Contrôleurs, sécurité et configuration relus avant toute exécution</td></tr>
-<tr><td>Analyse outillée</td><td>ESLint, PMD/CPD, npm audit</td></tr>
-<tr><td rowspan="5">Boîte noire</td><td>Partitions d'équivalence</td><td>Identifiants valides ou invalides, adresses @enicar.tn ou non</td></tr>
-<tr><td>Valeurs limites</td><td>Mot de passe de 5 / 6 caractères ; 40 / 41 participants pour une salle de 40 places ; capacité 0 et −10</td></tr>
-<tr><td>Table de décision</td><td>Routes protégées (6 règles) ; rôle × action (sans jeton, jeton falsifié, membre, administrateur)</td></tr>
-<tr><td>Transitions d'états</td><td>Réservation PENDING → APPROVED / REJECTED (§ 5.5)</td></tr>
-<tr><td>Cas d'utilisation</td><td>Scénarios système et d'acceptation construits à partir des cas d'utilisation (§ 5.1)</td></tr>
-<tr><td>Boîte blanche</td><td>Couverture</td><td>Instructions et branches (Jest, JaCoCo)</td></tr>
-<tr><td>Expérience</td><td>Tests exploratoires</td><td>Appels directs à l'API, redémarrage du serveur, affichage sur smartphone</td></tr></table>
-<h2>6.6 Catalogue des cas de test</h2>
-<table><tr><th>Cas</th><th>Titre</th><th>Niveau</th><th>Type</th><th>Technique</th><th>Mode</th><th>Outil</th><th>Responsable</th></tr>
-${CAS.map((c) => `<tr><td style="white-space:nowrap">${c.id}</td><td>${esc(c.titre)}</td><td>${c.niveau}</td><td><span class="badge ${/^Fonctionnel/.test(c.type) ? "b-f" : /Non fonctionnel|Sécurité/.test(c.type) ? "b-nf" : ""}">${esc(c.type)}</span></td><td>${esc(c.tech)}</td><td>${c.mode === "auto" ? "automatisé" : "manuel"}</td><td>${esc(c.outil)}</td><td>${RESPONSABLE[c.id].replace(/^Mohamed /, "M. ")}</td></tr>`).join("")}</table>
-<h3>Répartition des cas de test dans l'équipe</h3>
-<table><tr><th>Membre</th><th>Rôle</th><th>Domaine de test</th><th>Cas de test</th><th>Nombre</th></tr>
-${SUIVI.equipe.map((m) => { const l = CAS.filter((c) => RESPONSABLE[c.id] === m).map((c) => c.id); const dom = m === SUIVI.chef ? "Acceptation, analyse statique, couverture, fiabilité, changements et maintenance" : l.some((x) => x.startsWith("TI")) ? "API : intégration, performance, sécurité, robustesse (Postman, Jest, k6)" : "Interface : composants (Jest) et parcours dans le navigateur (Playwright)"; return `<tr><td><b>${m}</b></td><td>${m === SUIVI.chef ? "Chef d'équipe" : "Membre"}</td><td>${dom}</td><td>${l.join(", ")}</td><td>${l.length}</td></tr>`; }).join("")}
-<tr><td colspan="4"><b>Total</b></td><td><b>${CAS.length}</b></td></tr></table>
-<p>Chaque responsable écrit ses cas de test, les exécute, enregistre les résultats et signale les anomalies sur GitHub. Le chef d'équipe relit les cas, suit l'avancement dans le tableau de suivi et valide les critères de sortie.</p>
-<h2>6.7 Matrice de traçabilité exigences → cas de test</h2>
-<table><tr><th>Exigence</th><th>Criticité</th><th>Cas de test qui la vérifieront</th></tr>
-${EXIGENCES.map((e) => `<tr><td>${e.id} ${esc(e.titre)}</td><td>${e.crit}</td><td>${casOf(e.id).join(", ")}</td></tr>`).join("")}</table>
-<div class="note">Chaque exigence est couverte par au moins un cas de test : ${EXIGENCES.filter((e) => casOf(e.id).length).length}/${EXIGENCES.length}.</div>
-<h2>6.8 Outils de test</h2>
-<table><tr><th>Outil</th><th>Utilisation prévue</th><th>Niveau</th><th>Type</th></tr>
-${OUTILS.map((o) => `<tr><td><b>${o[0]}</b></td><td>${o[1]}</td><td>${o[2]}</td><td>${o[3]}</td></tr>`).join("")}</table>
-<p><b>Postman</b> est le logiciel de test retenu pour l'API. Sa collection sera organisée en deux parties : <b>A — tests fonctionnels</b> (un dossier par cas TI-01 à TI-07) et <b>B — tests non fonctionnels</b> (NF-01 performance : temps de réponse &lt; 500 ms ; NF-02 sécurité : accès, jetons, injection SQL, CORS ; NF-03 robustesse : entrées invalides sans erreur 500). Chaque requête porte ses vérifications (<code>pm.test</code>) :</p>
-${code(`pm.test("Code HTTP 200", () => pm.response.to.have.status(200));
-pm.test("Temps de réponse < 500 ms", () => pm.expect(pm.response.responseTime).to.be.below(500));
-pm.test("Le hash du mot de passe n'est pas renvoyé", () => pm.expect(pm.response.json().user).to.not.have.property("password"));`)}
-<h2>6.9 Environnement et données de test</h2>
+<table><tr><th>Niveau</th><th>Objectif</th><th>Tests</th><th>Outil</th></tr>
+${["Unitaire", "Intégration", "Système", "Acceptation"].map((n) => `<tr><td>${n}</td><td>${{ Unitaire: "Vérifier chaque composant isolément (API simulée)", Intégration: "Vérifier l'API avec la sécurité et la base de données réelles", Système: "Vérifier l'application complète dans un navigateur", Acceptation: "Valider le besoin du point de vue de chaque profil" }[n]}</td><td>${PLAN.filter((t) => t.niveau === n).map((t) => t.id).join(", ")}</td><td>${[...new Set(PLAN.filter((t) => t.niveau === n).map((t) => t.outil))].join(" ; ")}</td></tr>`).join("")}</table>
+
+<h2>6.4 Tests fonctionnels (5)</h2>
+<p>Ils vérifient <b>ce que fait</b> l'application : les règles métier des exigences fonctionnelles.</p>
+<table><tr><th>Test</th><th>Objet</th><th>Résultat attendu</th><th>Niveau</th><th>Technique</th><th>Exigences</th><th>Responsable</th></tr>
+${PLAN.filter((t) => t.famille === "Fonctionnel").map(row).join("")}</table>
+
+<h2>6.5 Tests non fonctionnels (5)</h2>
+<p>Ils vérifient <b>comment se comporte</b> l'application : performance, sécurité, utilisabilité, compatibilité et fiabilité.</p>
+<table><tr><th>Test</th><th>Caractéristique</th><th>Objet</th><th>Résultat attendu</th><th>Outil</th><th>Exigences</th><th>Responsable</th></tr>
+${PLAN.filter((t) => t.famille === "Non fonctionnel").map((t) => `<tr><td style="white-space:nowrap"><b>${t.id}</b></td><td>${t.carac}</td><td>${esc(t.titre)}</td><td>${esc(t.attendu)}</td><td>${esc(t.outil)}</td><td>${t.ex.join(", ")}</td><td>${short(t.resp)}</td></tr>`).join("")}</table>
+
+<h2>6.6 Tests d'API (4)</h2>
+<p>Ils interrogent directement l'API REST avec <b>Postman</b>, sans passer par l'interface. Chaque requête porte ses vérifications (<code>pm.test</code>).</p>
+<table><tr><th>Test</th><th>Requête et objet</th><th>Résultat attendu</th><th>Technique</th><th>Exigences</th><th>Responsable</th></tr>
+${PLAN.filter((t) => t.famille === "API").map((t) => `<tr><td style="white-space:nowrap"><b>${t.id}</b></td><td>${esc(t.titre)}</td><td>${esc(t.attendu)}</td><td>${esc(t.tech)}</td><td>${t.ex.join(", ")}</td><td>${short(t.resp)}</td></tr>`).join("")}</table>
+${code(`// Exemple de vérifications Postman prévues pour API-01 (connexion valide)
+pm.test("Code HTTP 200", () => pm.response.to.have.status(200));
+pm.test("Un jeton est renvoyé", () => pm.expect(pm.response.json().token).to.be.a("string").and.not.empty);
+pm.test("Le mot de passe n'est pas renvoyé", () => pm.expect(pm.response.json().user).to.not.have.property("password"));`)}
+
+<h2>6.7 Techniques de test</h2>
+<table><tr><th>Famille</th><th>Technique</th><th>Tests</th></tr>
+<tr><td>Statique</td><td>Revue des exigences et revue de code</td><td>Reformulation des besoins en critères mesurables ; revue du code de sécurité (TNF-02)</td></tr>
+<tr><td rowspan="4">Boîte noire</td><td>Partitions d'équivalence</td><td>TF-01, TF-02, API-01, API-03, API-04</td></tr>
+<tr><td>Valeurs limites</td><td>TF-02 (mot de passe 5 / 6 caractères), TF-03 (40 / 41 participants)</td></tr>
+<tr><td>Table de décision</td><td>TF-05 (rôle × action), API-02 (sans jeton / falsifié / membre / administrateur)</td></tr>
+<tr><td>Transitions d'états</td><td>TF-04 (réservation PENDING → APPROVED / REJECTED, § 5.5)</td></tr>
+<tr><td>Expérience</td><td>Test exploratoire</td><td>TNF-05 (redémarrage du serveur)</td></tr>
+<tr><td>Mesure</td><td>Charge et mise en page</td><td>TNF-01 (50 utilisateurs), TNF-03 (360 px), TNF-04 (deux navigateurs)</td></tr></table>
+
+<h2>6.8 Répartition des tests dans l'équipe</h2>
+<table><tr><th>Membre</th><th>Rôle</th><th>Fonctionnels</th><th>Non fonctionnels</th><th>API</th><th>Total</th></tr>
+${SUIVI.equipe.map((m) => { const f = (fam) => PLAN.filter((t) => t.resp === m && t.famille === fam).map((t) => t.id).join(", ") || "—"; return `<tr><td><b>${m}</b></td><td>${m === SUIVI.chef ? "Chef d'équipe" : "Membre"}</td><td>${f("Fonctionnel")}</td><td>${f("Non fonctionnel")}</td><td>${f("API")}</td><td>${PLAN.filter((t) => t.resp === m).length}</td></tr>`; }).join("")}
+<tr><td colspan="5"><b>Total</b></td><td><b>${PLAN.length}</b></td></tr></table>
+<p>Chaque responsable écrit ses tests, les exécute, enregistre les résultats et signale les anomalies sur GitHub. Le chef d'équipe relit les tests, suit l'avancement dans le tableau de suivi et valide les critères de sortie.</p>
+
+<h2>6.9 Matrice de traçabilité exigences → tests</h2>
+<table><tr><th>Exigence</th><th>Criticité</th><th>Tests qui la vérifieront</th></tr>
+${EXIGENCES.map((e) => { const l = PLAN.filter((t) => t.ex.includes(e.id)).map((t) => t.id); return `<tr><td>${e.id} ${esc(e.titre)}</td><td>${e.crit}</td><td>${l.length ? l.join(", ") : "<i>hors périmètre de cette campagne</i>"}</td></tr>`; }).join("")}</table>
+<div class="note">Toutes les exigences <b>critiques</b> sont couvertes. Au total, ${EXIGENCES.filter((e) => PLAN.some((t) => t.ex.includes(e.id))).length} exigences sur ${EXIGENCES.length} sont vérifiées par au moins un test. Les autres, de criticité majeure ou mineure (équipements, notifications, maintenabilité, dépendances, configuration, portabilité), sont hors périmètre de cette campagne et seront ajoutées si le temps le permet.</div>
+
+<h2>6.10 Outils de test</h2>
+<table><tr><th>Outil</th><th>Utilisation prévue</th><th>Tests</th></tr>
+<tr><td><b>Jest + React Testing Library</b></td><td>Tests unitaires et de composants de l'interface (API simulée)</td><td>TF-01, TF-02</td></tr>
+<tr><td><b>Postman</b></td><td>Logiciel de test d'API : collection en dossiers (fonctionnels, non fonctionnels, API), Collection Runner et onglet Performance</td><td>API-01 à API-04, TNF-02, TNF-01</td></tr>
+<tr><td><b>Playwright</b></td><td>Scénarios dans un vrai navigateur (Edge, Firefox) ; interface graphique « UI Mode »</td><td>TF-03, TF-05, TNF-03, TNF-04</td></tr>
+<tr><td><b>k6</b></td><td>Test de charge (50 utilisateurs virtuels)</td><td>TNF-01</td></tr>
+<tr><td><b>GitHub</b></td><td>Exigences, tests et anomalies sous forme d'issues liées ; jalons pour les campagnes</td><td>Tous</td></tr></table>
+
+<h2>6.11 Environnement et données de test</h2>
 <ul><li><b>Unitaires :</b> jsdom, API simulée avec les données initiales du projet.</li>
 <li><b>Intégration et système :</b> backend réel sur MySQL 8 (Docker) ; chaque test crée ses propres données pour pouvoir être rejoué.</li>
 <li><b>Acceptation :</b> base réinitialisée ; comptes admin@enicar.tn et ahmed@enicar.tn.</li>
 <li><b>Navigateurs :</b> Microsoft Edge et Firefox, en 1440 × 900 et en 360 × 800 (smartphone).</li></ul>
-<h2>6.10 Critères d'entrée, de sortie et de suspension</h2>
+<h2>6.12 Critères d'entrée, de sortie et de suspension</h2>
 <table><tr><th>Critère</th><th>Définition</th></tr>
 <tr><td>Entrée</td><td>Application compilée et démarrée ; base de test accessible ; exigences et cas de test publiés sur GitHub</td></tr>
-<tr><td>Sortie</td><td>100 % des cas exécutés ; aucune anomalie critique ou majeure ouverte ; 100 % des exigences couvertes ; couverture des instructions ≥ 70 % ; p95 &lt; 500 ms</td></tr>
+<tr><td>Sortie</td><td>100 % des cas exécutés ; aucune anomalie critique ou majeure ouverte ; 100 % des exigences critiques couvertes ; couverture des instructions ≥ 70 % ; p95 &lt; 500 ms</td></tr>
 <tr><td>Suspension</td><td>Environnement indisponible ou anomalie bloquante empêchant plus de 30 % des tests</td></tr>
 <tr><td>Reprise</td><td>Correctif livré ; re-test de confirmation puis non-régression complète</td></tr></table>
-<h2>6.11 Gestion des anomalies et des tests</h2>
+<h2>6.13 Gestion des anomalies et des tests</h2>
 <p><b>Cycle de vie d'une anomalie :</b> Détectée → Confirmée → Corrigée → Re-testée → Fermée. <b>Gravité :</b> critique (sécurité, perte de données), majeure (fonction dégradée), mineure (gêne). Sur GitHub, chaque exigence, chaque cas de test et chaque anomalie est une issue ; une anomalie est liée à l'exigence concernée et au test qui l'a détectée, et la Pull Request qui la corrige la ferme. Les jalons représentent les campagnes de test.</p>
 
 <h1>7. Organisation de l'équipe et planning</h1>
@@ -318,7 +325,7 @@ ${weeks.map((w) => { const l = SUIVI.taches.filter((t) => t.semaine === w).sort(
 ${img("img/suivi-planning.png", "Tableau de suivi hebdomadaire : objectifs de l'encadrant et tâches de chaque membre (semaine 47)", 96)}
 
 <h1>8. Conclusion et prochaines étapes</h1>
-<p>Ce rapport décrit la plateforme de gestion des clubs de l'ENICarthage : ses profils et ses fonctionnalités, ses ${EXIGENCES.length} exigences, son architecture en trois couches et sa conception (cas d'utilisation, classes, données, séquences, états). Il fixe le plan de test qui guidera la suite : ${CAS.length} cas de test répartis sur les quatre niveaux, tests fonctionnels et non fonctionnels, techniques de conception des tests, outils (Jest, Postman, Playwright, k6) et critères de sortie.</p>
+<p>Ce rapport décrit la plateforme de gestion des clubs de l'ENICarthage : ses profils et ses fonctionnalités, ses ${EXIGENCES.length} exigences, son architecture en trois couches et sa conception (cas d'utilisation, classes, données, séquences, états). Il fixe le plan de test qui guidera la suite : ${PLAN.length} tests (5 fonctionnels, 5 non fonctionnels, 4 d'API) répartis entre les trois membres et sur les quatre niveaux, techniques de conception des tests, outils (Jest, Postman, Playwright, k6) et critères de sortie.</p>
 <p><b>Prochaines étapes :</b> semaine 48, tests unitaires (Jest) et tests d'intégration de l'API (Postman) ; semaine 49, tests système (Playwright), tests non fonctionnels et tests d'acceptation ; semaine 50, correctifs, non-régression et rapport final avec le verdict de recette.</p>
 </body></html>`;
 
