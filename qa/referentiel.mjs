@@ -93,3 +93,10 @@ export const STATUT = Object.fromEntries([
   ["ANO-17", "Ouverte — détectée en itération 2"],
   ["ANO-19", "Corrigée et re-testée (v1.0.2)"],
 ]);
+
+// Responsable de chaque cas de test (chef d'équipe et deux membres)
+export const RESPONSABLE = Object.fromEntries([
+  ...["TA-01", "TA-02", "TA-03", "TNF-03", "TNF-04", "TNF-05", "TR-01", "TR-02", "TM-01"].map((c) => [c, "Mohamed Aziz Rouissi"]),
+  ...["TI-01", "TI-02", "TI-03", "TI-04", "TI-05", "TI-06", "TI-07", "TNF-01", "TNF-02", "TNF-06", "TS-05", "TS-06"].map((c) => [c, "Mohamed Bouchahda"]),
+  ...["TU-01", "TU-02", "TU-03", "TU-04", "TU-05", "TU-06", "TS-01", "TS-02", "TS-03", "TS-04", "TS-07", "TS-08"].map((c) => [c, "Mohamed Hosni Missaoui"]),
+]);

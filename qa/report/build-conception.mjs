@@ -2,7 +2,7 @@
 // Ne contient aucun résultat d'exécution (phase suivante du projet).
 // Usage : node qa/report/build-conception.mjs  →  qa/report/Rapport_Conception_Plan_de_Test.html
 import { writeFileSync, readFileSync } from "node:fs";
-import { EXIGENCES, CAS } from "../referentiel.mjs";
+import { EXIGENCES, CAS, RESPONSABLE } from "../referentiel.mjs";
 
 const window = {};
 new Function("window", readFileSync(new URL("../../suivi/donnees.js", import.meta.url), "utf8"))(window);
@@ -248,17 +248,17 @@ ${img("conception/cycleV.svg", "Correspondance entre phases de développement et
 <tr><td>Acceptation</td><td>Valider le besoin du point de vue de chaque profil</td><td>TA-01 … TA-03</td><td>Navigateur, fiches de test</td></tr></table>
 <h2>6.4 Types de test</h2>
 <h3>Tests fonctionnels — ce que fait l'application</h3>
-<table><tr><th>Cas</th><th>Objet</th><th>Niveau</th><th>Exigences</th></tr>
-${fonctionnels.map((c) => `<tr><td>${c.id}</td><td>${esc(c.titre)}</td><td>${c.niveau}</td><td>${c.ex.join(", ")}</td></tr>`).join("")}</table>
+<table><tr><th>Cas</th><th>Objet</th><th>Niveau</th><th>Exigences</th><th>Responsable</th></tr>
+${fonctionnels.map((c) => `<tr><td>${c.id}</td><td>${esc(c.titre)}</td><td>${c.niveau}</td><td>${c.ex.join(", ")}</td><td>${RESPONSABLE[c.id]}</td></tr>`).join("")}</table>
 <h3>Tests non fonctionnels — comment elle se comporte</h3>
-<table><tr><th>Cas</th><th>Objet</th><th>Caractéristique</th><th>Exigences</th></tr>
-${nonFonctionnels.map((c) => `<tr><td>${c.id}</td><td>${esc(c.titre)}</td><td>${esc(c.type.replace(/^Non fonctionnel \\(|\\)$/g, ""))}</td><td>${c.ex.join(", ")}</td></tr>`).join("")}</table>
+<table><tr><th>Cas</th><th>Objet</th><th>Caractéristique</th><th>Exigences</th><th>Responsable</th></tr>
+${nonFonctionnels.map((c) => `<tr><td>${c.id}</td><td>${esc(c.titre)}</td><td>${esc(c.type.replace(/^Non fonctionnel \\(|\\)$/g, ""))}</td><td>${c.ex.join(", ")}</td><td>${RESPONSABLE[c.id]}</td></tr>`).join("")}</table>
 <h3>Autres types</h3>
-<table><tr><th>Type</th><th>Cas</th><th>Description</th></tr>
-<tr><td>Statique</td><td>TNF-03</td><td>Revue de code et analyse statique (ESLint, PMD/CPD), sans exécuter le code</td></tr>
-<tr><td>Structurel (boîte blanche)</td><td>TNF-04</td><td>Couverture des instructions et des branches (objectif ≥ 70 %)</td></tr>
-<tr><td>Lié aux changements</td><td>TR-01, TR-02</td><td>Re-test de confirmation après chaque correctif, puis non-régression complète</td></tr>
-<tr><td>Maintenance</td><td>TM-01</td><td>Portage vers MariaDB (XAMPP) sans modification du code</td></tr></table>
+<table><tr><th>Type</th><th>Cas</th><th>Description</th><th>Responsable</th></tr>
+<tr><td>Statique</td><td>TNF-03</td><td>Revue de code et analyse statique (ESLint, PMD/CPD), sans exécuter le code</td><td>${RESPONSABLE["TNF-03"]}</td></tr>
+<tr><td>Structurel (boîte blanche)</td><td>TNF-04</td><td>Couverture des instructions et des branches (objectif ≥ 70 %)</td><td>${RESPONSABLE["TNF-04"]}</td></tr>
+<tr><td>Lié aux changements</td><td>TR-01, TR-02</td><td>Re-test de confirmation après chaque correctif, puis non-régression complète</td><td>${RESPONSABLE["TR-01"]}</td></tr>
+<tr><td>Maintenance</td><td>TM-01</td><td>Portage vers MariaDB (XAMPP) sans modification du code</td><td>${RESPONSABLE["TM-01"]}</td></tr></table>
 <h2>6.5 Techniques de test</h2>
 <table><tr><th>Famille</th><th>Technique</th><th>Application prévue</th></tr>
 <tr><td rowspan="3">Statique</td><td>Revue des exigences</td><td>Reformuler chaque besoin en critère mesurable (ex. ENF-03 : p95 &lt; 500 ms à 50 utilisateurs)</td></tr>
@@ -272,8 +272,13 @@ ${nonFonctionnels.map((c) => `<tr><td>${c.id}</td><td>${esc(c.titre)}</td><td>${
 <tr><td>Boîte blanche</td><td>Couverture</td><td>Instructions et branches (Jest, JaCoCo)</td></tr>
 <tr><td>Expérience</td><td>Tests exploratoires</td><td>Appels directs à l'API, redémarrage du serveur, affichage sur smartphone</td></tr></table>
 <h2>6.6 Catalogue des cas de test</h2>
-<table><tr><th>Cas</th><th>Titre</th><th>Niveau</th><th>Type</th><th>Technique</th><th>Mode</th><th>Outil</th></tr>
-${CAS.map((c) => `<tr><td>${c.id}</td><td>${esc(c.titre)}</td><td>${c.niveau}</td><td><span class="badge ${/^Fonctionnel/.test(c.type) ? "b-f" : /Non fonctionnel|Sécurité/.test(c.type) ? "b-nf" : ""}">${esc(c.type)}</span></td><td>${esc(c.tech)}</td><td>${c.mode === "auto" ? "automatisé" : "manuel"}</td><td>${esc(c.outil)}</td></tr>`).join("")}</table>
+<table><tr><th>Cas</th><th>Titre</th><th>Niveau</th><th>Type</th><th>Technique</th><th>Mode</th><th>Outil</th><th>Responsable</th></tr>
+${CAS.map((c) => `<tr><td style="white-space:nowrap">${c.id}</td><td>${esc(c.titre)}</td><td>${c.niveau}</td><td><span class="badge ${/^Fonctionnel/.test(c.type) ? "b-f" : /Non fonctionnel|Sécurité/.test(c.type) ? "b-nf" : ""}">${esc(c.type)}</span></td><td>${esc(c.tech)}</td><td>${c.mode === "auto" ? "automatisé" : "manuel"}</td><td>${esc(c.outil)}</td><td>${RESPONSABLE[c.id].replace(/^Mohamed /, "M. ")}</td></tr>`).join("")}</table>
+<h3>Répartition des cas de test dans l'équipe</h3>
+<table><tr><th>Membre</th><th>Rôle</th><th>Domaine de test</th><th>Cas de test</th><th>Nombre</th></tr>
+${SUIVI.equipe.map((m) => { const l = CAS.filter((c) => RESPONSABLE[c.id] === m).map((c) => c.id); const dom = m === SUIVI.chef ? "Acceptation, analyse statique, couverture, fiabilité, changements et maintenance" : l.some((x) => x.startsWith("TI")) ? "API : intégration, performance, sécurité, robustesse (Postman, Jest, k6)" : "Interface : composants (Jest) et parcours dans le navigateur (Playwright)"; return `<tr><td><b>${m}</b></td><td>${m === SUIVI.chef ? "Chef d'équipe" : "Membre"}</td><td>${dom}</td><td>${l.join(", ")}</td><td>${l.length}</td></tr>`; }).join("")}
+<tr><td colspan="4"><b>Total</b></td><td><b>${CAS.length}</b></td></tr></table>
+<p>Chaque responsable écrit ses cas de test, les exécute, enregistre les résultats et signale les anomalies sur GitHub. Le chef d'équipe relit les cas, suit l'avancement dans le tableau de suivi et valide les critères de sortie.</p>
 <h2>6.7 Matrice de traçabilité exigences → cas de test</h2>
 <table><tr><th>Exigence</th><th>Criticité</th><th>Cas de test qui la vérifieront</th></tr>
 ${EXIGENCES.map((e) => `<tr><td>${e.id} ${esc(e.titre)}</td><td>${e.crit}</td><td>${casOf(e.id).join(", ")}</td></tr>`).join("")}</table>
