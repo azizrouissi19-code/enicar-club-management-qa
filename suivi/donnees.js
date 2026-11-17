@@ -117,7 +117,7 @@ window.SUIVI = {
     {
       "id": "t08",
       "semaine": "2026-S47",
-      "tache": "Conception des tests non fonctionnels TNF-01 à TNF-05",
+      "tache": "Conception des tests non fonctionnels TNF-01 à TNF-05 et de maintenance TM-01 à TM-05",
       "lot": "Tests",
       "membre": "Mohamed Bouchahda",
       "statut": "À faire",
@@ -127,7 +127,7 @@ window.SUIVI = {
     {
       "id": "t09",
       "semaine": "2026-S47",
-      "tache": "Conception des tests fonctionnels TF-01 à TF-05",
+      "tache": "Conception des tests fonctionnels TF-01 à TF-05 et liés aux changements TC-01 à TC-05",
       "lot": "Tests",
       "membre": "Mohamed Hosni Missaoui",
       "statut": "À faire",
@@ -137,7 +137,7 @@ window.SUIVI = {
     {
       "id": "t20",
       "semaine": "2026-S47",
-      "tache": "Conception des tests d'API API-01 à API-04 (Playwright)",
+      "tache": "Conception des tests structurels TST-01 à TST-05 (boîte blanche, Playwright)",
       "lot": "Tests",
       "membre": "Mohamed Aziz Rouissi",
       "statut": "À faire",
@@ -177,7 +177,7 @@ window.SUIVI = {
     {
       "id": "t13",
       "semaine": "2026-S48",
-      "tache": "Environnement de test et exécution des tests d'API API-01 à API-04 (Playwright)",
+      "tache": "Environnement de test et exécution des tests structurels TST-01 à TST-05 (Playwright)",
       "lot": "Infrastructure",
       "membre": "Mohamed Aziz Rouissi",
       "statut": "À faire",
@@ -217,7 +217,7 @@ window.SUIVI = {
     {
       "id": "t17",
       "semaine": "2026-S50",
-      "tache": "Correctifs backend et re-test",
+      "tache": "Tests de maintenance TM-01 à TM-05 (Playwright)",
       "lot": "Backend",
       "membre": "Mohamed Bouchahda",
       "statut": "À faire",
@@ -227,7 +227,7 @@ window.SUIVI = {
     {
       "id": "t18",
       "semaine": "2026-S50",
-      "tache": "Correctifs frontend et non-régression",
+      "tache": "Tests liés aux changements : confirmation TC-01, TC-02 et régression TC-03 à TC-05 (Playwright)",
       "lot": "Frontend",
       "membre": "Mohamed Hosni Missaoui",
       "statut": "À faire",

@@ -3,7 +3,7 @@
 // Usage : node qa/report/build-conception.mjs  →  qa/report/Rapport_Conception_Plan_de_Test.html
 import { writeFileSync, readFileSync } from "node:fs";
 import { EXIGENCES, CAS, RESPONSABLE } from "../referentiel.mjs";
-import { PLAN } from "../plan-evaluation.mjs";
+import { PLAN, TYPES } from "../plan-evaluation.mjs";
 
 const window = {};
 new Function("window", readFileSync(new URL("../../suivi/donnees.js", import.meta.url), "utf8"))(window);
@@ -24,6 +24,11 @@ const fonctionnels = CAS.filter((c) => /^Fonctionnel/.test(c.type));
 const nonFonctionnels = CAS.filter((c) => /Non fonctionnel|Sécurité/.test(c.type));
 
 const short = (n) => n.replace(/^Mohamed /, "M. ");
+const M_ = PLAN.find((t) => t.famille === "Fonctionnel").resp, B_ = PLAN.find((t) => t.famille === "Non fonctionnel").resp;
+const ids = (f) => PLAN.filter(f).map((t) => t.id).join(", ");
+const respOf = (fam) => [...new Set(PLAN.filter((t) => t.famille === fam).map((t) => short(t.resp)))].join(", ");
+const rowT = (t) => `<tr><td style="white-space:nowrap"><b>${t.id}</b>${t.carac || t.sorte ? `<br><span style="color:#0e7c86;font-size:8.5pt">${t.carac || t.sorte}</span>` : ""}</td><td>${esc(t.titre)}</td><td>${esc(t.attendu)}</td><td>${t.niveau}</td><td>${esc(t.tech)}</td><td>${t.ex.join(", ")}</td><td>${short(t.resp)}</td></tr>`;
+const tableType = (fam) => `<table><tr><th>Test</th><th>Objet</th><th>Résultat attendu</th><th>Niveau</th><th>Technique</th><th>Exigences</th><th>Responsable</th></tr>${PLAN.filter((t) => t.famille === fam).map(rowT).join("")}</table>`;
 const row = (t) => `<tr><td style="white-space:nowrap"><b>${t.id}</b></td><td>${esc(t.titre)}</td><td>${esc(t.attendu)}</td><td>${t.niveau}</td><td>${esc(t.tech)}</td><td>${t.ex.join(", ")}</td><td>${short(t.resp)}</td></tr>`;
 
 const API = [
@@ -91,7 +96,7 @@ figcaption{font-size:8.4pt;color:#444;margin-top:4px}
 <div class="top">ÉCOLE NATIONALE D'INGÉNIEURS DE CARTHAGE · ATELIER TEST LOGICIEL</div>
 <div class="t">Plateforme de gestion des clubs de l'ENICarthage</div>
 <div class="s">Compte rendu 3 — Rapport : CR1 (description du projet, outil de gestion des tests) + CR2 (plan de test) + besoins, architecture et conception</div>
-<div class="pills"><span>CR1 · CR2 · CR3</span><span>${PLAN.length} tests : 5 fonctionnels, 5 non fonctionnels, 4 d'API</span><span>Un outil de test : Playwright</span><span>Gestion des tests : GitHub</span></div>
+<div class="pills"><span>CR1 · CR2 · CR3</span><span>${PLAN.length} tests : 5 par type de test (5 types)</span><span>Un outil de test : Playwright</span><span>Gestion des tests : GitHub</span></div>
 </div>
 <div class="band">
 <div><b>Réalisé par :</b> ${SUIVI.equipe.join(" · ")}</div>
@@ -168,20 +173,21 @@ figcaption{font-size:8.4pt;color:#444;margin-top:4px}
 <tr><td>Fermée</td><td>Fusion de la Pull Request ; colonne « Fermée »</td><td>Chef d'équipe</td></tr></table>
 <section class="part"><div class="k">PARTIE 2 — COMPTE RENDU 2 (CR2)</div><div class="t">Plan de test</div><ul><li>4. Plan de test (document)</li><li>5. Outil de test : Playwright</li><li>6. Le plan de test dans l'outil de gestion</li></ul></section>
 <h1>4. Plan de test (document)</h1>
-<p>Ce plan suit la structure de la norme IEEE 829 / ISO/IEC/IEEE 29119-3. Il couvre les quatre niveaux de test et les types de test fonctionnels et non fonctionnels.</p>
+<p>Ce plan suit la structure de la norme IEEE 829 / ISO/IEC/IEEE 29119-3 et les deux premiers chapitres du cours (« Fondamentaux des tests » et « Tester pendant le cycle de vie »). Il prévoit <b>5 tests pour chacun des 5 types de test</b> du cours, soit ${PLAN.length} tests, répartis sur les niveaux d'intégration, système et acceptation.</p>
 <h2>4.1 Objet et périmètre</h2>
 <table><tr><th>Dans le périmètre</th><th>Hors périmètre</th></tr><tr><td>Authentification, inscription, rôles · clubs · événements · salles · équipements · réservations · tableau de bord · profil, paramètres, notifications · sécurité de l'API · performance · robustesse · affichage mobile · compatibilité · maintenabilité · dépendances · persistance · portabilité de la base</td><td>Déploiement en production ; envoi d'e-mails (non prévu) ; accessibilité avancée (lecteurs d'écran)</td></tr></table>
 <h2>4.2 Stratégie : approche basée sur les risques</h2>
-<p>Le plan retient 14 tests : <b>5 tests fonctionnels</b>, <b>5 tests non fonctionnels</b> et <b>4 tests d'API</b>. Ils sont choisis en priorité sur les risques les plus élevés, de sorte que toutes les exigences critiques soient couvertes.</p>
+<p>Le plan retient ${PLAN.length} tests : ${TYPES.map((y) => `<b>5 ${y.titre.replace(/^Tests /, "tests ").replace(/ \(.*\)/, "")}</b>`).join(", ")}. À l'intérieur de chaque type, les tests sont choisis en priorité sur les risques les plus élevés, de sorte que toutes les exigences critiques soient couvertes.</p>
 <table><tr><th>Risque produit</th><th>Probabilité</th><th>Impact</th><th>Priorité</th><th>Tests prévus</th></tr>
-<tr><td>Action d'administration par un utilisateur non autorisé</td><td>Élevée</td><td>Critique</td><td>P1</td><td>API-02, TF-05</td></tr>
-<tr><td>Fuite des mots de passe</td><td>Moyenne</td><td>Critique</td><td>P1</td><td>TNF-02, API-01</td></tr>
-<tr><td>Double réservation d'une salle</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>API-03, TF-04</td></tr>
-<tr><td>Événement dépassant la capacité d'une salle</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>TF-03</td></tr>
-<tr><td>Création d'un club avec un président déjà inscrit</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>API-04</td></tr>
+<tr><td>Action d'administration par un utilisateur non autorisé</td><td>Élevée</td><td>Critique</td><td>P1</td><td>TF-05, TST-04</td></tr>
+<tr><td>Fuite des mots de passe</td><td>Moyenne</td><td>Critique</td><td>P1</td><td>TNF-02, TST-03</td></tr>
+<tr><td>Double réservation d'une salle</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>TF-04, TST-01</td></tr>
+<tr><td>Événement dépassant la capacité d'une salle</td><td>Moyenne</td><td>Majeur</td><td>P1</td><td>TF-03, TST-02</td></tr>
+<tr><td>Une correction casse une fonction qui marchait</td><td>Élevée</td><td>Majeur</td><td>P1</td><td>TC-01 à TC-05</td></tr>
 <tr><td>Lenteur en période d'inscription</td><td>Faible</td><td>Majeur</td><td>P2</td><td>TNF-01</td></tr>
 <tr><td>Mauvais affichage sur smartphone</td><td>Moyenne</td><td>Moyen</td><td>P2</td><td>TNF-03</td></tr>
-<tr><td>Perte de données au redémarrage</td><td>Faible</td><td>Critique</td><td>P2</td><td>TNF-05</td></tr></table>
+<tr><td>Perte de données au redémarrage ou lors d'une migration</td><td>Faible</td><td>Critique</td><td>P2</td><td>TNF-05, TM-01</td></tr>
+<tr><td>Mise à jour (dépendances, Java) qui rend l'application inutilisable</td><td>Moyenne</td><td>Majeur</td><td>P2</td><td>TM-02, TM-03</td></tr></table>
 
 <h2>4.3 Niveaux de test (cycle en V)</h2>
 ${img("conception/cycleV.svg", "Correspondance entre phases de développement et niveaux de test", 62)}
@@ -191,62 +197,77 @@ ${img("conception/cycleV.svg", "Correspondance entre phases de développement et
 <tr><td>Acceptation</td><td>Valider le besoin du point de vue de chaque profil</td><td>${PLAN.filter((t) => t.niveau === "Acceptation").map((t) => t.id).join(", ")}</td><td>Navigateur, scénario multi-profils</td></tr>
 <tr><td>Unitaire</td><td>Vérifier chaque composant isolément</td><td>—</td><td>Hors de ce plan : Playwright teste à travers l'interface et l'API (§ 5.5)</td></tr></table>
 
-<h2>4.4 Tests fonctionnels (5)</h2>
-<p>Ils vérifient <b>ce que fait</b> l'application : les règles métier des exigences fonctionnelles.</p>
-<table><tr><th>Test</th><th>Objet</th><th>Résultat attendu</th><th>Niveau</th><th>Technique</th><th>Exigences</th><th>Responsable</th></tr>
-${PLAN.filter((t) => t.famille === "Fonctionnel").map(row).join("")}</table>
+<h2>4.4 Les cinq types de test du cours</h2>
+<p>Le chapitre 2 du cours distingue cinq types de test. Chacun répond à une question différente ; le plan en prévoit 5 de chaque.</p>
+<table><tr><th>Type</th><th>Question</th><th>Définition (cours, chapitre 2)</th><th>Tests</th><th>Responsable</th></tr>
+${TYPES.map((y) => `<tr><td><b>${y.titre}</b></td><td><i>${y.question}</i></td><td>${esc(y.def)}</td><td>${ids((t) => t.famille === y.famille)}</td><td>${respOf(y.famille)}</td></tr>`).join("")}</table>
 
-<h2>4.5 Tests non fonctionnels (5)</h2>
-<p>Ils vérifient <b>comment se comporte</b> l'application : performance, sécurité, utilisabilité, compatibilité et fiabilité.</p>
-<table><tr><th>Test</th><th>Caractéristique</th><th>Objet</th><th>Résultat attendu</th><th>Outil</th><th>Exigences</th><th>Responsable</th></tr>
-${PLAN.filter((t) => t.famille === "Non fonctionnel").map((t) => `<tr><td style="white-space:nowrap"><b>${t.id}</b></td><td>${t.carac}</td><td>${esc(t.titre)}</td><td>${esc(t.attendu)}</td><td>${esc(t.outil)}</td><td>${t.ex.join(", ")}</td><td>${short(t.resp)}</td></tr>`).join("")}</table>
+<h2>4.5 Tests fonctionnels (5)</h2>
+<p>Ils vérifient <b>ce que fait</b> l'application : les règles métier des exigences fonctionnelles, en boîte noire.</p>
+${tableType("Fonctionnel")}
 
-<h2>4.6 Tests d'API (4)</h2>
-<p>Ils interrogent directement l'API REST avec le module <code>request</code> de <b>Playwright</b>, sans passer par l'interface, et vérifient le code de réponse et le contenu.</p>
-<table><tr><th>Test</th><th>Requête et objet</th><th>Résultat attendu</th><th>Technique</th><th>Exigences</th><th>Responsable</th></tr>
-${PLAN.filter((t) => t.famille === "API").map((t) => `<tr><td style="white-space:nowrap"><b>${t.id}</b></td><td>${esc(t.titre)}</td><td>${esc(t.attendu)}</td><td>${esc(t.tech)}</td><td>${t.ex.join(", ")}</td><td>${short(t.resp)}</td></tr>`).join("")}</table>
-<h2>4.7 Techniques de test</h2>
+<h2>4.6 Tests non fonctionnels (5)</h2>
+<p>Ils vérifient <b>comment se comporte</b> l'application : une caractéristique de qualité par test (performance, sécurité, utilisabilité, compatibilité, fiabilité).</p>
+${tableType("Non fonctionnel")}
+
+<h2>4.7 Tests structurels — boîte blanche (5)</h2>
+<p>Ils sont conçus en lisant le <b>code</b> : chaque décision, condition ou chemin du code testé est exercé au moins une fois. Les quatre premiers visent les contrôleurs et le filtre de sécurité du backend, à travers l'API ; le cinquième mesure la couverture du code du frontend pendant les scénarios.</p>
+${tableType("Structurel")}
+
+<h2>4.8 Tests liés aux changements (5)</h2>
+<p>Ils sont exécutés <b>après une modification</b> : les tests de <b>confirmation</b> rejouent le test qui avait échoué pour vérifier la correction ; les tests de <b>régression</b> rejouent les tests existants pour vérifier que rien d'autre n'a été cassé.</p>
+${tableType("Lié aux changements")}
+
+<h2>4.9 Tests de maintenance (5)</h2>
+<p>Ils portent sur le système existant lorsqu'il <b>évolue</b> : migration de la base, mises à jour, modification d'une fonction, changement de configuration. Chacun teste la modification puis enchaîne une régression.</p>
+${tableType("Maintenance")}
+
+<h2>4.10 Techniques de test</h2>
 <table><tr><th>Famille</th><th>Technique</th><th>Tests</th></tr>
-<tr><td>Statique</td><td>Revue des exigences et revue de code</td><td>Reformulation des besoins en critères mesurables ; revue du code de sécurité (TNF-02)</td></tr>
-<tr><td rowspan="4">Boîte noire</td><td>Partitions d'équivalence</td><td>TF-01, TF-02, API-01, API-03, API-04</td></tr>
+<tr><td>Statique</td><td>Revue des exigences et revue de code</td><td>Reformulation des besoins en critères mesurables ; lecture du code pour concevoir TST-01 à TST-04 ; revue formelle du rapport (chapitre 10)</td></tr>
+<tr><td rowspan="4">Boîte noire</td><td>Partitions d'équivalence</td><td>TF-01, TF-02</td></tr>
 <tr><td>Valeurs limites</td><td>TF-02 (mot de passe 5 / 6 caractères), TF-03 (40 / 41 participants)</td></tr>
-<tr><td>Table de décision</td><td>TF-05 (rôle × action), API-02 (sans jeton / falsifié / membre / administrateur)</td></tr>
-<tr><td>Transitions d'états</td><td>TF-04 (réservation PENDING → APPROVED / REJECTED, § 9.5)</td></tr>
-<tr><td>Expérience</td><td>Test exploratoire</td><td>TNF-05 (redémarrage du serveur)</td></tr>
-<tr><td>Mesure</td><td>Charge et mise en page</td><td>TNF-01 (50 requêtes simultanées), TNF-03 (360 px), TNF-04 (deux navigateurs)</td></tr></table>
+<tr><td>Table de décision</td><td>TF-05 (rôle × action)</td></tr>
+<tr><td>Transitions d'états</td><td>TF-04 (réservation PENDING → APPROVED / REJECTED, § 9.5), TM-04 (nouvel état CANCELLED)</td></tr>
+<tr><td rowspan="4">Boîte blanche</td><td>Couverture des décisions</td><td>TST-01</td></tr>
+<tr><td>Couverture des conditions</td><td>TST-02</td></tr>
+<tr><td>Couverture des branches et des chemins</td><td>TST-03, TST-04</td></tr>
+<tr><td>Couverture des instructions</td><td>TST-05</td></tr>
+<tr><td>Liés aux changements</td><td>Confirmation et régression</td><td>TC-01 à TC-05 ; la régression termine aussi chaque test de maintenance</td></tr>
+<tr><td>Mesure</td><td>Charge, mise en page, navigateurs</td><td>TNF-01 (50 requêtes simultanées), TNF-03 (360 px), TNF-04 (deux navigateurs)</td></tr></table>
 
-<h2>4.8 Répartition des tests dans l'équipe</h2>
-<table><tr><th>Membre</th><th>Rôle</th><th>Fonctionnels</th><th>Non fonctionnels</th><th>API</th><th>Total</th></tr>
-${SUIVI.equipe.map((m) => { const f = (fam) => PLAN.filter((t) => t.resp === m && t.famille === fam).map((t) => t.id).join(", ") || "—"; return `<tr><td><b>${m}</b></td><td>${m === SUIVI.chef ? "Chef d'équipe" : "Membre"}</td><td>${f("Fonctionnel")}</td><td>${f("Non fonctionnel")}</td><td>${f("API")}</td><td>${PLAN.filter((t) => t.resp === m).length}</td></tr>`; }).join("")}
-<tr><td colspan="5"><b>Total</b></td><td><b>${PLAN.length}</b></td></tr></table>
-<p>La répartition suit les familles de tests : un membre pour les tests fonctionnels, l'autre pour les tests non fonctionnels, et le chef d'équipe pour les tests d'API. Chaque responsable écrit ses tests, les exécute, enregistre les résultats et signale les anomalies sur GitHub. Le chef d'équipe relit les tests, suit l'avancement dans le tableau de suivi et valide les critères de sortie.</p>
+<h2>4.11 Répartition des tests dans l'équipe</h2>
+<table><tr><th>Membre</th><th>Rôle</th>${TYPES.map((y) => `<th>${y.titre.replace(/^Tests /, "").replace(/ \(.*\)/, "").replace(/^./, (c) => c.toUpperCase())}</th>`).join("")}<th>Total</th></tr>
+${SUIVI.equipe.map((m) => `<tr><td><b>${m}</b></td><td>${m === SUIVI.chef ? "Chef d'équipe" : "Membre"}</td>${TYPES.map((y) => `<td>${ids((t) => t.resp === m && t.famille === y.famille) || "—"}</td>`).join("")}<td>${PLAN.filter((t) => t.resp === m).length}</td></tr>`).join("")}
+<tr><td colspan="${TYPES.length + 2}"><b>Total</b></td><td><b>${PLAN.length}</b></td></tr></table>
+<p>La répartition suit les types de test. ${M_} prend les tests fonctionnels et les tests liés aux changements, qui rejouent surtout ses propres tests après chaque correction. ${B_} prend les tests non fonctionnels et les tests de maintenance, qui touchent l'environnement (base, versions, configuration). Le chef d'équipe, ${SUIVI.chef}, prend les tests structurels, qui demandent de lire le code du backend, en plus de la coordination : il relit les tests, suit l'avancement dans le tableau de suivi et valide les critères de sortie.</p>
 
-<h2>4.9 Matrice de traçabilité exigences → tests</h2>
+<h2>4.12 Matrice de traçabilité exigences → tests</h2>
 <table><tr><th>Exigence</th><th>Criticité</th><th>Tests qui la vérifieront</th></tr>
 ${EXIGENCES.map((e) => { const l = PLAN.filter((t) => t.ex.includes(e.id)).map((t) => t.id); return `<tr><td>${e.id} ${esc(e.titre)}</td><td>${e.crit}</td><td>${l.length ? l.join(", ") : "<i>hors périmètre de cette campagne</i>"}</td></tr>`; }).join("")}</table>
-<div class="note">Toutes les exigences <b>critiques</b> sont couvertes. Au total, ${EXIGENCES.filter((e) => PLAN.some((t) => t.ex.includes(e.id))).length} exigences sur ${EXIGENCES.length} sont vérifiées par au moins un test. Les autres, de criticité majeure ou mineure (équipements, notifications, maintenabilité, dépendances, configuration, portabilité), sont hors périmètre de cette campagne et seront ajoutées si le temps le permet.</div>
+<div class="note">Toutes les exigences <b>critiques</b> sont couvertes. Au total, ${EXIGENCES.filter((e) => PLAN.some((t) => t.ex.includes(e.id))).length} exigences sur ${EXIGENCES.length} sont vérifiées par au moins un test. Les autres, de criticité majeure ou mineure, sont hors périmètre de cette campagne et seront ajoutées si le temps le permet.</div>
 
-<h2>4.10 Environnement et données de test</h2>
+<h2>4.13 Environnement et données de test</h2>
 <ul>
 <li><b>Intégration et système :</b> backend réel sur MySQL 8 (Docker) ; chaque test crée ses propres données pour pouvoir être rejoué.</li>
 <li><b>Acceptation :</b> base réinitialisée ; comptes admin@enicar.tn et ahmed@enicar.tn.</li>
 <li><b>Navigateurs :</b> Microsoft Edge et Firefox, en 1440 × 900 et en 360 × 800 (smartphone).</li></ul>
-<h2>4.11 Critères d'entrée, de sortie et de suspension</h2>
+<h2>4.14 Critères d'entrée, de sortie et de suspension</h2>
 <table><tr><th>Critère</th><th>Définition</th></tr>
 <tr><td>Entrée</td><td>Application compilée et démarrée ; base de test accessible ; exigences et cas de test publiés sur GitHub</td></tr>
 <tr><td>Sortie</td><td>100 % des cas exécutés ; aucune anomalie critique ou majeure ouverte ; 100 % des exigences critiques couvertes ; couverture des instructions ≥ 70 % ; p95 &lt; 500 ms</td></tr>
 <tr><td>Suspension</td><td>Environnement indisponible ou anomalie bloquante empêchant plus de 30 % des tests</td></tr>
 <tr><td>Reprise</td><td>Correctif livré ; re-test de confirmation puis non-régression complète</td></tr></table>
-<h2>4.12 Gestion des anomalies et des tests</h2>
+<h2>4.15 Gestion des anomalies et des tests</h2>
 <p><b>Cycle de vie d'une anomalie :</b> Détectée → Confirmée → Corrigée → Re-testée → Fermée. <b>Gravité :</b> critique (sécurité, perte de données), majeure (fonction dégradée), mineure (gêne). Sur GitHub, chaque exigence, chaque cas de test et chaque anomalie est une issue ; une anomalie est liée à l'exigence concernée et au test qui l'a détectée, et la Pull Request qui la corrige la ferme. Les jalons représentent les campagnes de test.</p>
 
 <h1>5. Outil de test : Playwright</h1>
-<p>Les 14 tests du plan s'exécutent avec <b>un seul outil : Playwright</b> (version 1.65), déjà installé dans le projet. Playwright pilote un vrai navigateur, envoie des requêtes HTTP directement à l'API et simule différents écrans et navigateurs : il couvre donc les trois familles de tests.</p>
+<p>Les ${PLAN.length} tests du plan s'exécutent avec <b>un seul outil : Playwright</b> (version 1.65), déjà installé dans le projet. Playwright pilote un vrai navigateur, envoie des requêtes HTTP directement à l'API et simule différents écrans et navigateurs : il couvre donc les cinq types de test. Pour les tests structurels, il mesure aussi la couverture du code exécuté dans le navigateur (<code>page.coverage</code>).</p>
 <h2>5.1 Les trois usages de Playwright dans le plan</h2>
 <table><tr><th>Usage</th><th>Ce qu'il fait</th><th>Tests</th><th>Responsable</th></tr>
-<tr><td><b>Navigateur</b></td><td>Ouvre l'application dans Microsoft Edge et rejoue un parcours d'utilisateur : saisir, cliquer, vérifier ce qui s'affiche</td><td>TF-01 à TF-05</td><td>${short(PLAN.find((t) => t.id === "TF-01").resp)}</td></tr>
-<tr><td><b>Module <code>request</code></b></td><td>Envoie des requêtes HTTP à l'API REST, sans interface, et vérifie le code de réponse, le contenu et le temps de réponse</td><td>API-01 à API-04, TNF-01, TNF-02, TNF-05</td><td>${short(SUIVI.chef)} (API), ${short(PLAN.find((t) => t.id === "TNF-01").resp)} (TNF)</td></tr>
-<tr><td><b>Émulation et projets</b></td><td>Simule un écran de smartphone (360 × 800) et rejoue les mêmes tests dans Edge et dans Firefox</td><td>TNF-03, TNF-04</td><td>${short(PLAN.find((t) => t.id === "TNF-03").resp)}</td></tr></table>
+<tr><td><b>Navigateur</b></td><td>Ouvre l'application dans Microsoft Edge et rejoue un parcours d'utilisateur : saisir, cliquer, vérifier ce qui s'affiche ; peut mesurer la couverture du code exécuté</td><td>${ids((t) => /Navigateur/.test(t.outil))}</td><td>${[...new Set(PLAN.filter((t) => /Navigateur/.test(t.outil)).map((t) => short(t.resp)))].join(", ")}</td></tr>
+<tr><td><b>Module <code>request</code></b></td><td>Envoie des requêtes HTTP à l'API REST, sans interface, et vérifie le code de réponse, le contenu et le temps de réponse</td><td>${ids((t) => /request/.test(t.outil))}</td><td>${[...new Set(PLAN.filter((t) => /request/.test(t.outil)).map((t) => short(t.resp)))].join(", ")}</td></tr>
+<tr><td><b>Émulation et projets</b></td><td>Simule un écran de smartphone (360 × 800) et rejoue les mêmes tests dans Edge et dans Firefox</td><td>${ids((t) => /smartphone|Projets/.test(t.outil))}</td><td>${[...new Set(PLAN.filter((t) => /smartphone|Projets/.test(t.outil)).map((t) => short(t.resp)))].join(", ")}</td></tr></table>
 <h2>5.2 Interface graphique et rapports</h2>
 <ul><li><b>UI Mode</b> (<code>npx playwright test --ui</code>) : application graphique qui affiche l'arborescence des tests, les lance d'un clic et montre pour chaque test la liste des actions, une chronologie avec des captures de la page avant et après chaque action, la console et les requêtes réseau.</li>
 <li><b>Rapport HTML</b> (<code>npx playwright show-report</code>) : la liste des tests avec leur statut et leur durée, et pour un test en échec la capture d'écran et la trace de l'exécution.</li>
@@ -263,9 +284,7 @@ export default defineConfig({
   webServer: { command: "npm run dev", url: "http://localhost:5173" },
 });`)}
 <table><tr><th>Dossier</th><th>Contenu</th><th>Responsable</th></tr>
-<tr><td><code>tests/fonctionnels/</code></td><td>TF-01 à TF-05</td><td>${short(PLAN.find((t) => t.id === "TF-01").resp)}</td></tr>
-<tr><td><code>tests/non-fonctionnels/</code></td><td>TNF-01 à TNF-05</td><td>${short(PLAN.find((t) => t.id === "TNF-01").resp)}</td></tr>
-<tr><td><code>tests/api/</code></td><td>API-01 à API-04</td><td>${short(SUIVI.chef)}</td></tr></table>
+${[["fonctionnels", "Fonctionnel"], ["non-fonctionnels", "Non fonctionnel"], ["structurels", "Structurel"], ["changements", "Lié aux changements"], ["maintenance", "Maintenance"]].map(([d, f]) => `<tr><td><code>tests/${d}/</code></td><td>${ids((t) => t.famille === f)}</td><td>${respOf(f)}</td></tr>`).join("")}</table>
 <h2>5.4 Exemples de tests prévus</h2>
 <h3>Test fonctionnel — TF-03 (navigateur, valeurs limites)</h3>
 ${code(`test("TF-03 : 41 participants pour une salle de 40 places sont refusés", async ({ page }) => {
@@ -287,38 +306,44 @@ ${code(`test("TNF-01 : 95 % de 50 requêtes simultanées en moins de 500 ms", as
   mesures.sort((a, b) => a - b);
   expect(mesures[Math.ceil(0.95 * mesures.length) - 1]).toBeLessThan(500);
 });`)}
-<h3>Test d'API — API-02 (contrôle d'accès, table de décision)</h3>
-${code(`test("API-02 : un jeton falsifié est refusé (401)", async ({ request }) => {
+<h3>Test structurel — TST-04 (chemins du filtre de sécurité, module request)</h3>
+${code(`// Un test par chemin de TokenAuthenticationFilter
+test("TST-04 : un jeton inconnu laisse la requête non authentifiée (401)", async ({ request }) => {
   const reponse = await request.post(API + "/rooms", {
-    headers: { Authorization: "Bearer jeton-falsifie" },
+    headers: { Authorization: "Bearer jeton-inconnu" },
     data: { name: "Salle test", capacity: 10, type: "SALLE" },
   });
   expect(reponse.status()).toBe(401);
 });`)}
+<h3>Test lié aux changements — TC-03 (régression)</h3>
+${code(`# Après chaque correctif : rejouer tous les tests fonctionnels, sans les modifier
+npx playwright test tests/fonctionnels --project=edge`)}
 <h2>5.5 Limites assumées</h2>
 <ul><li><b>Tests unitaires :</b> Playwright teste l'application à travers l'interface et l'API ; les composants isolés ne font pas partie de ce plan.</li>
+<li><b>Couverture :</b> TST-05 mesure la couverture du code du frontend (navigateur Chromium/Edge) ; la couverture du backend est visée par la conception des tests TST-01 à TST-04, sans outil de mesure dédié.</li>
 <li><b>Charge :</b> TNF-01 envoie 50 requêtes simultanées depuis un seul poste ; c'est une mesure de temps de réponse sous charge, plus légère qu'un outil de charge dédié.</li></ul>
 
 <h1>6. Le plan de test dans l'outil de gestion</h1>
-<p>Le plan de test est livré sous deux formes : ce document, et sa saisie dans l'outil de gestion des tests (GitHub). Chacun des 14 tests y devient une issue assignée à son responsable et rangée dans le jalon de la campagne.</p>
+<p>Le plan de test est livré sous deux formes : ce document, et sa saisie dans l'outil de gestion des tests (GitHub). Chacun des ${PLAN.length} tests y devient une issue assignée à son responsable et rangée dans le jalon de la campagne.</p>
 <table><tr><th>Élément GitHub</th><th>Contenu</th></tr>
-<tr><td>Jalon</td><td>« CR2 — Plan de test » : regroupe les 14 tests de la campagne</td></tr>
-<tr><td>Issues</td><td>${PLAN.length} issues : ${PLAN.filter((t) => t.famille === "Fonctionnel").length} <code>[TF-xx]</code>, ${PLAN.filter((t) => t.famille === "Non fonctionnel").length} <code>[TNF-xx]</code>, ${PLAN.filter((t) => t.famille === "API").length} <code>[API-xx]</code></td></tr>
-<tr><td>Libellés</td><td><code>fonctionnel</code>, <code>non fonctionnel</code>, <code>api</code> ; niveau (<code>intégration</code>, <code>système</code>, <code>acceptation</code>)</td></tr>
-<tr><td>Assignation</td><td>Tests fonctionnels : ${PLAN.find((t) => t.famille === "Fonctionnel").resp} · non fonctionnels : ${PLAN.find((t) => t.famille === "Non fonctionnel").resp} · API : ${SUIVI.chef}</td></tr>
-<tr><td>Tableau Projects</td><td>Les 14 tests dans la colonne « À faire » au début de la campagne</td></tr></table>
-<h3>Exemple de fiche de test dans l'outil : issue [API-03]</h3>
-${code(`Titre : [API-03] POST /api/reservations : double réservation refusée
-Libellés : api · intégration          Assignée à : ${SUIVI.chef}          Jalon : CR2 — Plan de test
+<tr><td>Jalon</td><td>« CR2 — Plan de test » : regroupe les ${PLAN.length} tests de la campagne</td></tr>
+<tr><td>Issues</td><td>${PLAN.length} issues : ${TYPES.map((y) => `5 <code>[${y.prefixe}-xx]</code>`).join(", ")}</td></tr>
+<tr><td>Libellés</td><td>Type : <code>fonctionnel</code>, <code>non fonctionnel</code>, <code>structurel</code>, <code>lié aux changements</code>, <code>maintenance</code> ; niveau : <code>intégration</code>, <code>système</code>, <code>acceptation</code></td></tr>
+<tr><td>Assignation</td><td>${TYPES.map((y) => `${y.titre.replace(/ \(.*\)/, "")} : ${respOf(y.famille)}`).join(" · ")}</td></tr>
+<tr><td>Tableau Projects</td><td>Les ${PLAN.length} tests dans la colonne « À faire » au début de la campagne</td></tr></table>
+<h3>Exemple de fiche de test dans l'outil : issue [TST-01]</h3>
+${code(`Titre : [TST-01] Décisions de ReservationController.createReservation
+Libellés : structurel · intégration          Assignée à : ${SUIVI.chef}          Jalon : CR2 — Plan de test
 
-| Niveau      | Technique                                                   | Outil                        |
-|-------------|-------------------------------------------------------------|------------------------------|
-| Intégration | Partitions (ressource libre / déjà réservée / inexistante)  | Playwright — module request  |
+| Niveau      | Technique                                          | Outil                        |
+|-------------|----------------------------------------------------|------------------------------|
+| Intégration | Couverture des décisions (boîte blanche)           | Playwright — module request  |
 
-Vérifie : EF-09 (Réservation de ressources)
-Résultat attendu : ressource libre → 200 et statut PENDING ; même salle à la même date → 409 ;
-ressource inexistante → 400.
-Fichier : tests/api/API-03.spec.js`)}
+Décisions du code à couvrir (vraie et fausse au moins une fois) :
+  type = ROOM ?   type = EQUIPMENT ?   ressource existante ?   déjà réservée à cette date ?
+Vérifie : EF-09 (Réservation de ressources), ENF-02 (Sécurité et robustesse de l'API)
+Résultat attendu : 200 PENDING ; 400 ressource inexistante ou type inconnu ; 409 double réservation.
+Fichier : tests/structurels/TST-01.spec.js`)}
 
 <section class="part"><div class="k">PARTIE 3 — COMPLÉMENTS DU RAPPORT</div><div class="t">Besoins, architecture, conception et revue</div><ul><li>7. Spécification des besoins</li><li>8. Architecture</li><li>9. Conception</li><li>10. Revue formelle du rapport</li></ul></section>
 <h1>7. Spécification des besoins</h1>
@@ -441,7 +466,7 @@ ${img("conception/etatsReservation.svg", "Cycle de vie d'une réservation", 80)}
 <tr><td>R-03</td><td></td><td></td><td></td><td></td><td></td></tr></table>
 <p class="note">La fiche est remplie pendant la réunion de revue. Décision finale : ☐ accepté · ☐ accepté avec corrections · ☐ à revoir.</p>
 <h1>11. Conclusion</h1>
-<p>Ce rapport réunit les deux premiers comptes rendus. Le CR1 décrit la plateforme de gestion des clubs (profils, fonctionnalités) et l'outil de gestion des tests, GitHub, qui relie exigences, tests, anomalies et corrections. Le CR2 fixe le plan de test : ${PLAN.length} tests exécutés avec un seul outil, Playwright, dont 5 fonctionnels confiés à ${PLAN.find((t) => t.famille === "Fonctionnel").resp}, 5 non fonctionnels confiés à ${PLAN.find((t) => t.famille === "Non fonctionnel").resp} et 4 tests d'API pris en charge par le chef d'équipe, ${SUIVI.chef}. Il est complété par les ${EXIGENCES.length} exigences, l'architecture en trois couches et la conception (cas d'utilisation, classes, données, séquences, états), et sera soumis à une revue formelle.</p>
+<p>Ce rapport réunit les deux premiers comptes rendus. Le CR1 décrit la plateforme de gestion des clubs (profils, fonctionnalités) et l'outil de gestion des tests, GitHub, qui relie exigences, tests, anomalies et corrections. Le CR2 fixe le plan de test, construit sur les deux premiers chapitres du cours : ${PLAN.length} tests, 5 pour chacun des cinq types (fonctionnels, non fonctionnels, structurels, liés aux changements, de maintenance), exécutés avec un seul outil, Playwright, et répartis entre ${M_}, ${B_} et le chef d'équipe, ${SUIVI.chef}. Il est complété par les ${EXIGENCES.length} exigences, l'architecture en trois couches et la conception (cas d'utilisation, classes, données, séquences, états), et sera soumis à une revue formelle.</p>
 </body></html>`;
 
 writeFileSync(new URL("./Rapport_Conception_Plan_de_Test.html", import.meta.url), html);
