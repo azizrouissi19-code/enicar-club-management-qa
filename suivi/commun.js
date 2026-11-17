@@ -2,7 +2,7 @@
 // Source : donnees.js (versionné). Les modifications du chef sont gardées dans le navigateur
 // jusqu'à l'export d'un nouveau donnees.js, à commiter pour les partager.
 (function () {
-  const KEY = "suivi-hebdo-v7"; // v3 : planning sans indicateurs de résultats de tests
+  const KEY = "suivi-hebdo-v8"; // v3 : planning sans indicateurs de résultats de tests
   const clone = (o) => JSON.parse(JSON.stringify(o));
   const fichier = clone(window.SUIVI || {});
 

@@ -272,19 +272,11 @@ ${EXIGENCES.map((e) => { const l = PLAN.filter((t) => t.ex.includes(e.id)).map((
 <ul><li><b>UI Mode</b> (<code>npx playwright test --ui</code>) : application graphique qui affiche l'arborescence des tests, les lance d'un clic et montre pour chaque test la liste des actions, une chronologie avec des captures de la page avant et après chaque action, la console et les requêtes réseau.</li>
 <li><b>Rapport HTML</b> (<code>npx playwright show-report</code>) : la liste des tests avec leur statut et leur durée, et pour un test en échec la capture d'écran et la trace de l'exécution.</li>
 <li><b>Ligne de commande</b> (<code>npx playwright test</code>) : exécution de toute la suite, par exemple avant chaque version.</li></ul>
-<h2>5.3 Configuration prévue</h2>
-${code(`// playwright.config.js — deux navigateurs, application lancée automatiquement
-export default defineConfig({
-  testDir: "./tests",
-  use: { baseURL: "http://localhost:5173", screenshot: "only-on-failure" },
-  projects: [
-    { name: "edge", use: { channel: "msedge" } },
-    { name: "firefox", use: { browserName: "firefox" } },
-  ],
-  webServer: { command: "npm run dev", url: "http://localhost:5173" },
-});`)}
+<h2>5.3 Configuration</h2>
+<p>Le fichier <code>frontend/playwright.plan.config.js</code> configure Playwright pour le plan de test :</p>
+${code(readFileSync(new URL("../../frontend/playwright.plan.config.js", import.meta.url), "utf8").split("\n").slice(3).join("\n"))}
 <table><tr><th>Dossier</th><th>Contenu</th><th>Responsable</th></tr>
-${[["fonctionnels", "Fonctionnel"], ["non-fonctionnels", "Non fonctionnel"], ["structurels", "Structurel"], ["changements", "Lié aux changements"], ["maintenance", "Maintenance"]].map(([d, f]) => `<tr><td><code>tests/${d}/</code></td><td>${ids((t) => t.famille === f)}</td><td>${respOf(f)}</td></tr>`).join("")}</table>
+${[["fonctionnels", "Fonctionnel"], ["non-fonctionnels", "Non fonctionnel"], ["structurels", "Structurel"], ["changements", "Lié aux changements"], ["maintenance", "Maintenance"]].map(([d, f]) => `<tr><td><code>tests/plan/${d}/</code></td><td>${ids((t) => t.famille === f)}</td><td>${respOf(f)}</td></tr>`).join("")}</table>
 <h2>5.4 Exemples de tests prévus</h2>
 <h3>Test fonctionnel — TF-03 (navigateur, valeurs limites)</h3>
 ${code(`test("TF-03 : 41 participants pour une salle de 40 places sont refusés", async ({ page }) => {
@@ -323,6 +315,36 @@ npx playwright test tests/fonctionnels --project=edge`)}
 <li><b>Couverture :</b> TST-05 mesure la couverture du code du frontend (navigateur Chromium/Edge) ; la couverture du backend est visée par la conception des tests TST-01 à TST-04, sans outil de mesure dédié.</li>
 <li><b>Charge :</b> TNF-01 envoie 50 requêtes simultanées depuis un seul poste ; c'est une mesure de temps de réponse sous charge, plus légère qu'un outil de charge dédié.</li></ul>
 
+<h2>5.6 Installation sur le poste</h2>
+<p>Playwright est installé sur le poste de l'équipe (Windows 11 Pro) comme dépendance de développement du frontend. Les captures ci-dessous sont des captures réelles du poste.</p>
+<table><tr><th>Étape</th><th>Commande</th><th>Rôle</th></tr>
+<tr><td>1. Prérequis</td><td><code>node -v</code> · <code>npm -v</code></td><td>Vérifier Node.js (v24) et npm, nécessaires à Playwright</td></tr>
+<tr><td>2. Installation</td><td><code>npm install --save-dev @playwright/test@1.65.0</code></td><td>Ajouter Playwright au projet (dossier <code>frontend</code>)</td></tr>
+<tr><td>3. Navigateurs</td><td><code>npx playwright install firefox</code></td><td>Télécharger Firefox pour Playwright ; Microsoft Edge, déjà installé, est utilisé directement (<code>channel: "msedge"</code>)</td></tr>
+<tr><td>4. Vérification</td><td><code>npx playwright --version</code> · <code>npx playwright install --list</code></td><td>Contrôler la version et les navigateurs installés</td></tr>
+<tr><td>5. Configuration</td><td><code>playwright.plan.config.js</code> (§ 5.3)</td><td>Dossier des tests, URL de l'application, navigateurs, rapports</td></tr>
+<tr><td>6. Tests du plan</td><td><code>node qa/plan-squelette.mjs</code></td><td>Créer les 25 tests du plan dans <code>tests/plan/</code>, déclarés « à écrire » (<code>test.fixme</code>)</td></tr></table>
+${img("captures-outil/c1-installation.png", "Installation de Playwright et du navigateur Firefox, vérification de la version (capture du poste)")}
+
+<h2>5.7 Environnement de test</h2>
+<table><tr><th>Élément</th><th>Version / valeur</th><th>Rôle</th></tr>
+<tr><td>Système d'exploitation</td><td>Windows 11 Pro</td><td>Poste de test</td></tr>
+<tr><td>Node.js · npm</td><td>24.12.0 · 11.6.2</td><td>Exécution de Playwright et du frontend</td></tr>
+<tr><td>Playwright (@playwright/test)</td><td>1.65.0</td><td>Outil de test</td></tr>
+<tr><td>Microsoft Edge</td><td>157.0</td><td>Navigateur du projet <code>edge</code></td></tr>
+<tr><td>Firefox (Playwright)</td><td>build 1572</td><td>Navigateur du projet <code>firefox</code></td></tr>
+<tr><td>Java (OpenJDK)</td><td>17.0.18</td><td>Backend Spring Boot (port 9090)</td></tr>
+<tr><td>Docker · MySQL</td><td>29.7.2 · MySQL 8.4 (conteneur)</td><td>Base de données de test (port 3306)</td></tr>
+<tr><td>Vite</td><td>8</td><td>Frontend React (port 5173), lancé automatiquement par Playwright (<code>webServer</code>)</td></tr>
+<tr><td>Visual Studio Code</td><td>1.145</td><td>Écriture des tests</td></tr></table>
+${img("captures-outil/c2-environnement.png", "Environnement de test du poste : versions, navigateurs de Playwright, dossiers et configuration du plan")}
+
+<h2>5.8 Les tests du plan dans Playwright</h2>
+<p>Playwright reconnaît les ${PLAN.length} tests du plan, dans les cinq dossiers, pour chacun des deux navigateurs (${PLAN.length * 2} exécutions prévues). Ils sont déclarés « à écrire » : aucun n'a encore été exécuté.</p>
+${img("captures-outil/c3-liste.png", "Liste des 25 tests du plan par Playwright (npx playwright test --list)")}
+${img("captures-outil/c4-uimode.png", "Interface graphique de Playwright (UI Mode) : arborescence des tests du plan, par type")}
+${img("captures-outil/c5-uimode-test.png", "UI Mode : fiche du test TST-01 — source, responsable et exigences en annotations, statut « Did not run »")}
+
 <h1>6. Le plan de test dans l'outil de gestion</h1>
 <p>Le plan de test est livré sous deux formes : ce document, et sa saisie dans l'outil de gestion des tests (GitHub). Chacun des ${PLAN.length} tests y devient une issue assignée à son responsable et rangée dans le jalon de la campagne.</p>
 <table><tr><th>Élément GitHub</th><th>Contenu</th></tr>
@@ -343,7 +365,7 @@ Décisions du code à couvrir (vraie et fausse au moins une fois) :
   type = ROOM ?   type = EQUIPMENT ?   ressource existante ?   déjà réservée à cette date ?
 Vérifie : EF-09 (Réservation de ressources), ENF-02 (Sécurité et robustesse de l'API)
 Résultat attendu : 200 PENDING ; 400 ressource inexistante ou type inconnu ; 409 double réservation.
-Fichier : tests/structurels/TST-01.spec.js`)}
+Fichier : frontend/tests/plan/structurels/TST.spec.js`)}
 
 <section class="part"><div class="k">PARTIE 3 — COMPLÉMENTS DU RAPPORT</div><div class="t">Besoins, architecture, conception et revue</div><ul><li>7. Spécification des besoins</li><li>8. Architecture</li><li>9. Conception</li><li>10. Revue formelle du rapport</li></ul></section>
 <h1>7. Spécification des besoins</h1>
