@@ -258,9 +258,9 @@ export const DIAGRAMMES = {
   end
   subgraph T[" "]
     direction TB
-    TA["Tests d'acceptation<br/>TF-04, TNF-05"] --- TS["Tests système<br/>TF-03, TF-05, TNF-01, TNF-03, TNF-04"]
-    TS --- TI["Tests d'intégration<br/>API-01 … API-04, TNF-02 (Postman)"]
-    TI --- TU["Tests unitaires<br/>TF-01, TF-02 (Jest)"]
+    TA["Tests d'acceptation<br/>TF-04"] --- TS["Tests système<br/>TF-01 … TF-03, TF-05, TNF-01, TNF-03 … TNF-05"]
+    TS --- TI["Tests d'intégration<br/>API-01 … API-04, TNF-02"]
+    TI --- TU["Tests unitaires<br/>hors de ce plan"]
   end
   B -. "valide" .- TA
   S -. "vérifie" .- TS

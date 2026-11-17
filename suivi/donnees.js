@@ -137,7 +137,7 @@ window.SUIVI = {
     {
       "id": "t20",
       "semaine": "2026-S47",
-      "tache": "Conception des tests d'API API-01 à API-04 (Postman)",
+      "tache": "Conception des tests d'API API-01 à API-04 (Playwright)",
       "lot": "Tests",
       "membre": "Mohamed Aziz Rouissi",
       "statut": "À faire",
@@ -157,7 +157,7 @@ window.SUIVI = {
     {
       "id": "t11",
       "semaine": "2026-S48",
-      "tache": "Exécution de TF-01 et TF-02 (Jest)",
+      "tache": "Exécution de TF-01 et TF-02 (Playwright)",
       "lot": "Tests",
       "membre": "Mohamed Hosni Missaoui",
       "statut": "À faire",
@@ -167,7 +167,7 @@ window.SUIVI = {
     {
       "id": "t12",
       "semaine": "2026-S48",
-      "tache": "Exécution de TNF-01 (charge) et TNF-02 (sécurité)",
+      "tache": "Exécution de TNF-01 (performance) et TNF-02 (sécurité) (Playwright)",
       "lot": "Tests",
       "membre": "Mohamed Bouchahda",
       "statut": "À faire",
@@ -177,7 +177,7 @@ window.SUIVI = {
     {
       "id": "t13",
       "semaine": "2026-S48",
-      "tache": "Environnement de test et exécution des tests d'API API-01 à API-04 (Postman)",
+      "tache": "Environnement de test et exécution des tests d'API API-01 à API-04 (Playwright)",
       "lot": "Infrastructure",
       "membre": "Mohamed Aziz Rouissi",
       "statut": "À faire",
@@ -187,7 +187,7 @@ window.SUIVI = {
     {
       "id": "t14",
       "semaine": "2026-S49",
-      "tache": "Exécution de TF-03, TF-04 et TF-05 (Playwright, navigateur)",
+      "tache": "Exécution de TF-03, TF-04 et TF-05 (Playwright)",
       "lot": "Tests",
       "membre": "Mohamed Hosni Missaoui",
       "statut": "À faire",
@@ -197,7 +197,7 @@ window.SUIVI = {
     {
       "id": "t15",
       "semaine": "2026-S49",
-      "tache": "Exécution de TNF-03, TNF-04 et TNF-05 (smartphone, navigateurs, redémarrage)",
+      "tache": "Exécution de TNF-03, TNF-04 et TNF-05 (Playwright : smartphone, navigateurs, redémarrage)",
       "lot": "Tests",
       "membre": "Mohamed Bouchahda",
       "statut": "À faire",
